@@ -2744,7 +2744,7 @@ class TenCounterAnimationView extends StatefulWidget {
 - Step 3-3 を DartPad で動作するようにした修正後全内容  
 *修正点は、独自MVVMライブラリをインポートせずソースに含めるようにしたのみです。*  
 *以下の **DartPad対応全コード** を [DartPad](https://dartpad.dev) に貼り付ければ動作を確認できます。*  
-DartPad対応全コード：[`lib/src/step3_3/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3-3/main.dart) [(ダウンロード)](./project/lib/src/step3-3/main.dart)  
+DartPad対応全コード：[`lib/src/step3_3/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3_3/main.dart) [(ダウンロード)](./project/lib/src/step3_3/main.dart)  
 
 <br/>
 <br/>
