@@ -11,7 +11,7 @@ void startApp() {
 }
 
 /// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   Widget create() {
     return MultiProvider(
       providers: [
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyProvider().create(),
+      home: MyHomeProvider().create(),
     );
   }
 }

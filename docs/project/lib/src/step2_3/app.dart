@@ -14,7 +14,7 @@ void startApp() {
 // CountViewModel で、UI状態のCountModel従属と UI表示の更新を行う。
 
 /// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   CountModel countModel;
   CountViewModel count;
 
@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyProvider().create(),
+      home: MyHomeProvider().create(),
     );
   }
 }

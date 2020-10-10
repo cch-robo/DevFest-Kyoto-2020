@@ -570,7 +570,7 @@ flutterには、コードを変更してもアプリ全体を再ビルドする�
 [BuildContext#read()](https://pub.dev/documentation/provider/latest/provider/ReadContext.html) で モデルのオブジェクトを参照でき、
 [Consumer クラス](https://pub.dev/documentation/provider/latest/provider/Consumer-class.html) や 
 [BuildContext#watch()](https://pub.dev/documentation/provider/latest/provider/WatchContext.html) で モデルのオブジェクトの参照と 通知によるビューの再描画ができるようにしてくれます。  
-サンプルでは、情報の器となる `MyProviderクラス`が 複数のプロバイダーを扱えるよう [MultiProvider クラス](https://pub.dev/documentation/provider/latest/provider/MultiProvider-class.html) でラップしています。
+サンプルでは、情報の器となる `MyHomeProviderクラス`が 複数のプロバイダーを扱えるよう [MultiProvider クラス](https://pub.dev/documentation/provider/latest/provider/MultiProvider-class.html) でラップしています。
 
 - providerパッケージの中身は複雑ですので、  
 ここでは「表示の関心事をモデルに分離して、ビューを再描画させることができる」という理解で構いません。  
@@ -582,16 +582,12 @@ flutterには、コードを変更してもアプリ全体を再ビルドする�
 1. プロジェクトのパッケージ設定ファイル `pubspec.yaml` に providerパッケージを追加。  
 1. 追加した provider パッケージをプロジェクトにインポート。  
 1. アプリのソースファイル `lib/src/app.dart`を providerパッケージ対応に修正。 
-1. モデルを提供する`MyProvider`と カウンタ値とカウンタ関数を提供する`CountViewModel`を新規追加。  
-1. `MyApp`の`home:`プロパティ先を `MyProvider`に変更。  
+1. モデルを提供する`MyHomeProvider`と カウンタ値とカウンタ関数を提供する`CountViewModel`を新規追加。  
+1. `MyApp`の`home:`プロパティ先を `MyHomeProvider`に変更。  
 1. `MyHomePage`を `StatelessWidget`継承に変更し、  
 `CountViewModel`に移設された `_MyHomePageState`のプロパティとカウント関数のコードを削除。  
 
 <br/>
-
-- `pubspec.yaml`修正内容：  
-修正前：[`pubspec.yaml`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/pubspec.yaml) [(ダウンロード)](./project/lib/src/step1_2/pubspec.yaml)  
-修正後：[`pubspec.yaml`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/pubspec.yaml) [(ダウンロード)](./project/lib/src/step2_1/pubspec.yaml)  
 
 - `dependencies:`セクションに、`　provider:  ^4.3.2+2` を追加。  
 *インデントが崩れないよう`provider:`の先頭には半角スペースを 2つ入れます。*  
@@ -616,18 +612,18 @@ dependencies:
 
 <br/>
 
+- `pubspec.yaml`修正内容：  
+修正前：[`pubspec.yaml`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/pubspec.yaml) [(ダウンロード)](./project/lib/src/step1_2/pubspec.yaml)  
+修正後：[`pubspec.yaml`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_1/pubspec.yaml) [(ダウンロード)](./project/lib/src/step2_1/pubspec.yaml)  
+
+<br/>
+
 - 追加した provider パッケージをプロジェクトにインポート。
 
 ```bash
 # プロジェクトで使えるパッケージを最新化
 $ flutter pub get
 ```
-
-<br/>
-
-- `lib/src/app.dart`修正内容：  
-修正前：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/app.dart) [(ダウンロード)](./project/lib/src/step1_2/app.dart)  
-修正後：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_1/app.dart) [(ダウンロード)](./project/lib/src/step2_1/app.dart)  
 
 <br/>
 
@@ -646,11 +642,11 @@ import 'package:provider/provider.dart';
 
 <br/>
 
-- モデルを提供する`MyProvider`と カウンタ値とカウンタ関数を提供する`CountViewModel`を新規追加  
+- モデルを提供する`MyHomeProvider`と カウンタ値とカウンタ関数を提供する`CountViewModel`を新規追加  
 
 ```dart
 /// ページ全体にモデル（ビジネスロジックとデータ）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   Widget create() {
     return MultiProvider(
       providers: [
@@ -675,11 +671,11 @@ class CountViewModel with ChangeNotifier {
 
 <br/>
 
-![thinking](./images/1f914.png) なんで `MyProvider`は、`MyHomePage`を子ウィジェットにしているの？
+![thinking](./images/1f914.png) なんで `MyHomeProvider`は、`MyHomePage`を子ウィジェットにしているの？
 
 <br/>
 
-- `MyApp`の`home:`プロパティ先を `MyProvider`に変更。  
+- `MyApp`の`home:`プロパティ先を `MyHomeProvider`に変更。  
 
 ```dart
 class MyApp extends StatelessWidget {
@@ -709,7 +705,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyProvider().create(),
+      home: MyHomeProvider().create(),
     );
   }
 }
@@ -819,96 +815,9 @@ class MyHomePage extends StatelessWidget {
 
 <br/>
 
-- `lib/src/app.dart` 修正後全内容  
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-// provider パッケージを使った、VM パターン実装
-// CountView に CountViewModel をバインドして、
-// CountViewModel で、UI状態の変更と UI表示の更新を行う。
-
-/// step2-1
-void startApp() {
-  runApp(MyApp());
-}
-
-/// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
-  Widget create() {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => CountViewModel()),
-      ],
-      child: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-/// カウントの UI表示に関する、値とロジックを提供する ViewModel
-class CountViewModel with ChangeNotifier {
-  int _count = 0;
-  int get count => _count;
-
-  void incrementCounter() {
-    _count++;
-    notifyListeners();
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyProvider().create(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            // カウントの UI表示を行う View
-            Consumer<CountViewModel>(
-              builder: (context, model, child) {
-                return Text(
-                  '${model.count}',
-                  style: Theme.of(context).textTheme.headline4,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<CountViewModel>().incrementCounter(),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-```
+- `lib/src/app.dart`修正内容：  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/app.dart) [(ダウンロード)](./project/lib/src/step1_2/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_1/app.dart) [(ダウンロード)](./project/lib/src/step2_1/app.dart)  
 
 <br/>
 <br/>
@@ -918,12 +827,6 @@ class MyHomePage extends StatelessWidget {
 `Step 2-1`では、モデルからの通知でカウント表示を再描画できるように [Consumer クラス](https://pub.dev/documentation/provider/latest/provider/Consumer-class.html) を使っています。  
 [BuildContext#watch()](https://pub.dev/documentation/provider/latest/provider/WatchContext.html) を使えば、モデルからの通知で再描画する独自ウィジェットが作れますので、  
 カウント表示のみを行う `CountView`ウィジェットを作成してみましょう。
-
-<br/>
-
-- `lib/src/app.dart`修正内容：  
-修正前：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_1/app.dart) [(ダウンロード)](./project/lib/src/step2_1/app.dart)  
-修正後：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_2/app.dart) [(ダウンロード)](./project/lib/src/step2_2/app.dart)  
 
 <br/>
 
@@ -971,102 +874,9 @@ class CountView extends StatelessWidget {
 
 <br/>
 
-- `lib/src/app.dart` 修正後全内容  
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-// provider パッケージを使った、VM パターン実装
-// CountView に CountViewModel をバインドして、
-// CountViewModel で、UI状態の変更と UI表示の更新を行う。
-
-/// step2-2
-void startApp() {
-  runApp(MyApp());
-}
-
-/// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
-  Widget create() {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => CountViewModel()),
-      ],
-      child: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-/// カウントの UI表示に関する、値とロジックを提供する ViewModel
-class CountViewModel with ChangeNotifier {
-  int _count = 0;
-  int get count => _count;
-
-  void incrementCounter() {
-    _count++;
-    notifyListeners();
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyProvider().create(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            // カウントの UI表示を行う View
-            CountView(),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<CountViewModel>().incrementCounter(),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-/// カウントの UI表示を行う View
-class CountView extends StatelessWidget {
-  const CountView({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '${context.watch<CountViewModel>().count}',
-      style: Theme.of(context).textTheme.headline4,
-    );
-  }
-}
-```
+- `lib/src/app.dart`修正内容：  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_1/app.dart) [(ダウンロード)](./project/lib/src/step2_1/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_2/app.dart) [(ダウンロード)](./project/lib/src/step2_2/app.dart)  
 
 <br/>
 <br/>
@@ -1127,7 +937,7 @@ Modelは、外部からの都合を受けないので、純粋なドメインモ
 1. Model/ViewModel作成を支援する独自ライブラリ `lib/src/library/model_mixin.dart` のインポート追加
 1. カウントのみを関心事とする `CountModel`を新規作成
 1. `CountViewModel`を MVVMパターンの View Model 対応に修正
-1. `MyProvider`に `CountModel`の生成と `CountViewModel`への受渡を追加
+1. `MyHomeProvider`に `CountModel`の生成と `CountViewModel`への受渡を追加
 1. `CountViewModel`のMVVM対応に伴い `onPressed`プロパティのハンドラ先を修正。
 
 <br/>
@@ -1211,11 +1021,11 @@ class CountViewModel with ChangeNotifier, ViewModel {
 
 <br/>
 
-- `MyProvider`に `CountModel`の生成と `CountViewModel`への受渡を追加
+- `MyHomeProvider`に `CountModel`の生成と `CountViewModel`への受渡を追加
 
 ```dart
 /// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   Widget create() {
     return MultiProvider(
       providers: [
@@ -1231,7 +1041,7 @@ class MyProvider {
 
 ```dart
 /// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   CountModel countModel;
   CountViewModel count;
 
@@ -1273,139 +1083,8 @@ class MyProvider {
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_2/app.dart) [(ダウンロード)](./project/lib/src/step2_2/app.dart)  
-修正後：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_3/app.dart) [(ダウンロード)](./project/lib/src/step2_3/app.dart)  
-
-- `lib/src/app.dart` 修正後全内容  
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:memojudge/src/library/model_mixin.dart';
-
-/// step2-3
-void startApp() {
-  runApp(MyApp());
-}
-
-// provider パッケージ＋ViewModel＆Modelを使った、MVVM パターン実装
-// CountView に CountViewModel をバインドして、
-// CountViewModel に CountModel をバインド(所有)させて、
-// CountModel でカウントを操作して、CountViewModelに通知し、
-// CountViewModel で、UI状態のCountModel従属と UI表示の更新を行う。
-
-/// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
-  CountModel countModel;
-  CountViewModel count;
-
-  Widget create() {
-    countModel = CountModel();
-    count = CountViewModel(countModel);
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => count),
-      ],
-      child: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-/// カウントを管理する Model
-class CountModel with Model {
-  int _count = 0;
-  int get count => _count;
-
-  void incrementCounter() {
-    _count++;
-    updateViewModels();
-  }
-}
-
-/// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class CountViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  CountViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  int get count => countModel.count;
-
-  void updateCount() {
-    countModel.incrementCounter();
-  }
-
-  @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      notifyListeners();
-    }
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyProvider().create(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({
-    Key key,
-    this.title,
-  }) : super(key: key);
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            // カウントの UI表示を行う View
-            CountView(),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<CountViewModel>().updateCount(),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-/// カウントの UI表示を行う View
-class CountView extends StatelessWidget {
-  const CountView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '${context.watch<CountViewModel>().count}',
-      style: Theme.of(context).textTheme.headline4,
-    );
-  }
-}
-```
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_2/app.dart) [(ダウンロード)](./project/lib/src/step2_2/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_3/app.dart) [(ダウンロード)](./project/lib/src/step2_3/app.dart)  
 
 <br/>
 
@@ -1487,7 +1166,7 @@ MVVMパターンの効果として、`CountModel`も `CountViewModel`も変更�
 10カウントごとに **CLEAR**表示を追加する修正手順概要は、以下の通りです。
 1. 10カウントごとに UI表示を更新させる `TenCounterViewModel`を新規作成。
 1. **CLEAR** UI表示を行う `TenCounterView`を新規作成。
-1. `MyProvider`に `TenCounterViewModel`の生成と `ChangeNotifierProvider`への登録を追加。
+1. `MyHomeProvider`に `TenCounterViewModel`の生成と `ChangeNotifierProvider`への登録を追加。
 1. `MyHome`ページの画面表示に、カウント表示と**CLEAR**表示を重ね合わせる修正を追加。
 
 <br/>
@@ -1567,12 +1246,12 @@ class TenCounterView extends StatelessWidget {
 
 <br/>
 
-- `MyProvider`に `TenCounterViewModel`の生成と `ChangeNotifierProvider`への登録を追加  
+- `MyHomeProvider`に `TenCounterViewModel`の生成と `ChangeNotifierProvider`への登録を追加  
 *`CountModel`を `TenCounterViewModel`に与えて、プロパティとコマンドを利用できるようにしています。*
 
 ```dart
 /// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   CountModel countModel;
   CountViewModel count;
 
@@ -1593,7 +1272,7 @@ class MyProvider {
 
 ```dart
 /// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   CountModel countModel;
   CountViewModel count;
   TenCounterViewModel tenCounter;
@@ -1681,220 +1360,8 @@ class MyProvider {
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_3/app.dart) [(ダウンロード)](./project/lib/src/step2_3/app.dart)  
-修正後：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_4/app.dart) [(ダウンロード)](./project/lib/src/step2_4/app.dart)  
-
-- `lib/src/app.dart` 修正後全内容  
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:memojudge/src/library/model_mixin.dart';
-
-/// step2-4
-void startApp() {
-  runApp(MyApp());
-}
-
-// provider パッケージ＋ViewModel＆Modelを使った、MVVM パターン実装
-// CountModelを CountViewModelと TenCounterViewModelにバインド(所有)させて、
-// CountViewに CountViewModel、TenCounterViewに TenCounterViewModelをバインドして、
-// CountModelは、全体の関心事(カウント操作と、更新通知⇒バインド元への一斉通知)のみに専念することで、
-// View Model側は、自分の表示ルール⇒ロジックに従った、Modelから UI状態への反映と UI表示の更新を行い、
-// View側での ボタンクリックごとの カウント増加と、10カウントごとの CLEAR 表示の連携を実現しています。
-
-/// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
-  CountModel countModel;
-  CountViewModel count;
-  TenCounterViewModel tenCounter;
-
-  Widget create() {
-    countModel = CountModel();
-    count = CountViewModel(countModel);
-    tenCounter = TenCounterViewModel(countModel);
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => count),
-        ChangeNotifierProvider(create: (context) => tenCounter),
-      ],
-      child: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-/// カウントを管理する Model
-class CountModel with Model {
-  int _count = 0;
-  int get count => _count;
-
-  void incrementCounter() {
-    _count++;
-    updateViewModels();
-  }
-}
-
-/// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class CountViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  CountViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  int get count => countModel.count;
-
-  void updateCount() {
-    countModel.incrementCounter();
-  }
-
-  @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      notifyListeners();
-    }
-  }
-}
-
-/// 10カウントごとの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class TenCounterViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  TenCounterViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  bool _isAnimate = false;
-  bool get isAnimate => _isAnimate;
-
-  /// 10カウントごとに バインド先の UI表示切替を行う
-  void displayForEvery10Counts(int count) {
-    if (count % 10 == 0) {
-      // カウントが 10 ごとに表示する。
-      _isAnimate = true;
-      notifyListeners();
-    } else
-    if (_isAnimate == true) {
-      // カウントが 10 ごとでないのなら表示しない。
-      _isAnimate = false;
-      notifyListeners();
-    }
-  }
-
-  @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      displayForEvery10Counts(countModel.count);
-    }
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyProvider().create(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({
-    Key key,
-    this.title,
-  }) : super(key: key);
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Stack(
-        fit:StackFit.loose,
-        overflow: Overflow.clip,
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Text(
-                  'You have pushed the button this many times:',
-                ),
-                // カウントの UI表示を行う View
-                CountView(),
-              ],
-            ),
-          ),
-          Center(
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.transparent,
-              // 10カウントごとの UI表示を行う View
-              child: const TenCounterView(),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<CountViewModel>().updateCount(),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-/// カウントの UI表示を行う View
-class CountView extends StatelessWidget {
-  const CountView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '${context.watch<CountViewModel>().count}',
-      style: Theme.of(context).textTheme.headline4,
-    );
-  }
-}
-
-/// 10カウントごとの UI表示を行う View
-class TenCounterView extends StatelessWidget {
-  const TenCounterView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // trueになったときのみ表示させます。
-    if (context.watch<TenCounterViewModel>().isAnimate) {
-      return Builder(
-          builder: (BuildContext context) {
-            return const Align(
-              alignment: Alignment(0.0, 0.0),
-              child: Text(
-                  'CLEAR',
-                  style: TextStyle(
-                      fontSize: 50.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber),
-              ),
-            );
-          },
-      );
-
-    } else {
-      return const SizedBox.shrink();
-    }
-  }
-}
-```
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_3/app.dart) [(ダウンロード)](./project/lib/src/step2_3/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_4/app.dart) [(ダウンロード)](./project/lib/src/step2_4/app.dart)  
 
 <br/>
 <br/>
@@ -2315,280 +1782,8 @@ Column(children: <Widget>[
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_4/app.dart) [(ダウンロード)](./project/lib/src/step2_4/app.dart)  
-修正後：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_5/app.dart) [(ダウンロード)](./project/lib/src/step2_5/app.dart)  
-
-- `lib/src/app.dart` 修正後全内容  
-
-```dart
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:memojudge/src/library/model_mixin.dart';
-
-/// step2-5
-void startApp() {
-  runApp(MyApp());
-}
-
-// provider パッケージ＋ViewModel＆Modelを使った、MVVM パターン実装
-// CountModelを CountViewModelと TenCounterViewModelにバインド(所有)させて、
-// CountViewに CountViewModel、TenCounterViewに TenCounterViewModelをバインドして、
-// CountModelは、全体の関心事(カウント操作と、更新通知⇒バインド元への一斉通知)のみに専念することで、
-// View Model側は、自分の表示ルール⇒ロジックに従った、Modelから UI状態への反映と UI表示の更新を行い、
-// View側での ボタンクリックごとの カウント増加と、10カウントごとの CLEAR 表示の連携を実現しています。
-
-/// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
-  CountModel countModel;
-  CountViewModel count;
-  TenCounterViewModel tenCounter;
-
-  Widget create() {
-    countModel = CountModel();
-    count = CountViewModel(countModel);
-    tenCounter = TenCounterViewModel(countModel);
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => count),
-        ChangeNotifierProvider(create: (context) => tenCounter),
-      ],
-      child: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-/// カウントを管理する Model
-class CountModel with Model {
-  bool isAutoCountUpStarted = false;
-  int _count = 0;
-  int get count => _count;
-
-  void incrementCounter() {
-    _count++;
-    updateViewModels();
-  }
-
-  void autoIncrementToTwenty(bool isUseTimer) {
-    if (isAutoCountUpStarted) {
-      return;
-    }
-
-    isAutoCountUpStarted = true;
-    if (isUseTimer) {
-      _incrementToTwentyByTimer();
-    } else {
-      _incrementToTwentyByAwait();
-    }
-  }
-
-  /// カウンターが20になるまで、1秒毎に incrementCounter() を実行。（Timer.periodic 版）
-  void _incrementToTwentyByTimer() {
-    _count = 0;
-
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      if (count < 20) {
-        incrementCounter();
-      } else {
-        timer.cancel();
-        isAutoCountUpStarted = false;
-      }
-    });
-  }
-
-  /// カウンターが20になるまで、1秒毎に incrementCounter() を実行。（Future.delayed 版）
-  Future<void> _incrementToTwentyByAwait() async {
-    _count = 0;
-
-    Future<void> asyncWait() {
-      final Future<void> future = Future.delayed(const Duration(seconds: 1));
-      return future;
-    }
-
-    while(count < 20) {
-      incrementCounter();
-      await asyncWait();
-    }
-    isAutoCountUpStarted = false;
-  }
-}
-
-/// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class CountViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  CountViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  int get count => countModel.count;
-
-  void updateCount(bool isUseTimer) {
-    countModel.autoIncrementToTwenty(isUseTimer);
-  }
-
-  @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      notifyListeners();
-    }
-  }
-}
-
-/// 10カウントごとの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class TenCounterViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  TenCounterViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  bool _isAnimate = false;
-  bool get isAnimate => _isAnimate;
-
-  /// 10カウントごとに バインド先の UI表示切替を行う
-  void displayForEvery10Counts(int count) {
-    if (count % 10 == 0) {
-      // カウントが 10 ごとに表示する。
-      _isAnimate = true;
-      notifyListeners();
-    } else
-    if (_isAnimate == true) {
-      // カウントが 10 ごとでないのなら表示しない。
-      _isAnimate = false;
-      notifyListeners();
-    }
-  }
-
-  @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      displayForEvery10Counts(countModel.count);
-    }
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyProvider().create(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({
-    Key key,
-    this.title,
-  }) : super(key: key);
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Stack(
-        fit:StackFit.loose,
-        overflow: Overflow.clip,
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Text(
-                  'You have pushed the button this many times:',
-                ),
-                // カウントの UI表示を行う View
-                CountView(),
-              ],
-            ),
-          ),
-          Center(
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.transparent,
-              // 10カウントごとの UI表示を行う View
-              child: const TenCounterView(),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(child:
-            FloatingActionButton(
-              onPressed: () => context.read<CountViewModel>().updateCount(true),
-              tooltip: 'auto increment by Timer.periodic',
-              child: const Icon(Icons.add),
-            ),
-          ),
-          Expanded(child:
-            FloatingActionButton(
-              onPressed: () => context.read<CountViewModel>().updateCount(false),
-              tooltip: 'auto increment by Future.delayed',
-              child: const Icon(Icons.add),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// カウントの UI表示を行う View
-class CountView extends StatelessWidget {
-  const CountView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '${context.watch<CountViewModel>().count}',
-      style: Theme.of(context).textTheme.headline4,
-    );
-  }
-}
-
-/// 10カウントごとの UI表示を行う View
-class TenCounterView extends StatelessWidget {
-  const TenCounterView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // trueになったときのみ表示させます。
-    if (context.watch<TenCounterViewModel>().isAnimate) {
-      return Builder(
-          builder: (BuildContext context) {
-            return const Align(
-              alignment: Alignment(0.0, 0.0),
-              child: Text(
-                  'CLEAR',
-                  style: TextStyle(
-                      fontSize: 50.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber),
-              ),
-            );
-          },
-      );
-
-    } else {
-      return const SizedBox.shrink();
-    }
-  }
-}
-```
+修正前コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_4/app.dart) [(ダウンロード)](./project/lib/src/step2_4/app.dart)  
+修正後コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_5/app.dart) [(ダウンロード)](./project/lib/src/step2_5/app.dart)  
 
 <br/>
 <br/>
@@ -2618,7 +1813,7 @@ class TenCounterView extends StatelessWidget {
 アプリ起動時に、カウントを 1〜20まで、1秒毎にカウントアップさせるようにする修正手順概要は、以下の通りです。
 1. 自動カウントアップ起動用の `AutoCountViewModel`を新規作成。  
 1. `CountModel`に、自動カウントアップを 別の処理の実行で起動させる関数を新規追加。  
-1. `MyProvider`に `AutoCountViewModel`の生成と `ChangeNotifierProvider`への登録を追加。  
+1. `MyHomeProvider`に `AutoCountViewModel`の生成と `ChangeNotifierProvider`への登録を追加。  
 1. `MyHomePage`の `build`関数先頭に、自動カウントアップ起動用関数の実行を追加。
 
 <br/>
@@ -2666,12 +1861,12 @@ Futureは、Isolateの上に「呼出元の処理の実行」との状態の共�
 
 <br/>
 
-- `MyProvider`に `AutoCountViewModel`の生成と `ChangeNotifierProvider`への登録を追加  
+- `MyHomeProvider`に `AutoCountViewModel`の生成と `ChangeNotifierProvider`への登録を追加  
 *`CountModel`を `AutoCountViewModel`に与えて、プロパティとコマンドを利用できるようにしています。*
 
 ```dart
 /// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   CountModel countModel;
   CountViewModel count;
   TenCounterViewModel tenCounter;
@@ -2695,7 +1890,7 @@ class MyProvider {
 
 ```dart
 /// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   CountModel countModel;
   AutoCountViewModel auto;
   CountViewModel count;
@@ -2746,303 +1941,8 @@ class MyProvider {
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_5/app.dart) [(ダウンロード)](./project/lib/src/step2_5/app.dart)  
-修正後：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_6/app.dart) [(ダウンロード)](./project/lib/src/step2_6/app.dart)  
-
-- `lib/src/app.dart` 修正後全内容  
-
-```dart
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:memojudge/src/library/model_mixin.dart';
-
-/// step2-6
-void startApp() {
-  runApp(MyApp());
-}
-
-// provider パッケージ＋ViewModel＆Modelを使った、MVVM パターン実装
-// CountModelを CountViewModelと TenCounterViewModelにバインド(所有)させて、
-// CountViewに CountViewModel、TenCounterViewに TenCounterViewModelをバインドして、
-// CountModelは、全体の関心事(カウント操作と、更新通知⇒バインド元への一斉通知)のみに専念することで、
-// View Model側は、自分の表示ルール⇒ロジックに従った、Modelから UI状態への反映と UI表示の更新を行い、
-// View側での ボタンクリックごとの カウント増加と、10カウントごとの CLEAR 表示の連携を実現しています。
-
-/// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
-  CountModel countModel;
-  AutoCountViewModel auto;
-  CountViewModel count;
-  TenCounterViewModel tenCounter;
-
-  Widget create() {
-    countModel = CountModel();
-    auto = AutoCountViewModel(countModel);
-    count = CountViewModel(countModel);
-    tenCounter = TenCounterViewModel(countModel);
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => auto),
-        ChangeNotifierProvider(create: (context) => count),
-        ChangeNotifierProvider(create: (context) => tenCounter),
-      ],
-      child: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-/// カウントを管理する Model
-class CountModel with Model {
-  bool isAutoCountUpStarted = false;
-  int _count = 0;
-  int get count => _count;
-
-  void incrementCounter() {
-    _count++;
-    updateViewModels();
-  }
-
-  void startAutoIncrement(bool isUseTimer) {
-    // メインとは別の Isolate で、自動インクリメントを実行させる。
-    Future(() {
-      autoIncrementToTwenty(isUseTimer);
-    });
-  }
-
-  void autoIncrementToTwenty(bool isUseTimer) {
-    if (isAutoCountUpStarted) {
-      return;
-    }
-
-    isAutoCountUpStarted = true;
-    if (isUseTimer) {
-      _incrementToTwentyByTimer();
-    } else {
-      _incrementToTwentyByAwait();
-    }
-  }
-
-  /// カウンターが20になるまで、1秒毎に incrementCounter() を実行。（Timer.periodic 版）
-  void _incrementToTwentyByTimer() {
-    _count = 0;
-
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      if (count < 20) {
-        incrementCounter();
-      } else {
-        timer.cancel();
-        isAutoCountUpStarted = false;
-      }
-    });
-  }
-
-  /// カウンターが20になるまで、1秒毎に incrementCounter() を実行。（Future.delayed 版）
-  Future<void> _incrementToTwentyByAwait() async {
-    _count = 0;
-
-    Future<void> asyncWait() {
-      final Future<void> future = Future.delayed(const Duration(seconds: 1));
-      return future;
-    }
-
-    while(count < 20) {
-      incrementCounter();
-      await asyncWait();
-    }
-    isAutoCountUpStarted = false;
-  }
-}
-
-/// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class AutoCountViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  AutoCountViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  void startAutoIncrement(bool isUseTimer) {
-    countModel.startAutoIncrement(isUseTimer);
-  }
-}
-
-/// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class CountViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  CountViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  int get count => countModel.count;
-
-  void updateCount(bool isUseTimer) {
-    countModel.autoIncrementToTwenty(isUseTimer);
-  }
-
-  @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      notifyListeners();
-    }
-  }
-}
-
-/// 10カウントごとの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class TenCounterViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  TenCounterViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  bool _isAnimate = false;
-  bool get isAnimate => _isAnimate;
-
-  /// 10カウントごとに バインド先の UI表示切替を行う
-  void displayForEvery10Counts(int count) {
-    if (count % 10 == 0) {
-      // カウントが 10 ごとに表示する。
-      _isAnimate = true;
-      notifyListeners();
-    } else
-    if (_isAnimate == true) {
-      // カウントが 10 ごとでないのなら表示しない。
-      _isAnimate = false;
-      notifyListeners();
-    }
-  }
-
-  @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      displayForEvery10Counts(countModel.count);
-    }
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyProvider().create(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({
-    Key key,
-    this.title,
-  }) : super(key: key);
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    context.watch<AutoCountViewModel>().startAutoIncrement(true);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Stack(
-        fit:StackFit.loose,
-        overflow: Overflow.clip,
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Text(
-                  'You have pushed the button this many times:',
-                ),
-                // カウントの UI表示を行う View
-                CountView(),
-              ],
-            ),
-          ),
-          Center(
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.transparent,
-              // 10カウントごとの UI表示を行う View
-              child: const TenCounterView(),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(child:
-            FloatingActionButton(
-              onPressed: () => context.read<CountViewModel>().updateCount(true),
-              tooltip: 'auto increment by Timer.periodic',
-              child: const Icon(Icons.add),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
-          ),
-          Expanded(child:
-            FloatingActionButton(
-              onPressed: () => context.read<CountViewModel>().updateCount(false),
-              tooltip: 'auto increment by Future.delayed',
-              child: const Icon(Icons.add),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// カウントの UI表示を行う View
-class CountView extends StatelessWidget {
-  const CountView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '${context.watch<CountViewModel>().count}',
-      style: Theme.of(context).textTheme.headline4,
-    );
-  }
-}
-
-/// 10カウントごとの UI表示を行う View
-class TenCounterView extends StatelessWidget {
-  const TenCounterView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // trueになったときのみ表示させます。
-    if (context.watch<TenCounterViewModel>().isAnimate) {
-      return Builder(
-          builder: (BuildContext context) {
-            return const Align(
-              alignment: Alignment(0.0, 0.0),
-              child: Text(
-                  'CLEAR',
-                  style: TextStyle(
-                      fontSize: 50.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber),
-              ),
-            );
-          },
-      );
-
-    } else {
-      return const SizedBox.shrink();
-    }
-  }
-}
-```
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_5/app.dart) [(ダウンロード)](./project/lib/src/step2_5/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_6/app.dart) [(ダウンロード)](./project/lib/src/step2_6/app.dart)  
 
 <br/>
 <br/>
@@ -3251,365 +2151,14 @@ class _TenCounterAnimationViewState extends State<TenCounterAnimationView>
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_6/app.dart) [(ダウンロード)](./project/lib/src/step2_6/app.dart)  
-修正後：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_7/app.dart) [(ダウンロード)](./project/lib/src/step2_7/app.dart)  
-
-- `lib/src/app.dart` 修正後全内容  
-
-```dart
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:memojudge/src/library/model_mixin.dart';
-
-/// step2-7
-void startApp() {
-  runApp(MyApp());
-}
-
-// provider パッケージ＋ViewModel＆Modelを使った、MVVM パターン実装
-// CountModelを CountViewModelと TenCounterViewModelにバインド(所有)させて、
-// CountViewに CountViewModel、TenCounterViewに TenCounterViewModelをバインドして、
-// CountModelは、全体の関心事(カウント操作と、更新通知⇒バインド元への一斉通知)のみに専念することで、
-// View Model側は、自分の表示ルール⇒ロジックに従った、Modelから UI状態への反映と UI表示の更新を行い、
-// View側での ボタンクリックごとの カウント増加と、10カウントごとの CLEAR 表示の連携を実現しています。
-
-/// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
-  CountModel countModel;
-  AutoCountViewModel auto;
-  CountViewModel count;
-  TenCounterViewModel tenCounter;
-
-  Widget create() {
-    countModel = CountModel();
-    auto = AutoCountViewModel(countModel);
-    count = CountViewModel(countModel);
-    tenCounter = TenCounterViewModel(countModel);
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => auto),
-        ChangeNotifierProvider(create: (context) => count),
-        ChangeNotifierProvider(create: (context) => tenCounter),
-      ],
-      child: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-/// カウントを管理する Model
-class CountModel with Model {
-  bool isAutoCountUpStarted = false;
-  int _count = 0;
-  int get count => _count;
-
-  void incrementCounter() {
-    _count++;
-    updateViewModels();
-  }
-
-  void startAutoIncrement(bool isUseTimer) {
-    // メインとは別の Isolate で、自動インクリメントを実行させる。
-    Future(() {
-      autoIncrementToTwenty(isUseTimer);
-    });
-  }
-
-  void autoIncrementToTwenty(bool isUseTimer) {
-    if (isAutoCountUpStarted) {
-      return;
-    }
-
-    isAutoCountUpStarted = true;
-    if (isUseTimer) {
-      _incrementToTwentyByTimer();
-    } else {
-      _incrementToTwentyByAwait();
-    }
-  }
-
-  /// カウンターが20になるまで、1秒毎に incrementCounter() を実行。（Timer.periodic 版）
-  void _incrementToTwentyByTimer() {
-    _count = 0;
-
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      if (count < 20) {
-        incrementCounter();
-      } else {
-        timer.cancel();
-        isAutoCountUpStarted = false;
-      }
-    });
-  }
-
-  /// カウンターが20になるまで、1秒毎に incrementCounter() を実行。（Future.delayed 版）
-  Future<void> _incrementToTwentyByAwait() async {
-    _count = 0;
-
-    Future<void> asyncWait() {
-      final Future<void> future = Future.delayed(const Duration(seconds: 1));
-      return future;
-    }
-
-    while(count < 20) {
-      incrementCounter();
-      await asyncWait();
-    }
-    isAutoCountUpStarted = false;
-  }
-}
-
-/// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class AutoCountViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  AutoCountViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  void startAutoIncrement(bool isUseTimer) {
-    countModel.startAutoIncrement(isUseTimer);
-  }
-}
-
-/// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class CountViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  CountViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  int get count => countModel.count;
-
-  void updateCount(bool isUseTimer) {
-    countModel.autoIncrementToTwenty(isUseTimer);
-  }
-
-  @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      notifyListeners();
-    }
-  }
-}
-
-/// 10カウントごとの UI表示に関する、プロパティとコマンドを提供する ViewModel
-class TenCounterViewModel with ChangeNotifier, ViewModel {
-  final CountModel countModel;
-  TenCounterViewModel(this.countModel) {
-    countModel.bindUpdate(onUpdate);
-  }
-
-  bool _isAnimate = false;
-  bool get isAnimate => _isAnimate;
-
-  /// 10カウントごとに バインド先の UI表示切替を行う
-  void displayForEvery10Counts(int count) {
-    if (count % 10 == 0) {
-      // カウントが 10 ごとに表示する。
-      _isAnimate = true;
-      notifyListeners();
-    } else
-    if (_isAnimate == true) {
-      // カウントが 10 ごとでないのなら表示しない。
-      _isAnimate = false;
-      notifyListeners();
-    }
-  }
-
-  @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      displayForEvery10Counts(countModel.count);
-    }
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyProvider().create(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({
-    Key key,
-    this.title,
-  }) : super(key: key);
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    context.watch<AutoCountViewModel>().startAutoIncrement(true);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Stack(
-        fit:StackFit.loose,
-        overflow: Overflow.clip,
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Text(
-                  'You have pushed the button this many times:',
-                ),
-                // カウントの UI表示を行う View
-                CountView(),
-              ],
-            ),
-          ),
-          Center(
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.transparent,
-              // 10カウントごとの UI表示を行う AnimationView
-              child: const TenCounterAnimationView(),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(child:
-            FloatingActionButton(
-              onPressed: () => context.read<CountViewModel>().updateCount(true),
-              tooltip: 'auto increment by Timer.periodic',
-              child: const Icon(Icons.add),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
-          ),
-          Expanded(child:
-            FloatingActionButton(
-              onPressed: () => context.read<CountViewModel>().updateCount(false),
-              tooltip: 'auto increment by Future.delayed',
-              child: const Icon(Icons.add),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// カウントの UI表示を行う View
-class CountView extends StatelessWidget {
-  const CountView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '${context.watch<CountViewModel>().count}',
-      style: Theme.of(context).textTheme.headline4,
-    );
-  }
-}
-
-/// 10カウントごとの UI表示を行う AnimationView
-class TenCounterAnimationView extends StatefulWidget {
-  const TenCounterAnimationView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _TenCounterAnimationViewState createState() => _TenCounterAnimationViewState();
-}
-class _TenCounterAnimationViewState extends State<TenCounterAnimationView>
-    with TickerProviderStateMixin {
-  _TenCounterAnimationViewState() : super();
-
-  // 独自追加アニメーションオブジェクト
-  AnimationController controller;
-  Animation<double> animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _initAnimation();
-  }
-
-  @override
-  void dispose() {
-    _disposeAnimation();
-    super.dispose();
-  }
-
-  void _initAnimation() {
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 500),
-        vsync: this)
-      ..forward();
-    animation = Tween<double>(begin: 1.0, end: 0.0)
-        .animate(
-          CurvedAnimation(
-            parent: controller,
-            curve: Curves.easeOutQuart),
-        );
-  }
-
-  void _disposeAnimation() {
-    controller?.stop();
-    controller?.dispose();
-    controller = null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // アニメ実行済の場合は、再初期化を実行する。
-    if (controller?.isCompleted ?? false) {
-      _disposeAnimation();
-      _initAnimation();
-    }
-
-    // trueになったときのみアニメを実行させます。
-    if (context.watch<TenCounterViewModel>().isAnimate) {
-      // Alignment は、左端/上端が-1.0 で 右端/下端が 1.0 の位置を表す座標系なので、
-      // Alignmentの x は、0.0 ⇒ 中央固定で、y を 1.0 〜 0.0 まで変化させて、
-      // 画面下端から中央に移動させます。
-      return AnimatedBuilder(
-          builder: (BuildContext context, Widget child) {
-            return Align(
-              alignment: Alignment(0.0, animation.value),
-              child: const Text(
-                  'CLEAR',
-                  style: TextStyle(
-                      fontSize: 50.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber),
-              ),
-            );
-          },
-          animation: controller,
-          child: null,
-      );
-
-    } else {
-      return const SizedBox.shrink();
-    }
-  }
-}
-```
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_6/app.dart) [(ダウンロード)](./project/lib/src/step2_6/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_7/app.dart) [(ダウンロード)](./project/lib/src/step2_7/app.dart)  
 
 <br/>
 <br/>
 
 ----------
 ### Step 3-1〜3-3: 独自MVVMライブラリの紹介 (DartPadでも動作可能にする)
-
-![UNDER CONSTRUCTING](./images/under_constructing.png)
-
 providerパッケージを使った MVVMパターンにより、  
 関心事を表示から引き剥がし、新しい表示機能の追加や、表示機能の連携もしやすくして、ミニゲームを作る基礎を紹介しました。  
 ですが作ったミニゲームを DartPad を使って **手軽に大勢の人に遊んでもらう** ことを考えると、１つ問題があります。
@@ -3618,22 +2167,25 @@ DartPadの Samples には、カウンタアプリ(テンプレートアプリ) �
 providerパッケージは、`pubspec.yaml`で依存指定が必要な外部ライブラリなので [DartPad](https://dartpad.dev/) では使えないのです。  
 このままでは、自分でミニゲームを作っても、flutter for web 環境を構築した人でないと遊んでもらえません。
 
-<br/>
-
 そこで、DartPad でも利用できる、  
 MVVM アーキテクチャ基盤を提供する独自ライブラリ `model_view_viewmodel_container.dart` を作りました。  
 独自ライブラリは、providerパッケージのような最適化されたライブラリではなく、原理も違い効率や性能も劣る簡易なものですが、  
-providerパッケージを使った MVVM 実装パターンに、なるべく似るようにしています。
+providerパッケージを使った MVVM 実装パターンに、なるべく似せるようにしています。
 
-- 独自ライブラリと providerパッケージを使った MVVM パターンとの実装の違い
+<br/>
+
+#### 独自ライブラリと providerパッケージを使った MVVM パターンとの実装の違い
 
 - 公開する View Model の提供方法の違い  
-・ページ全体にモデルを提供するため モデルプロバイダー を作り、公開する View Model を登録する。  
+・ページ全体にモデルを提供するため **モデルプロバイダー** を作り、公開する View Model を登録する。  
 　オブジェクトをウィジェットツリーのページの上流に配置して、  
 　ページから context を介して、公開モデルを参照できるようにする。  
-・ページ全体のモデルを提供する モデルコンテナ を作り、公開する View Model を登録する。  
+・ページ全体のモデルを提供する **モデルコンテナ** を作り、公開する View Model を登録する。  
 　オブジェクトをページ(`PageWidget`抽象クラスを継承)のフィールドに保持させて、  
 　ページの build関数の第２引数を介して、公開モデルを参照できるようにする。  
+　*ページ全体のモデルコンテナは、`PageModelContainerミキシイン`を継承し、*  
+　*`initModel`関数で、公開する View Model を返すように実装します。*  
+　*`pageInit`関数は、`BuildContext`が必要な場合に実装します。*  
 
 - Model の違い  
 ・モデルは、`Modelミキシイン`を with で継承して作成する。  
@@ -3661,78 +2213,97 @@ providerパッケージを使った MVVM 実装パターンに、なるべく似
 
 <br/>
 
-- 現状のサンプルアプリを DartPadでも動作するように修正
+#### 現状のサンプルアプリを DartPadでも動作するように修正する手順概要
+現状のサンプルアプリを DartPadでも動作するように修正する手順概要は、以下の通りです。  
+1. インポート元を `provider.dart`と `model_mixin.dart`から、`model_view_viewmodel_container.dart` に差し替え。
+1. ページ全体のモデル提供元を `MyHomeProvider` から `MyHomeModelContainer` に変更。
+1. `CountModel`を `Model`抽象クラス継承に変更。
+1. `AutoCountViewModel`を `ViewModelクラス`継承に変更。
+1. `CountViewModel`を `ViewModelクラス`継承、更新通知を `updateView`関数に変更。
+1. `TenCounterViewModel`を `ViewModelクラス`継承、更新通知を `updateView`関数に変更。
+1. `MyApp`を `AppWidget抽象クラス`継承、`home`プロパティを `MyHomePage`適用に変更。
+1. `MyHomePage`を `PageWidget抽象クラス`継承に変更し、`createModelContainer`メソッドを新規追加。
+1. `MyHomePage#build`関数の複数箇所を修正。  
+1. `CountView`を `AbstractViewWidget抽象クラス`継承に変更、`build`関数に 第２引数 `ViewModels`を新規追加。  
+1. `TenCounterView`を新規追加。  
+1. `TenCounterAnimationView`に `isAnimate`プロパティを追加。  
+1. `TenCounterAnimationView#build`関数の アニメ実行条件判定を修正。  
 
-
-
-
-
-
-
-
-
-
-
-<br/>
-
-- `lib/src/library/model_view_viewmodel_container.dart` ライブラリ：  
-ライブラリ：[`lib/src/model_view_viewmodel_container.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/library/model_view_viewmodel_container.dart) [(ダウンロード)](./project/lib/src/library/model_view_viewmodel_container.dart)  
-*`model_view_viewmodel_container.dart`ライブラリは、`BSD 3-Clause License`です。(自由に御利用ください)*  
-
-<br/>
-
-- Step 3-1: `lib/src/app.dart`修正内容：  
-修正前：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2-7/app.dart) [(ダウンロード)](./project/lib/src/step2-7/app.dart)  
-修正後：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3-1/app.dart) [(ダウンロード)](./project/lib/src/step3-1/app.dart)  
+**以下の具体的な修正は、providerパッケージの代わりに、**  
+**MVVM アーキテクチャ基盤を提供する独自ライブラリを適用するためのものです。**  
+**このため「このように修正する」ということだけ押さえれば、特に理解する必要はありません。**
 
 <br/>
-
-- Step 3-2: providerパッケージの `Consumer`ウィジェットと同じような役割の `ViewWidget`と `AnimationViewWidget`を使ったサンプル  
-- `lib/src/app.dart`参考例内容：  
-参考例：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3_2/app.dart) [(ダウンロード)](./project/lib/src/step3_2/app.dart)  
-
 <br/>
 
-- Step 3-3: `TenCounterAnimationView`をライブラリ基盤を継承して、アニメ用の View Model(`AnimationViewModel`)対応に改修したサンプル  
-- `lib/src/app.dart`参考例内容：  
-参考例：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3_3/app.dart) [(ダウンロード)](./project/lib/src/step3_3/app.dart)  
-
-<br/>
-
-- Step 3-3 を DartPad で動作するようにした修正後全内容  
-*修正点は、独自MVVMライブラリをインポートせずソースに含めるようにしたのみです。*  
-*以下のソースを [DartPad](https://dartpad.dev) に貼り付ければ動作を確認できます。*
+- インポート元を `provider.dart`と `model_mixin.dart`から、`model_view_viewmodel_container.dart` に差し替え  
+*MVVMパターンのために使うライブラリを独自ライブラリに差し替えます。*
 
 ```dart
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:memojudge/src/library/model_mixin.dart';
+```
 
-/// step3-3
-void main() {
-  runApp(MyApp());
+![below](./images/below.png)
+
+```dart
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:memojudge/src/library/model_view_viewmodel_container.dart';
+```
+
+<br/>
+
+- ページ全体のモデル提供元を `MyHomeProvider` から `MyHomeModelContainer` に変更  
+*ページ全体のモデルコンテナは、`PageModelContainerミキシイン`を継承し、*  
+*`initModel`関数で、公開する View Model を返すように実装します。*  
+*`pageInit`関数は、`BuildContext`が必要な場合に実装します。*  
+
+```dart
+/// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
+class MyHomeProvider {
+  CountModel countModel;
+  AutoCountViewModel auto;
+  CountViewModel count;
+  TenCounterViewModel tenCounter;
+
+  Widget create() {
+    countModel = CountModel();
+    auto = AutoCountViewModel(countModel);
+    count = CountViewModel(countModel);
+    tenCounter = TenCounterViewModel(countModel);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => auto),
+        ChangeNotifierProvider(create: (context) => count),
+        ChangeNotifierProvider(create: (context) => tenCounter),
+      ],
+      child: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
 }
+```
 
-// 独自 MVVM パッケージを使った、MVVM パターン実装
-// CountModelを CountViewModelと TenCounterViewModelにバインド(所有)させて、
-// CountViewに CountViewModel、TenCounterViewに TenCounterViewModelをバインドして、
-// CountModelは、全体の関心事(カウント操作と、更新通知⇒バインド元への一斉通知)のみに専念することで、
-// View Model側は、自分の表示ルール⇒ロジックに従った、Modelから UI状態への反映と UI表示の更新を行い、
-// View側での ボタンクリックごとの カウント増加と、10カウントごとの CLEAR 表示の連携を実現しています。
+![below](./images/below.png)
 
+```dart
 /// ページ全体のモデル（ビジネスロジックとデータモデル）を提供するモデルコンテナ
 class MyHomeModelContainer with PageModelContainer {
   CountModel countModel;
   AutoCountViewModel auto;
   CountViewModel count;
-  TenCounterAnimationViewModel tenCounter;
+  TenCounterViewModel tenCounter;
 
   @override
   ViewModels initModel() {
     countModel = CountModel();
     auto = AutoCountViewModel(countModel);
     count = CountViewModel(countModel);
-    tenCounter = TenCounterAnimationViewModel(countModel);
+    tenCounter = TenCounterViewModel(countModel);
     return ViewModels([
       auto,
       count,
@@ -3742,7 +2313,23 @@ class MyHomeModelContainer with PageModelContainer {
   @override
   void initPage(BuildContext context) {}
 }
+```
 
+<br/>
+
+- `CountModel`を `Model`抽象クラス継承に変更
+
+```dart
+/// カウントを管理する Model
+class CountModel with Model {
+  bool isAutoCountUpStarted = false;
+  int _count = 0;
+  int get count => _count;
+```
+
+![below](./images/below.png)
+
+```dart
 /// カウントを管理する Model
 class CountModel extends Model {
   CountModel(): super();
@@ -3750,88 +2337,67 @@ class CountModel extends Model {
   bool isAutoCountUpStarted = false;
   int _count = 0;
   int get count => _count;
+```
 
-  void incrementCounter() {
-    _count++;
-    updateViewModels();
+<br/>
+
+- `AutoCountViewModel`を `ViewModelクラス`継承に変更
+
+```dart
+/// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
+class AutoCountViewModel with ChangeNotifier, ViewModel {
+  final CountModel countModel;
+  AutoCountViewModel(this.countModel) {
+    countModel.bindUpdate(onUpdate);
   }
+```
 
-  void startAutoIncrement(bool isUseTimer) {
-    // メインとは別の Isolate で、自動インクリメントを実行させる。
-    Future(() {
-      autoIncrementToTwenty(isUseTimer);
-    });
-  }
+![below](./images/below.png)
 
-  void autoIncrementToTwenty(bool isUseTimer) {
-    if (isAutoCountUpStarted) {
-      return;
-    }
-
-    isAutoCountUpStarted = true;
-    if (isUseTimer) {
-      _incrementToTwentyByTimer();
-    } else {
-      _incrementToTwentyByAwait();
-    }
-  }
-
-  /// カウンターが20になるまで、1秒毎に incrementCounter() を実行。（Timer.periodic 版）
-  void _incrementToTwentyByTimer() {
-    _count = 0;
-
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      if (count < 20) {
-        incrementCounter();
-      } else {
-        timer.cancel();
-        isAutoCountUpStarted = false;
-      }
-    });
-  }
-
-  /// カウンターが20になるまで、1秒毎に incrementCounter() を実行。（Future.delayed 版）
-  Future<void> _incrementToTwentyByAwait() async {
-    _count = 0;
-
-    Future<void> asyncWait() {
-      final Future<void> future = Future.delayed(const Duration(seconds: 1));
-      return future;
-    }
-
-    while(count < 20) {
-      incrementCounter();
-      await asyncWait();
-    }
-    isAutoCountUpStarted = false;
-  }
-}
-
+```dart
 /// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
 class AutoCountViewModel extends ViewModel {
   final CountModel countModel;
   AutoCountViewModel(this.countModel) :super() {
     countModel.bindUpdate(onUpdate);
   }
+```
 
-  void startAutoIncrement(bool isUseTimer) {
-    countModel.startAutoIncrement(isUseTimer);
+<br/>
+
+- `CountViewModel`を `ViewModelクラス`継承、更新通知を `updateView`関数に変更
+
+```dart
+/// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
+class CountViewModel with ChangeNotifier, ViewModel {
+  final CountModel countModel;
+  CountViewModel(this.countModel) {
+    countModel.bindUpdate(onUpdate);
+  }
+```
+
+```dart
+  @override
+  void onUpdate(Model model) {
+    if (model?.hashCode == countModel.hashCode ?? false) {
+      notifyListeners();
+    }
   }
 }
+```
 
+![below](./images/below.png)
+
+```dart
 /// カウントの UI表示に関する、プロパティとコマンドを提供する ViewModel
 class CountViewModel extends ViewModel {
   final CountModel countModel;
   CountViewModel(this.countModel) : super() {
     countModel.bindUpdate(onUpdate);
   }
+```
 
-  int get count => countModel.count;
-
-  void updateCount(bool isUseTimer) {
-    countModel.autoIncrementToTwenty(isUseTimer);
-  }
-
+```dart
   @override
   void onUpdate(Model model) {
     if (model?.hashCode == countModel.hashCode ?? false) {
@@ -3839,38 +2405,87 @@ class CountViewModel extends ViewModel {
     }
   }
 }
+```
 
-/// 10カウントごとの UI表示に関する、プロパティとコマンドを提供する AnimationViewModel
-class TenCounterAnimationViewModel extends AnimationViewModel {
+<br/>
+
+- `TenCounterViewModel`を `ViewModelクラス`継承、更新通知を `updateView`関数に変更
+
+```dart
+/// 10カウントごとの UI表示に関する、プロパティとコマンドを提供する ViewModel
+class TenCounterViewModel with ChangeNotifier, ViewModel {
   final CountModel countModel;
-  TenCounterAnimationViewModel(this.countModel) : super(isAnimate: false) {
+  TenCounterViewModel(this.countModel) {
     countModel.bindUpdate(onUpdate);
   }
+```
 
-  bool get isClear => isAnimate;
-
+```dart
   /// 10カウントごとに バインド先の UI表示切替を行う
   void displayForEvery10Counts(int count) {
     if (count % 10 == 0) {
       // カウントが 10 ごとに表示する。
-      isAnimate = true;
+      _isAnimate = true;
+      notifyListeners();
+    } else
+    if (_isAnimate == true) {
+      // カウントが 10 ごとでないのなら表示しない。
+      _isAnimate = false;
+      notifyListeners();
+    }
+  }
+```
+
+![below](./images/below.png)
+
+```dart
+/// 10カウントごとの UI表示に関する、プロパティとコマンドを提供する ViewModel
+class TenCounterViewModel extends ViewModel {
+  final CountModel countModel;
+  TenCounterViewModel(this.countModel) : super() {
+    countModel.bindUpdate(onUpdate);
+  }
+```
+
+```dart
+  /// 10カウントごとに バインド先の UI表示切替を行う
+  void displayForEvery10Counts(int count) {
+    if (count % 10 == 0) {
+      // カウントが 10 ごとに表示する。
+      _isAnimate = true;
       updateView();
     } else
-    if (isAnimate == true) {
+    if (_isAnimate == true) {
       // カウントが 10 ごとでないのなら表示しない。
-      isAnimate = false;
+      _isAnimate = false;
       updateView();
     }
   }
+```
 
+<br/>
+
+- `MyApp`を `AppWidget抽象クラス`継承、`home:`プロパティを `MyHomePage`適用に変更
+
+```dart
+class MyApp extends StatelessWidget {
   @override
-  void onUpdate(Model model) {
-    if (model?.hashCode == countModel.hashCode ?? false) {
-      displayForEvery10Counts(countModel.count);
-    }
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: MyHomeProvider().create(),
+    );
   }
 }
+```
 
+![below](./images/below.png)
+
+```dart
 class MyApp extends AppWidget {
   @override
   Widget build(BuildContext context, modelContainer) {
@@ -3884,7 +2499,24 @@ class MyApp extends AppWidget {
     );
   }
 }
+```
 
+<br/>
+
+- `MyHomePage`を `PageWidget抽象クラス`継承に変更し、`createModelContainer`メソッドを新規追加
+
+```dart
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({
+    Key key,
+    this.title,
+  }) : super(key: key);
+  final String title;
+```
+
+![below](./images/below.png)
+
+```dart
 class MyHomePage extends PageWidget<MyHomeModelContainer> {
   const MyHomePage({
     Key key,
@@ -3896,63 +2528,109 @@ class MyHomePage extends PageWidget<MyHomeModelContainer> {
   MyHomeModelContainer createModelContainer() {
     return MyHomeModelContainer();
   }
+```
 
+<br/>
+
+- `MyHomePage#build`関数の複数箇所を修正  
+*`build`関数に、公開 View Model を提供する第２引数 `ViewModels`を新規追加*  
+*公開 View Model から `AutoCountViewModel#startAutoIncrement`関数を参照するよう変更*  
+*カウント UI表示を 改訂後の `CountView`ウィジェットに変更*  
+*10カウントごとの UI表示を 改訂後の `TenCounterAnimationView`に変更*  
+*`onPressed`プロパティに 公開 View Model の `CountViewModel#updateCount`関数を適用するよう変更*  
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    context.watch<AutoCountViewModel>().startAutoIncrement(true);
+```
+
+```dart
+                // カウントの UI表示を行う View
+                CountView(),
+```
+
+```dart
+              // 10カウントごとの UI表示を行う AnimationView
+              child: const TenCounterAnimationView(),
+```
+
+```dart
+          Expanded(child:
+            FloatingActionButton(
+              onPressed: () => context.read<CountViewModel>().updateCount(true),
+              tooltip: 'auto increment by Timer.periodic',
+              child: const Icon(Icons.add),
+            ), // This trailing comma makes auto-formatting nicer for build methods.
+          ),
+          Expanded(child:
+            FloatingActionButton(
+              onPressed: () => context.read<CountViewModel>().updateCount(false),
+              tooltip: 'auto increment by Future.delayed',
+              child: const Icon(Icons.add),
+            ), // This trailing comma makes auto-formatting nicer for build methods.
+          ),
+```
+
+![below](./images/below.png)
+
+```dart
   @override
   Widget build(BuildContext context, ViewModels viewModels) {
     viewModels.find<AutoCountViewModel>().startAutoIncrement(true);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Stack(
-        fit:StackFit.loose,
-        overflow: Overflow.clip,
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  'You have pushed the button this many times:',
-                ),
+```
+
+```dart
                 // カウントの UI表示を行う View
                 CountView(model: viewModels.find<CountViewModel>()),
-              ],
-            ),
-          ),
-          Center(
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.transparent,
-              // 10カウントごとの UI表示を行う AnimationView
-              child: TenCounterAnimationView(model: viewModels.find<TenCounterAnimationViewModel>()),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+```
+
+```dart
+              // 10カウントごとの UI表示を行う View
+              child: TenCounterView(model: viewModels.find<TenCounterViewModel>()),
+```
+
+```dart
           Expanded(child:
             FloatingActionButton(
               onPressed: () => viewModels.find<CountViewModel>().updateCount(true),
               tooltip: 'auto increment by Timer.periodic',
               child: const Icon(Icons.add),
-            ),
+            ), // This trailing comma makes auto-formatting nicer for build methods.
           ),
           Expanded(child:
             FloatingActionButton(
               onPressed: () => viewModels.find<CountViewModel>().updateCount(false),
               tooltip: 'auto increment by Future.delayed',
               child: const Icon(Icons.add),
-            ),
+            ), // This trailing comma makes auto-formatting nicer for build methods.
           ),
-        ],
-      ),
+```
+
+<br/>
+
+- `CountView`を `AbstractViewWidget抽象クラス`継承に変更、`build`関数に 第２引数 `ViewModels`を新規追加  
+
+```dart
+/// カウントの UI表示を行う View
+class CountView extends StatelessWidget {
+  const CountView({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '${context.watch<CountViewModel>().count}',
+      style: Theme.of(context).textTheme.headline4,
     );
   }
 }
+```
 
+![below](./images/below.png)
+
+```dart
 /// カウントの UI表示を行う View
 class CountView extends AbstractViewWidget<CountViewModel> {
   const CountView({
@@ -3968,604 +2646,105 @@ class CountView extends AbstractViewWidget<CountViewModel> {
     );
   }
 }
+```
 
-/// 10カウントごとの UI表示を行う AnimationView
-class TenCounterAnimationView extends AbstractAnimationViewWidget<TenCounterAnimationViewModel> {
-  const TenCounterAnimationView({
+<br/>
+
+- `TenCounterView`を新規追加  
+*`TenCounterViewModel`の アニメーション ON/OFF 用のフラグで `TenCounterAnimationView`を再描画させます。*  
+
+```dart
+/// 10カウントごとの UI表示を行う View
+class TenCounterView extends AbstractViewWidget<TenCounterViewModel> {
+  const TenCounterView({
     Key key,
-    @required TenCounterAnimationViewModel model,
-  }) : super(key: key, model: model);
+    @required TenCounterViewModel model,
+  }) : super(key:key, model: model);
 
   @override
-  AnimationController onCreateController(TickerProvider vsync) {
-    return AnimationController(
-        duration: const Duration(milliseconds: 500),
-        vsync: vsync)
-      ..forward();
-  }
-
-  @override
-  List<Animation> onCreateAnimations(AnimationController controller) {
-    final Animation<double> animation = Tween<double>(begin: 1.0, end: 0.0)
-        .animate(
-          CurvedAnimation(
-            parent: controller,
-            curve: Curves.easeOutQuart),
-        );
-    return <Animation>[animation];
-  }
-
-  @override
-  Widget onCreateChild(BuildContext context) {
-    return null;
-  }
-
-  @override
-  Widget onAnimationBuild(BuildContext context, Widget child,
-      AnimationController controller, List<Animation> animations, {TenCounterAnimationViewModel model}) {
-    final Animation<double> animation = convertAnimation(animations[0]);
-    // Alignment は、左端/上端が-1.0 で 右端/下端が 1.0 の位置を表す座標系なので、
-    // Alignmentの x は、0.0 ⇒ 中央固定で、y を 1.0 〜 0.0 まで変化させて、
-    // 画面下端から中央に移動させます。
-    return Align(
-      alignment: Alignment(0.0, animation.value),
-      child: const Text(
-          'CLEAR',
-          style: TextStyle(
-              fontSize: 50.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.amber),
-      ),
-    );
-  }
-
-  @override
-  Widget noAnimationBuild(BuildContext context, Widget child, {TenCounterAnimationViewModel model}) {
-    return const SizedBox.shrink();
-  }
-}
-
-
-// ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-// 独自MVVMライブラリ
-// ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-/// UI表現モデルを更新させるための関数型
-typedef UpdateViewModel = void Function(Model model);
-
-/// UI表現を更新させるための関数型
-typedef UpdateView = void Function();
-
-/// UI表現を更新させ、完了まで待機させるための関数型
-typedef AsyncUpdateView = Future<bool> Function();
-
-/// UI表現を構築するための関数型
-typedef ViewBuilder<M extends ViewModel> = Widget Function(BuildContext context, M model);
-
-/// voidを返し引数がない関数型
-typedef VoidFunction = void Function();
-
-
-/// アプリ全体の Model を管理するモデルコンテナのミキシイン(抽象基盤クラスの素)。
-mixin AppModelContainer {
-  /// アプリ全体で管理する Model の初期設定を行います。
-  void initModel();
-
-  /// アプリ全体に関わる初期設定を行います。
-  void initApp(BuildContext context);
-}
-
-/// アプリ全体のウィジェット定義と<br/>
-/// アプリ全体のモデルコンテナ([AppModelContainer]継承型オブジェクト)を指定する抽象基盤クラス。
-abstract class AppWidget<M extends AppModelContainer> extends StatefulWidget {
-  const AppWidget({
-    Key key,
-  }) : super(key: key);
-
-  void initState(){}
-  void dispose(){}
-
-  /// AppModelContainer継承オブジェクト生成
-  M createModelContainer() {
-    return null;
-  }
-
-  M _createModelContainer() {
-    final M appModelContainer = createModelContainer();
-    appModelContainer?.initModel();
-    return appModelContainer;
-  }
-
-  Widget build(BuildContext context, M modelContainer);
-
-  @override
-  AppWidgetState<M> createState() => AppWidgetState<M>(_createModelContainer());
-}
-class AppWidgetState<M extends AppModelContainer> extends State<AppWidget<M>> {
-  final M modelContainer;
-  AppWidgetState(this.modelContainer) : super();
-
-  @override
-  void initState(){
-    super.initState();
-    widget.initState();
-  }
-
-  @override
-  void dispose(){
-    widget.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    modelContainer?.initApp(context);
-    return widget.build(context, modelContainer);
-  }
-}
-
-
-/// ページ全体の ViewModel や Model を管理するモデルコンテナのミキシイン(抽象基盤クラスの素)。
-mixin PageModelContainer {
-  /// ページ全体で公開する ViewModel 一覧
-  ViewModels viewModels;
-
-  /// ページ全体で管理するモデル値の初期設定を行います。
-  ViewModels initModel();
-
-  /// ページ全体に関わる初期設定を行います。
-  void initPage(BuildContext context);
-
-  /// AppModelContainer継承オブジェクト提供
-  M provideAppModelContainer<M extends AppModelContainer>(BuildContext context) {
-    final AppWidgetState<M> state = context.findAncestorStateOfType<AppWidgetState<M>>();
-    return state?.modelContainer;
-  }
-}
-
-/// ページ全体のUI表現の定義と<br/>
-/// ページ全体のモデルコンテナ([PageModelContainer]継承型オブジェクト)を指定する抽象基盤クラス。
-abstract class PageWidget<M extends PageModelContainer> extends StatefulWidget {
-  const PageWidget({
-    Key key,
-  }) : super(key: key);
-
-  void initState(){}
-  void dispose(){}
-
-  /// PageModelContainer継承オブジェクト生成
-  M createModelContainer() {
-    return null;
-  }
-
-  M _createModelContainer() {
-    final M pageModelContainer = createModelContainer();
-    pageModelContainer.viewModels = pageModelContainer?.initModel();
-    return pageModelContainer;
-  }
-
-  Widget build(BuildContext context, ViewModels viewModels);
-
-  @override
-  _BasePageWidgetState<M> createState() => _BasePageWidgetState<M>(_createModelContainer());
-}
-class _BasePageWidgetState<M extends PageModelContainer> extends State<PageWidget<M>> {
-  final M modelContainer;
-  _BasePageWidgetState(this.modelContainer) : super();
-
-  @override
-  void initState(){
-    super.initState();
-    if (widget.initState != null) {
-      widget.initState();
-    }
-  }
-
-  @override
-  void dispose(){
-    if (widget.dispose != null) {
-      widget.dispose();
-    }
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    modelContainer?.initPage(context);
-    return widget.build(context, modelContainer?.viewModels);
-  }
-}
-
-/// ビジネスロジックとデータモデルを提供する、ドメインモデルを定義する基盤クラス。
-abstract class Model {
-  final List<UpdateViewModel> _updateViewModels = [];
-
-  /// UI表現モデル更新関数を登録する。
-  void bindUpdate(UpdateViewModel updateViewModel) {
-    if (updateViewModel != null) {
-      _updateViewModels.add(updateViewModel);
-    }
-  }
-
-  /// UI表現モデル更新関数を削除する。
-  void unbindUpdate(UpdateViewModel updateViewModel) {
-    if (updateViewModel != null) {
-      _updateViewModels.remove(updateViewModel);
-    }
-  }
-
-  /// UI表現モデルを更新する。
-  void updateViewModels() {
-    if (_updateViewModels != null) {
-      for (UpdateViewModel update in _updateViewModels) {
-        update(this);
-      }
-    }
-  }
-}
-
-/// テキストメセージなどのUI個別表現の状態を扱う基盤クラス。
-class ViewModel<T> {
-  UpdateView _updateView;
-  T value;
-  ViewModel({
-    this.value
-  }) : super();
-
-  /// UI表現を更新する。
-  void updateView() {
-    if (_updateView != null) {
-      _updateView();
-    }
-  }
-
-  /// UI個別表現の状態を更新するハンドラ。
-  void onUpdate(Model model) {}
-
-  /// モデルと更新ハンドラをバインドする。
-  void bindModel(Model model) {
-    model.bindUpdate(onUpdate);
-  }
-
-  /// モデルと更新ハンドラをアンバインドする。
-  void unbindModel(Model model) {
-    model.unbindUpdate(onUpdate);
-  }
-}
-
-/// アニメーション(ON/OFF)指定付きのUI個別表現の状態を扱う基盤クラス。
-class AnimationViewModel<T> extends ViewModel<T> {
-  bool isAnimate;
-  AsyncUpdateView _asyncUpdateView;
-
-  AnimationViewModel({
-    @required this.isAnimate,
-    T value
-  }) : super(value: value);
-
-  /// UI表現を更新し、アニメーション表示完了まで待機する。
-  Future<bool> asyncUpdateView() {
-    if (_asyncUpdateView != null) {
-      return _asyncUpdateView();
-    }
-    return Future<bool>.value(false);
-  }
-}
-
-/// ViewModel の一覧を格納する基盤クラス
-class ViewModels {
-  final PageModelContainer _pageModelContainer;
-  final Map<Type,ViewModel> _viewModelMap;
-  final List<ViewModel> _viewModels;
-
-  ViewModels(
-      this._viewModels,
-      PageModelContainer pageModelContainer,
-      ) : _viewModelMap = _parseMap(_viewModels),
-        _pageModelContainer = pageModelContainer;
-
-  M unsafePageModelContainer<M extends PageModelContainer>() {
-    return _pageModelContainer as M;
-  }
-
-  /// 指定 index の ViewModel要素取得
-  T get<T extends ViewModel>(int index) {
-    return _viewModels[index] as T;
-  }
-
-  /// 指定 ViewModel型 の ViewModel要素取得
-  T find<T extends ViewModel>() {
-    return _viewModelMap[T] as T;
-  }
-
-  static Map<Type,ViewModel> _parseMap(List<ViewModel> models) {
-    final Map<Type,ViewModel> viewModelMap = {};
-    for(ViewModel model in models) {
-      final Type type = model.runtimeType;
-      viewModelMap[type] = model;
-    }
-    return viewModelMap;
-  }
-}
-
-/// ページ内の個別のUI表現の定義と利用する View Model([ViewModel])を指定する基盤クラス。
-class ViewWidget<M extends ViewModel> extends AbstractViewWidget<M> {
-  final ViewBuilder<M> builder;
-  final VoidFunction initStater;
-  final VoidFunction disposer;
-
-  const ViewWidget({
-    Key key,
-    @required M model,
-    @required this.builder,
-    this.initStater,
-    this.disposer,
-  }) : super(key: key, model: model);
-
-  @override
-  void initState() {
-    if (initStater != null) {
-      initStater();
-    }
-  }
-
-  @override
-  void dispose() {
-    if (disposer != null) {
-      disposer();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context, M model) {
-    return builder(context, model);
-  }
-
-  @override
-  _AbstractViewWidgetState createState() => _AbstractViewWidgetState();
-}
-
-
-// ビルド関数の引数 model がオプションになっていることに注意！
-class AnimationViewWidget<M extends AnimationViewModel> extends AbstractAnimationViewWidget<M> {
-  final VoidFunction initStater;
-  final VoidFunction disposer;
-  final AnimationController Function(TickerProvider vsync) onCreatorController;
-  final List<Animation> Function(AnimationController controller) onCreatorAnimations;
-  final Widget Function(BuildContext context) onCreatorChild;
-  final Widget Function(BuildContext context, Widget child, AnimationController controller, List<Animation> animations, {M model}) onAnimationBuilder;
-  final Widget Function(BuildContext context, Widget child, {M model}) noAnimationBuilder;
-
-  const AnimationViewWidget({
-    Key key,
-    @required M model,
-    @required this.onCreatorController,
-    @required this.onCreatorAnimations,
-    @required this.onCreatorChild,
-    @required this.onAnimationBuilder,
-    @required this.noAnimationBuilder,
-    this.initStater,
-    this.disposer,
-  }) : super(key: key, model: model);
-
-  @override
-  void initState() {
-    if (initStater != null) {
-      initStater();
-    }
-  }
-
-  @override
-  void dispose() {
-    if (disposer != null) {
-      disposer();
-    }
-  }
-
-  /// アニメーションリスト要素の型キャスト
-  static Animation<V> converterAnimation<V>(Animation<dynamic> animation) {
-    return animation as Animation<V>;
-  }
-
-  @override
-  AnimationController onCreateController(TickerProvider vsync) {
-    return onCreatorController(vsync);
-  }
-
-  @override
-  List<Animation> onCreateAnimations(AnimationController controller) {
-    return onCreatorAnimations(controller);
-  }
-
-  @override
-  Widget onCreateChild(BuildContext context) {
-    return onCreatorChild(context);
-  }
-
-  @override
-  Widget onAnimationBuild(BuildContext context, Widget child, AnimationController controller, List<Animation> animations, {M model}) {
-    return onAnimationBuilder(context, child, controller, animations, model: model);
-  }
-
-  @override
-  Widget noAnimationBuild(BuildContext context, Widget child, {M model}) {
-    return noAnimationBuilder(context, child, model: model);
-  }
-
-  @override
-  _AbstractAnimationViewWidgetState createState() => _AbstractAnimationViewWidgetState();
-}
-
-
-abstract class AbstractViewWidget<M extends ViewModel> extends StatefulWidget {
-  final M model;
-  const AbstractViewWidget({
-    Key key,
-    @required this.model,
-  }) : super(key: key);
-
-  void initState(){}
-  void dispose(){}
-  Widget build(BuildContext context, M model);
-
-  @override
-  _AbstractViewWidgetState createState() => _AbstractViewWidgetState();
-}
-class _AbstractViewWidgetState extends State<AbstractViewWidget> {
-  _AbstractViewWidgetState() : super();
-
-  @override
-  void initState(){
-    super.initState();
-    widget.initState();
-    widget.model._updateView = _onUpdate;
-  }
-
-  @override
-  void dispose(){
-    widget.model._updateView = null;
-    widget.dispose();
-    super.dispose();
-  }
-
-  /// UI個別表現を更新するハンドラ。
-  // ignore: missing_return
-  UpdateView _onUpdate() {
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.build(context, widget.model);
-  }
-}
-
-
-// ビルダー関数の引数 model がオプションになっていることに注意！
-abstract class AbstractAnimationViewWidget<M extends AnimationViewModel> extends StatefulWidget {
-  final M model;
-
-  const AbstractAnimationViewWidget({
-    Key key,
-    @required this.model,
-  }) : super(key: key);
-
-  void initState(){}
-  void dispose(){}
-
-  /// アニメーション・コントローラ生成
-  AnimationController onCreateController(TickerProvider vsync);
-
-  /// アニメーション・オブジェクト生成
-  List<Animation> onCreateAnimations(AnimationController controller);
-
-  /// 子 UI表現構築用
-  Widget onCreateChild(BuildContext context);
-
-  /// アニメーションを伴なう、UI表現構築用
-  Widget onAnimationBuild(BuildContext context, Widget child,
-      AnimationController controller, List<Animation> animations, {M model});
-
-  /// アニメーションを伴わない、UI表現構築用
-  Widget noAnimationBuild(BuildContext context, Widget child, {M model});
-
-  /// アニメーションリスト要素の型キャスト
-  Animation<V> convertAnimation<V>(Animation<dynamic> animation) {
-    return animation as Animation<V>;
-  }
-
-  @override
-  _AbstractAnimationViewWidgetState createState() => _AbstractAnimationViewWidgetState();
-}
-class _AbstractAnimationViewWidgetState extends State<AbstractAnimationViewWidget>
-    with TickerProviderStateMixin {
-  Completer<bool> asyncUpdateCompleter;
-  AnimationController controller;
-  List<Animation> animations;
-  _AbstractAnimationViewWidgetState() : super();
-
-  @override
-  void initState() {
-    super.initState();
-    widget.initState();
-    widget.model._updateView = _onUpdate;
-    widget.model._asyncUpdateView = _asyncUpdate;
-    _initAnimation();
-  }
-
-  @override
-  void dispose() {
-    _disposeAnimation();
-    widget.model._updateView = null;
-    widget.model._asyncUpdateView = null;
-    widget.dispose();
-    super.dispose();
-  }
-
-  void _initAnimation() {
-    controller = widget.onCreateController(this);
-    animations = widget.onCreateAnimations(controller);
-  }
-
-  void _disposeAnimation() {
-    controller?.stop();
-    controller?.dispose();
-    controller = null;
-  }
-
-  /// UI個別表現を更新するハンドラ。
-  // ignore: missing_return
-  UpdateView _onUpdate () {
-    setState(() {});
-  }
-
-  Future<bool> _asyncUpdate() {
-    setState(() {});
-    asyncUpdateCompleter = Completer();
-    return asyncUpdateCompleter.future;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // アニメ実行済の場合は、再初期化を実行する。
-    if (controller?.isCompleted ?? false) {
-      _disposeAnimation();
-      _initAnimation();
-    }
-
-    // trueになったときのみアニメを実行させます。
-    if (widget.model.isAnimate) {
-      final TransitionBuilder onBuilder = (BuildContext context, Widget child) {
-        // 非同期更新の場合は、呼び出し元をアニメ完了後まで待機させるようにします。
-        if (!(asyncUpdateCompleter?.isCompleted ?? true)) {
-          if (controller.isCompleted) {
-            asyncUpdateCompleter.complete(true);
-          }
-        }
-        return widget.onAnimationBuild(
-            context,
-            child,
-            controller,
-            animations,
-            model: widget.model);
-      };
-      return AnimatedBuilder(
-          builder: onBuilder,
-          animation: controller,
-          child: widget.onCreateChild(context));
-
-    } else {
-      // 非同期更新の場合は、同期失敗で直帰させるようにします。
-      if (!(asyncUpdateCompleter?.isCompleted ?? true)) {
-        asyncUpdateCompleter.complete(false);
-      }
-      return widget.noAnimationBuild(
-          context,
-          widget.onCreateChild(context),
-          model: widget.model);
-    }
+  Widget build(BuildContext context, TenCounterViewModel model) {
+    // 10カウントごとの UI表示を行う AnimationView に処理を移譲
+    return TenCounterAnimationView(isAnimate: model.isAnimate);
   }
 }
 ```
+
+<br/>
+
+- `TenCounterAnimationView`に `isAnimate`プロパティを追加  
+*providerが使えないので、アニメーション ON/OFF 用のフラグプロパティをコンストラクタ引数で受け取らせます。*  
+
+```dart
+/// 10カウントごとの UI表示を行う AnimationView
+class TenCounterAnimationView extends StatefulWidget {
+  const TenCounterAnimationView({
+    Key key,
+  }) : super(key: key);
+```
+
+![below](./images/below.png)
+
+```dart
+/// 10カウントごとの UI表示を行う AnimationView
+class TenCounterAnimationView extends StatefulWidget {
+  final bool isAnimate;
+
+  const TenCounterAnimationView({
+    Key key,
+    @required this.isAnimate,
+  }) : super(key: key);
+```
+
+<br/>
+
+- `TenCounterAnimationView#build`関数の アニメ実行条件判定を修正  
+*アニメーション ON/OFF 用のフラグプロパティを参照するように変更。*  
+
+```dart
+    // trueになったときのみアニメを実行させます。
+    if (context.watch<TenCounterViewModel>().isAnimate) {
+```
+
+![below](./images/below.png)
+
+```dart
+    // trueになったときのみアニメを実行させます。
+    if (widget.isAnimate) {
+```
+
+<br/>
+<br/>
+
+- Step 3-1: `lib/src/app.dart`修正内容：  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2-7/app.dart) [(ダウンロード)](./project/lib/src/step2-7/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3-1/app.dart) [(ダウンロード)](./project/lib/src/step3-1/app.dart)  
+
+<br/>
+
+- Step 3-2: providerパッケージの `Consumer`ウィジェットと同じような役割の  
+  `ViewWidget`と `AnimationViewWidget`を使った場合のサンプル  
+- `lib/src/app.dart`参考例内容：  
+参考例：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3_2/app.dart) [(ダウンロード)](./project/lib/src/step3_2/app.dart)  
+
+<br/>
+
+- Step 3-3: `TenCounterAnimationView`をライブラリ基盤を継承して、  
+  アニメ用の View Model(`AnimationViewModel`)対応に改修したサンプル  
+- `lib/src/app.dart`参考例内容：  
+参考例：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3_3/app.dart) [(ダウンロード)](./project/lib/src/step3_3/app.dart)  
+
+<br/>
+
+- `lib/src/library/model_view_viewmodel_container.dart` ライブラリ：  
+ライブラリ：[`lib/src/model_view_viewmodel_container.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/library/model_view_viewmodel_container.dart) [(ダウンロード)](./project/lib/src/library/model_view_viewmodel_container.dart)  
+*ライブラリは、`BSD 3-Clause License`です。(自由に御利用ください)*  
+
+<br/>
+
+- Step 3-3 を DartPad で動作するようにした修正後全内容  
+*修正点は、独自MVVMライブラリをインポートせずソースに含めるようにしたのみです。*  
+*以下の **DartPad対応全コード** を [DartPad](https://dartpad.dev) に貼り付ければ動作を確認できます。*  
+DartPad対応全コード：[`lib/src/step3_3/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3-3/main.dart) [(ダウンロード)](./project/lib/src/step3-3/main.dart)  
 
 <br/>
 <br/>

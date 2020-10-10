@@ -15,7 +15,7 @@ void startApp() {
 // View側での ボタンクリックごとの カウント増加と、10カウントごとの CLEAR 表示の連携を実現しています。
 
 /// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
-class MyProvider {
+class MyHomeProvider {
   CountModel countModel;
   CountViewModel count;
   TenCounterViewModel tenCounter;
@@ -107,7 +107,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyProvider().create(),
+      home: MyHomeProvider().create(),
     );
   }
 }
