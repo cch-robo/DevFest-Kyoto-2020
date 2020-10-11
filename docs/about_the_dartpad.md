@@ -33,13 +33,13 @@
 
 #### DartPad コードの Gist 保管概要
 - DartPad は、pubspec.yaml を使わない ⇒ 外部ライブラリを使えない、  
-main.dart だけで完結する Flutter for Web アプリの簡易開発環境と考える。  
+main.dart だけで完結する Flutter for Web アプリの簡易開発環境と考えます。  
 
 - DartPad で作成＆動作確認したコードをコピペして、  
-タイトルを main.dart にした gist にして保管します。  
+ファイル名を main.dart にした gist にして保管します。  
 
-- gist は、同じタイトルであっても GIST_ID (ハッシュ値？) が異なるので、  
-　　　　　　　　　　　　　　main.dart タイトルの gist は複数作成できます。  
+- gist は、同じファイル名であっても GIST_ID (ハッシュ値？) が異なるので、  
+　　　　　　　　　　　　　　ファイル名 main.dart の gist は複数作成できます。  
 
 - gist は、パブリックか プライベートの git リポジトリです。  
 URLを知っている人のみにアクセスさせるには、URLを非公開にします。
@@ -51,8 +51,9 @@ URLを知っている人のみにアクセスさせるには、URLを非公開�
 #### DartPad コードの Gist 保管手順
 - GitHub にサインインして、gist ページ [https://gist.github.com/](https://gist.github.com/) を開きます。  
 
-- gist の 説明文を入力して、タイトルは main.dart 固定入力で、  
+- gist の 説明文を入力して、ファイル名は main.dart 固定入力で、  
 DartPad コードを Gist テキストボックスに貼り付けます。  
+***Gist説明/Gist description**で、同じファイル名が複数あっても区別がつくようにすること。*  
 
 - 「Create public gist」か「Create secret gist」のいずれかを選んで、  
 URL公開 (検索可能) か、URL非公開 (URLを知らないとアクセス不能) かを指定して gist を作成します。  
