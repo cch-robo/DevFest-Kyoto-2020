@@ -648,7 +648,7 @@ flutterには、コードを変更してもアプリ全体を再ビルドする�
 つまり関数は、関数オブジェクトなので、変数に直接定義したり代入でき、引数に指定することもできます。
 
 ```dart
-  // 変数に「値を返さなず引数のない関数型」の _incrementCounter を代入する。
+  // 変数に「値を返さず引数のない関数型」の _incrementCounter を代入する。
   void Function() incrementCounterVariable = _incrementCounter;
 
   // 変数に、関数を直接定義することもできる。
