@@ -26,8 +26,12 @@
 
 <br/>
 
-- [DartPad | Dart](https://dart.dev/tools/dartpad) 公式ページ  
+- [DartPad | Dart](https://dart.dev/tools/dartpad) マニュアル・ページ  
   [https://dart.dev/tools/dartpad](https://dart.dev/tools/dartpad)
+
+- [DartPad in tutorials: best practices](https://dart.dev/resources/dartpad-best-practices) (DartPadで教育コンテンツを作る際のガイド)  
+[https://dart.dev/resources/dartpad-best-practices](https://dart.dev/resources/dartpad-best-practices)  
+*ページ先頭に、DartPad画面の UIについての説明があります。*
 
 <br/>
 
