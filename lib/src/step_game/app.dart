@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:memojudge/src/library/model_view_viewmodel_container.dart';
 
 /// step game
@@ -10,7 +9,7 @@ void startApp() {
   runApp(MemoJudgeApp());
 }
 
-/// アプリ全体のモデル（ビジネスロジックとデータモデル）を提供するモデルコンテナ
+/// アプリ全体のモデル（モデル/ビジネスロジックとデータ）を提供するモデルコンテナ
 class GameAppModelContainer with AppModelContainer {
   GameAppModelContainer() : super();
 
@@ -30,43 +29,43 @@ class GameAppModelContainer with AppModelContainer {
 /// TapButtonがタップされたことを通知する関数型
 typedef TapButtonNotify = void Function(int);
 
-/// ページ全体のモデル（ビジネスロジックとデータモデル）を提供するモデルコンテナ
+/// ページ全体のモデル（ビューモデルとモデル）を提供するモデルコンテナ
 class GameModelContainer with PageModelContainer {
 
   /// ゲームロジックのモデル
   GamePlayModel gamePlay;
 
-  /// デモ表示フラグ
+  /// デモ表示のビューモデル
   DemosViewModel isOnDemos;
 
-  /// タップ入力バリア(ON/OFF)フラグ
+  /// タップ入力バリアのビューモデル
   TapBlockViewModel isTapBlock;
 
-  /// タップボタンのコンテナ
+  /// タップボタン・コンテナのビューモデル
   TapButtonsAnimationViewModel tapButtonsContainer;
 
-  /// LEVEL 表示
+  /// LEVEL 表示のビューモデル
   LevelAnimationViewModel level;
 
-  /// CHALLENGE 表示
+  /// CHALLENGE 表示のビューモデル
   ChallengeAnimationViewModel challenge;
 
-  /// CLEAR 表示
+  /// CLEAR 表示のビューモデル
   ClearAnimationViewModel clear;
 
-  /// MISS 表示
+  /// MISS 表示のビューモデル
   MissAnimationViewModel miss;
 
-  /// TIMEUP 表示
+  /// TIMEUP 表示のビューモデル
   TimeUpAnimationViewModel timeUp;
 
-  /// REPLAY 表示
+  /// REPLAY 表示のビューモデル
   ReplayAnimationViewModel replay;
 
-  /// GAME OVER 表示
+  /// GAME OVER 表示のビューモデル
   GameOverAnimationViewModel gameOver;
 
-  /// HIGH SCORE 表示
+  /// HIGH SCORE 表示のビューモデル
   HighScoreAnimationViewModel highScore;
 
   @override
@@ -468,7 +467,7 @@ class GamePlayModel {
   }
 }
 
-/// 表示フラグ＆値操作モデル (read/write)
+/// 表示ON/OFFフラグ＆値操作を提供するモデル (read/write)
 class OperationShowModel {
   OperationShowModel(this._isShow, [this._value = 0]) {
     _showModel = ShowModel(this);
@@ -492,7 +491,7 @@ class OperationShowModel {
   }
 }
 
-/// 表示フラグ＆値参照モデル (read only)
+/// 表示ON/OFFフラグ＆値参照を提供するモデル (read only)
 class ShowModel extends Model {
   final OperationShowModel _model;
   ShowModel(this._model);
@@ -500,7 +499,7 @@ class ShowModel extends Model {
   int get value => _model.value;
 }
 
-/// フラグ基盤クラス
+/// 表示ON/OFFフラグを提供するビューモデル基盤
 class _FlagViewModel extends ViewModel<bool> {
   final ShowModel _model;
   _FlagViewModel(this._model) : super(value: _model.isShow) {
@@ -516,27 +515,27 @@ class _FlagViewModel extends ViewModel<bool> {
   }
 }
 
-/// デモ表示フラグ
+/// デモ表示(表示ON/OFF付き)のビューモデル
 class DemosViewModel extends _FlagViewModel {
   final VoidFunction stopDemos;
   DemosViewModel(ShowModel model, this.stopDemos) : super(model);
   bool get isOnDemos => value;
 }
 
-/// タップ入力バリア(ON/OFF)フラグ
+/// タップ入力バリア(表示ON/OFF付き)のビューモデル
 class TapBlockViewModel extends _FlagViewModel {
   TapBlockViewModel(ShowModel model) : super(model);
   bool get isTapBlock => value;
 }
 
-/// TapButton コンテナ
+/// タップボタン・ビューモデルのコンテナ
 class TapButtonsAnimationViewModel extends ViewModel {
   final List<TapButtonAnimationViewModel> _tapButtons;
   TapButtonsAnimationViewModel(this._tapButtons) : super();
   List<TapButtonAnimationViewModel> get tapButtons => _tapButtons;
 }
 
-/// アニメ(ON/OFF)基盤クラス
+/// アニメ表示ON/OFFフラグを提供するビューモデル基盤
 class _FlagAnimationViewModel extends AnimationViewModel {
   final ShowModel _model;
   _FlagAnimationViewModel(this._model) : super(isAnimate: _model.isShow) {
@@ -552,44 +551,44 @@ class _FlagAnimationViewModel extends AnimationViewModel {
   }
 }
 
-/// TapButton 明滅表示
+/// タップボタン表示(アニメ表示ON/OFF付き)のビューモデル
 class TapButtonAnimationViewModel extends _FlagAnimationViewModel {
   final int index;
   final TapButtonNotify notify;
   TapButtonAnimationViewModel(ShowModel model, this.index, this.notify) : super(model);
 }
 
-/// CHALLENGE 表示
+/// チャレンジ表示(アニメ表示ON/OFF付き)のビューモデル
 class ChallengeAnimationViewModel extends _FlagAnimationViewModel {
   ChallengeAnimationViewModel(ShowModel model) : super(model);
 }
 
-/// CLEAR 表示
+/// チャレンジクリア表示(アニメ表示ON/OFF付き)のビューモデル
 class ClearAnimationViewModel extends _FlagAnimationViewModel {
   ClearAnimationViewModel(ShowModel model) : super(model);
 }
 
-/// MISS 表示
+/// ミス表示(アニメ表示ON/OFF付き)のビューモデル
 class MissAnimationViewModel extends _FlagAnimationViewModel {
   MissAnimationViewModel(ShowModel model) : super(model);
 }
 
-/// TIMEUP 表示
+/// タイムアップ表示(アニメ表示ON/OFF付き)のビューモデル
 class TimeUpAnimationViewModel extends _FlagAnimationViewModel {
   TimeUpAnimationViewModel(ShowModel model) : super(model);
 }
 
-/// REPLAY 表示
+/// リプレイ表示(アニメ表示ON/OFF付き)のビューモデル
 class ReplayAnimationViewModel extends _FlagAnimationViewModel {
   ReplayAnimationViewModel(ShowModel model) : super(model);
 }
 
-/// GAME OVER 表示
+/// ゲームオーバー表示(アニメ表示ON/OFF付き)のビューモデル
 class GameOverAnimationViewModel extends _FlagAnimationViewModel {
   GameOverAnimationViewModel(ShowModel model) : super(model);
 }
 
-/// int プロパティ付きアニメ(ON/OFF)基盤クラス
+/// int プロパティ付きアニメON/OFFフラグを提供するビューモデル基盤
 class _IntWithAnimationViewModel extends AnimationViewModel<int> {
   final ShowModel _model;
   _IntWithAnimationViewModel(this._model)
@@ -609,17 +608,18 @@ class _IntWithAnimationViewModel extends AnimationViewModel<int> {
   }
 }
 
-/// LEVEL 表示
+/// レベル表示(intプロパティ＋アニメ表示ON/OFF付き)のビューモデル
 class LevelAnimationViewModel extends _IntWithAnimationViewModel {
   LevelAnimationViewModel(ShowModel model) : super(model);
 }
 
-/// HIGH SCORE 表示
+/// ハイスコア表示(intプロパティ＋アニメ表示ON/OFF付き)のビューモデル
 class HighScoreAnimationViewModel extends _IntWithAnimationViewModel {
   HighScoreAnimationViewModel(ShowModel model) : super(model);
 }
 
 
+/// ゲームのアプリウィジェット
 class MemoJudgeApp extends AppWidget<GameAppModelContainer> {
   @override
   GameAppModelContainer createModelContainer() {
@@ -628,12 +628,6 @@ class MemoJudgeApp extends AppWidget<GameAppModelContainer> {
 
   @override
   Widget build(BuildContext context, GameAppModelContainer modelContainer) {
-    /// アプリ全体で画面を縦方向にロックする（画面回転抑止）
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
     return MaterialApp(
       title: 'Memory Judge',
       theme: ThemeData(
@@ -645,6 +639,7 @@ class MemoJudgeApp extends AppWidget<GameAppModelContainer> {
   }
 }
 
+/// ゲームのページウィジェット
 class GameFieldPage extends PageWidget<GameModelContainer> {
   const GameFieldPage({
         Key key,
@@ -715,56 +710,7 @@ class GameFieldPage extends PageWidget<GameModelContainer> {
 }
 
 
-// Flutter for Web では、ストローク付きのテキストはエラーになる ISSUE が上がっています。
-// [web] Text foreground paint / stroke not working #46683
-// https://github.com/flutter/flutter/issues/46683
-/*
-/// 縁取り付きのテキストを表示するウィジェット
-class StrokeText extends StatelessWidget {
-  // This custom text widget is based on the Stack Overflow post below.
-  // How to decorate text stroke in Flutter?
-  // https://stackoverflow.com/questions/52146269/how-to-decorate-text-stroke-in-flutter
-
-  const StrokeText(this.text, {
-    Key key,
-    @required this.color,
-    @required this.borderColor,
-    @required this.borderWidth,
-    this.fontSize,
-    this.fontStyle,
-    this.fontWeight,
-  }) : super(key: key);
-
-  final String text;
-  final Color color;
-  final Color borderColor;
-  final double borderWidth;
-  final double fontSize;
-  final FontStyle fontStyle;
-  final FontWeight fontWeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      Text(text,
-          style: TextStyle(
-              fontSize: fontSize ?? 14.0,
-              foreground: Paint()
-                ..color = color
-                ..style = PaintingStyle.stroke
-                ..strokeWidth = borderWidth
-          )),
-      Text(text,
-          style: TextStyle(
-            fontSize: fontSize ?? 14.0,
-            color: color,
-          )),
-    ]);
-  }
-}
-*/
-
-/// 縁取り付きのテキストを表示するウィジェット
+/// 縁取り付きのテキストを表示するビューウィジェット
 class BorderText extends StatelessWidget {
   // This custom text widget is based on the Stack Overflow post below.
   // How to decorate text stroke in Flutter?
@@ -820,7 +766,7 @@ class BorderText extends StatelessWidget {
 }
 
 
-/// タップ入力をブロックするためのウィジェット
+/// タップ入力をブロックするためのビューウィジェット
 class TapBlockViewWidget extends AbstractViewWidget<TapBlockViewModel> {
   const TapBlockViewWidget({
     Key key,
@@ -835,7 +781,7 @@ class TapBlockViewWidget extends AbstractViewWidget<TapBlockViewModel> {
   }
 }
 
-/// デモ表示中にゲーム説明をオーバラップ表示するウィジェット
+/// デモ表示中にゲーム説明をオーバラップ表示するビューウィジェット
 class DemosViewWidget extends AbstractViewWidget<DemosViewModel> {
   final double fontSize;
   const DemosViewWidget({
@@ -858,12 +804,6 @@ class DemosViewWidget extends AbstractViewWidget<DemosViewModel> {
               ),
               onPressed: model.stopDemos,
               child: BorderText(
-/*
-                'Memorize the order of\n'
-                ' shined buttons\n'
-                '  and tap in order.\n\n'
-                '  Tap to start a game.',
-*/
                 'Memorize the order of \n'
                 'the glowing buttons\n'
                 'and tap them in order.\n\n'
@@ -881,7 +821,8 @@ class DemosViewWidget extends AbstractViewWidget<DemosViewModel> {
 }
 
 
-/// せり上がるラベル・アニメーション表示と非表示の UI表示基盤ウィジェット
+/// せり上がるラベル・アニメーション表示と非表示の UI表示を適用するビューウィジェット基盤
+/// (ビューモデルが、アニメーション表示ON/OFFだけでなく intプロパティを持つ場合、ラベルの末尾に数値を追加します。)
 class RiseUpAnimationWidget<T extends AnimationViewModel> extends AbstractAnimationViewWidget<T> {
   final String label;
   final Color fontColor;
@@ -946,7 +887,7 @@ class RiseUpAnimationWidget<T extends AnimationViewModel> extends AbstractAnimat
   }
 }
 
-/// レベル表示をオーバラップしながらアニメーション表示するウィジェット
+/// レベル表示をオーバラップしながらアニメーション表示するビューウィジェット
 class LevelAnimationWidget extends RiseUpAnimationWidget<LevelAnimationViewModel> {
   const LevelAnimationWidget({
     Key key,
@@ -957,6 +898,7 @@ class LevelAnimationWidget extends RiseUpAnimationWidget<LevelAnimationViewModel
         label: 'LEVEL', fontColor: Colors.green, fontSize: fontSize);
 }
 
+/// チャレンジクリア表示をオーバラップしながらアニメーション表示するビューウィジェット
 class ClearAnimationWidget extends RiseUpAnimationWidget<ClearAnimationViewModel> {
   const ClearAnimationWidget({
     Key key,
@@ -967,6 +909,7 @@ class ClearAnimationWidget extends RiseUpAnimationWidget<ClearAnimationViewModel
       label: 'CLEAR', fontColor: Colors.white, fontSize: fontSize);
 }
 
+/// チャレンジ表示をオーバラップしながらアニメーション表示するビューウィジェット
 class ChallengeAnimationWidget extends RiseUpAnimationWidget<ChallengeAnimationViewModel> {
   const ChallengeAnimationWidget({
     Key key,
@@ -977,7 +920,7 @@ class ChallengeAnimationWidget extends RiseUpAnimationWidget<ChallengeAnimationV
         label: 'CHALLENGE', fontColor: Colors.orange, fontSize: fontSize);
 }
 
-/// ミス表示をオーバラップしながらアニメーション表示するウィジェット
+/// ミス表示をオーバラップしながらアニメーション表示するビューウィジェット
 class MissAnimationWidget extends RiseUpAnimationWidget<MissAnimationViewModel> {
   const MissAnimationWidget({
     Key key,
@@ -988,7 +931,7 @@ class MissAnimationWidget extends RiseUpAnimationWidget<MissAnimationViewModel> 
         label: 'MISS', fontColor: Colors.yellow, fontSize: fontSize);
 }
 
-/// タイムアップ表示をオーバラップしながらアニメーション表示するウィジェット
+/// タイムアップ表示をオーバラップしながらアニメーション表示するビューウィジェット
 class TimeUpAnimationWidget extends RiseUpAnimationWidget<TimeUpAnimationViewModel> {
   const TimeUpAnimationWidget({
     Key key,
@@ -999,7 +942,7 @@ class TimeUpAnimationWidget extends RiseUpAnimationWidget<TimeUpAnimationViewMod
       label: 'TIME UP', fontColor: Colors.yellow, fontSize: fontSize);
 }
 
-/// リプレイ表示をオーバラップしながらアニメーション表示するウィジェット
+/// リプレイ表示をオーバラップしながらアニメーション表示するビューウィジェット
 class ReplayAnimationWidget extends RiseUpAnimationWidget<ReplayAnimationViewModel> {
   const ReplayAnimationWidget({
     Key key,
@@ -1010,7 +953,7 @@ class ReplayAnimationWidget extends RiseUpAnimationWidget<ReplayAnimationViewMod
         label: 'REPLAY', fontColor: Colors.cyan, fontSize: fontSize);
 }
 
-/// ゲームオーバー表示をオーバラップしながらアニメーション表示するウィジェット
+/// ゲームオーバー表示をオーバラップしながらアニメーション表示するビューウィジェット
 class GameOverAnimationWidget extends RiseUpAnimationWidget<GameOverAnimationViewModel> {
   const GameOverAnimationWidget({
     Key key,
@@ -1021,7 +964,7 @@ class GameOverAnimationWidget extends RiseUpAnimationWidget<GameOverAnimationVie
         label: 'GAME OVER', fontColor: Colors.red, fontSize: fontSize);
 }
 
-/// ハイスコア表示をオーバラップしながらアニメーション表示するウィジェット
+/// ハイスコア表示をオーバラップしながらアニメーション表示するビューウィジェット
 class HighScoreAnimationWidget extends RiseUpAnimationWidget<HighScoreAnimationViewModel> {
   const HighScoreAnimationWidget({
     Key key,
@@ -1033,7 +976,7 @@ class HighScoreAnimationWidget extends RiseUpAnimationWidget<HighScoreAnimationV
 }
 
 
-/// 丸いタップボタンの UI表示ウィジェット（タップ時に明滅アニメーションを行なう）
+/// 丸いタップボタンの UI表示を明滅アニメーション表示するビューウィジェット
 class TapButtonAnimationWidget extends AbstractAnimationViewWidget<TapButtonAnimationViewModel> {
   final Color color;
   const TapButtonAnimationWidget({
