@@ -68,11 +68,11 @@ URL公開 (検索可能) か、URL非公開 (URLを知らないとアクセス�
 #### gist 連携 ⇒ DartPad＆コード埋め込み手順
 - コードを指定して DartPad を開くには、以下のようなホスト＋パスで、  
 DartPad コード gist URL の GIST_ID をクエリパラメータに指定します。  
-[https://dartpad.dev/embed-flutter.html?id=93f34ba70cd7eed727b0fea5525a7539](https://dartpad.dev/embed-flutter.html?id=93f34ba70cd7eed727b0fea5525a7539)  
+[https://dartpad.dev/embed-flutter.html?id=＜GIST_ID＞](https://dartpad.dev/embed-flutter.html?id=93f34ba70cd7eed727b0fea5525a7539)  
 - DartPadをページに追加するには、iframe タグと 上記URLを利用します。  
-`<iframe src="https://dartpad.dev/embed-flutter.html?id=<GIST_ID>"></iframe>`  
+`<iframe src="https://dartpad.dev/embed-flutter.html?id=＜GIST_ID＞"></iframe>`  
 - ダークテーマにするには、クエリとして theme=dark を追加指定します。  
-[https://dartpad.dev/embed-flutter.html?id=<GIST_ID>&split=80&theme=dark](https://dartpad.dev/embed-flutter.html?id=<GIST_ID>&split=80&theme=dark)
+[https://dartpad.dev/embed-flutter.html?id=＜GIST_ID＞&split=80&theme=dark](https://dartpad.dev/embed-flutter.html?id=93f34ba70cd7eed727b0fea5525a7539&split=80&theme=dark)
 
 - 参考元：dart-lang / dart-pad  Embedding Guide  
 [https://github.com/dart-lang/dart-pad/wiki/Embedding-Guide](https://github.com/dart-lang/dart-pad/wiki/Embedding-Guide)
