@@ -21,31 +21,31 @@
 <br/>
 
 - 講座構成
-  - [flutter for web 環境を作る](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#flutter-for-web-%E7%92%B0%E5%A2%83%E3%82%92%E4%BD%9C%E3%82%8B)
-  - [flutter for web ってなに？](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#flutter-for-web-%E3%81%A3%E3%81%A6%E3%81%AA%E3%81%AB)
-  - [Step 1-1: flutterプロジェクトを新規作成する](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-1-1-flutter%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E6%96%B0%E8%A6%8F%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B)
-  - [Step 1-2: テンプレートアプリの分割](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-1-2-%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%88%86%E5%89%B2)
-  - [テンプレートアプリの構造 (flutterアプリの構成の基本)](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E6%A7%8B%E9%80%A0-flutter%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E6%A7%8B%E6%88%90%E3%81%AE%E5%9F%BA%E6%9C%AC)
-  - [flutter for web アプリのビルドとアプリ実行 (webアプリの動作確認)](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#flutter-for-web-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%81%A8%E3%82%A2%E3%83%97%E3%83%AA%E5%AE%9F%E8%A1%8C-web%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D)
-  - [flutter for web アプリをスマートフォンで動作確認 (オプション)](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#flutter-for-web-%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E3%82%B9%E3%83%9E%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%B3%E3%81%A7%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D-%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3)
-  - [flutter アプリのホットリロードとホットリスタート](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#flutter-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E3%83%9B%E3%83%83%E3%83%88%E3%83%AA%E3%83%AD%E3%83%BC%E3%83%89%E3%81%A8%E3%83%9B%E3%83%83%E3%83%88%E3%83%AA%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%88)
-  - [ゲームプレイに必要な、ボタン入力とアクション実行の基本](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#%E3%82%B2%E3%83%BC%E3%83%A0%E3%83%97%E3%83%AC%E3%82%A4%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E3%83%9C%E3%82%BF%E3%83%B3%E5%85%A5%E5%8A%9B%E3%81%A8%E3%82%A2%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E5%AE%9F%E8%A1%8C%E3%81%AE%E5%9F%BA%E6%9C%AC)
-  - [Step 2-1: providerパッケージを使った UI表示更新の基本](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-2-1-provider%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F-ui%E8%A1%A8%E7%A4%BA%E6%9B%B4%E6%96%B0%E3%81%AE%E5%9F%BA%E6%9C%AC)
-  - [Step 2-2: providerパッケージを使った UI表示更新の基本２](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-2-2-provider%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F-ui%E8%A1%A8%E7%A4%BA%E6%9B%B4%E6%96%B0%E3%81%AE%E5%9F%BA%E6%9C%AC%EF%BC%92)
-  - [Step 2-3: MVVMアーキテクチャを導入する (ビジネスロジックの分離)](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-2-3-mvvm%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3%E3%82%92%E5%B0%8E%E5%85%A5%E3%81%99%E3%82%8B-%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9%E3%83%AD%E3%82%B8%E3%83%83%E3%82%AF%E3%81%AE%E5%88%86%E9%9B%A2)
-  - [Step 2-4: MVVMアーキテクチャを利用する (UI表示の連携)](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-2-4-mvvm%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3%E3%82%92%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B-ui%E8%A1%A8%E7%A4%BA%E3%81%AE%E9%80%A3%E6%90%BA)
-  - [Step 2-5: デモ表示に必要な、指定時間ごとの処理実行方法](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-2-5-%E3%83%87%E3%83%A2%E8%A1%A8%E7%A4%BA%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E6%8C%87%E5%AE%9A%E6%99%82%E9%96%93%E3%81%94%E3%81%A8%E3%81%AE%E5%87%A6%E7%90%86%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95)
-  - [Step 2-6: デモの自動起動に必要な、独自の処理流れの起動方法](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-2-6-%E3%83%87%E3%83%A2%E3%81%AE%E8%87%AA%E5%8B%95%E8%B5%B7%E5%8B%95%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%8B%AC%E8%87%AA%E3%81%AE%E5%87%A6%E7%90%86%E6%B5%81%E3%82%8C%E3%81%AE%E8%B5%B7%E5%8B%95%E6%96%B9%E6%B3%95)
-  - [Step 2-7: ゲームを賑やかにする、アニメーションの導入](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-2-7-%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%92%E8%B3%91%E3%82%84%E3%81%8B%E3%81%AB%E3%81%99%E3%82%8B%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E5%B0%8E%E5%85%A5)
-  - [Step 3-1〜3-3: 独自MVVMライブラリの紹介 (DartPadでも動作可能にする)](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#step-3-13-3-%E7%8B%AC%E8%87%AAmvvm%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%AE%E7%B4%B9%E4%BB%8B-dartpad%E3%81%A7%E3%82%82%E5%8B%95%E4%BD%9C%E5%8F%AF%E8%83%BD%E3%81%AB%E3%81%99%E3%82%8B)
-  - [ミニゲームを作ろう](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/#%E3%83%9F%E3%83%8B%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%92%E4%BD%9C%E3%82%8D%E3%81%86)
+  - [flutter for web 環境を作る](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E7%92%B0%E5%A2%83%E3%82%92%E4%BD%9C%E3%82%8B)
+  - [flutter for web ってなに？](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E3%81%A3%E3%81%A6%E3%81%AA%E3%81%AB)
+  - [Step 1-1: flutterプロジェクトを新規作成する](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-1-1-flutter%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E6%96%B0%E8%A6%8F%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B)
+  - [Step 1-2: テンプレートアプリの分割](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-1-2-%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%88%86%E5%89%B2)
+  - [テンプレートアプリの構造 (flutterアプリの構成の基本)](https://cch-robo.github.io/DevFest-Kyoto-2020/#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E6%A7%8B%E9%80%A0-flutter%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E6%A7%8B%E6%88%90%E3%81%AE%E5%9F%BA%E6%9C%AC)
+  - [flutter for web アプリのビルドとアプリ実行 (webアプリの動作確認)](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%81%A8%E3%82%A2%E3%83%97%E3%83%AA%E5%AE%9F%E8%A1%8C-web%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D)
+  - [flutter for web アプリをスマートフォンで動作確認 (オプション)](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E3%82%B9%E3%83%9E%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%B3%E3%81%A7%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D-%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3)
+  - [flutter アプリのホットリロードとホットリスタート](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E3%83%9B%E3%83%83%E3%83%88%E3%83%AA%E3%83%AD%E3%83%BC%E3%83%89%E3%81%A8%E3%83%9B%E3%83%83%E3%83%88%E3%83%AA%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%88)
+  - [ゲームプレイに必要な、ボタン入力とアクション実行の基本](https://cch-robo.github.io/DevFest-Kyoto-2020/#%E3%82%B2%E3%83%BC%E3%83%A0%E3%83%97%E3%83%AC%E3%82%A4%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E3%83%9C%E3%82%BF%E3%83%B3%E5%85%A5%E5%8A%9B%E3%81%A8%E3%82%A2%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E5%AE%9F%E8%A1%8C%E3%81%AE%E5%9F%BA%E6%9C%AC)
+  - [Step 2-1: providerパッケージを使った UI表示更新の基本](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-1-provider%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F-ui%E8%A1%A8%E7%A4%BA%E6%9B%B4%E6%96%B0%E3%81%AE%E5%9F%BA%E6%9C%AC)
+  - [Step 2-2: providerパッケージを使った UI表示更新の基本２](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-2-provider%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F-ui%E8%A1%A8%E7%A4%BA%E6%9B%B4%E6%96%B0%E3%81%AE%E5%9F%BA%E6%9C%AC%EF%BC%92)
+  - [Step 2-3: MVVMアーキテクチャを導入する (ビジネスロジックの分離)](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-3-mvvm%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3%E3%82%92%E5%B0%8E%E5%85%A5%E3%81%99%E3%82%8B-%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9%E3%83%AD%E3%82%B8%E3%83%83%E3%82%AF%E3%81%AE%E5%88%86%E9%9B%A2)
+  - [Step 2-4: MVVMアーキテクチャを利用する (UI表示の連携)](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-4-mvvm%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3%E3%82%92%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B-ui%E8%A1%A8%E7%A4%BA%E3%81%AE%E9%80%A3%E6%90%BA)
+  - [Step 2-5: デモ表示に必要な、指定時間ごとの処理実行方法](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-5-%E3%83%87%E3%83%A2%E8%A1%A8%E7%A4%BA%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E6%8C%87%E5%AE%9A%E6%99%82%E9%96%93%E3%81%94%E3%81%A8%E3%81%AE%E5%87%A6%E7%90%86%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95)
+  - [Step 2-6: デモの自動起動に必要な、独自の処理流れの起動方法](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-6-%E3%83%87%E3%83%A2%E3%81%AE%E8%87%AA%E5%8B%95%E8%B5%B7%E5%8B%95%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%8B%AC%E8%87%AA%E3%81%AE%E5%87%A6%E7%90%86%E6%B5%81%E3%82%8C%E3%81%AE%E8%B5%B7%E5%8B%95%E6%96%B9%E6%B3%95)
+  - [Step 2-7: ゲームを賑やかにする、アニメーションの導入](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-7-%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%92%E8%B3%91%E3%82%84%E3%81%8B%E3%81%AB%E3%81%99%E3%82%8B%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E5%B0%8E%E5%85%A5)
+  - [Step 3-1〜3-3: 独自MVVMライブラリの紹介 (DartPadでも動作可能にする)](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-3-13-3-%E7%8B%AC%E8%87%AAmvvm%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%AE%E7%B4%B9%E4%BB%8B-dartpad%E3%81%A7%E3%82%82%E5%8B%95%E4%BD%9C%E5%8F%AF%E8%83%BD%E3%81%AB%E3%81%99%E3%82%8B)
+  - [ミニゲームを作ろう](https://cch-robo.github.io/DevFest-Kyoto-2020/#%E3%83%9F%E3%83%8B%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%92%E4%BD%9C%E3%82%8D%E3%81%86)
 
 <br/>
 <br/>
 
 ----------
 ## flutter for web 環境を作る
-環境構築については、[flutter for web 環境を作る](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/install_flutter_sdk.html) ページを参照  
+環境構築については、[flutter for web 環境を作る](https://cch-robo.github.io/DevFest-Kyoto-2020/install_flutter_sdk.html) ページを参照  
 
 <br/>
 <br/>
@@ -292,7 +292,7 @@ $ git clone https://github.com/cch-robo/DevFest-Kyoto-2020.git
 
 <br/>
 
-修正：[`lib/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step1_2/main.dart) [(ダウンロード)](./project/lib/src/step1_2/main.dart)
+修正：[`lib/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/main.dart) [(ダウンロード)](./project/lib/src/step1_2/main.dart)
 
 ```dart
 import 'package:memojudge/src/app.dart';
@@ -304,7 +304,7 @@ void main() {
 
 <br/>
 
-新規作成：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step1_2/app.dart) [(ダウンロード)](./project/lib/src/step1_2/app.dart)
+新規作成：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/app.dart) [(ダウンロード)](./project/lib/src/step1_2/app.dart)
 
 ```dart
 import 'package:flutter/material.dart';
@@ -499,7 +499,7 @@ flutter for webアプリの動作を確認することができるようにな�
 - `dhttpd` を使った webアプリのホスト方法例
   - 公式資料で環境構築されたのなら、[dhttpd ツール](https://pub.dev/packages/dhttpd) をインストールしてホストさせます。
   - 独自自動スクリプト([flenv.sh](./scripts/flenv.sh))で環境構築されたのなら、`-server コマンド`が利用できます。
-  - *flutter for web 環境構築については、[flutter for web 環境を作る](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/install_flutter_sdk.html) ページを参照ください。*  
+  - *flutter for web 環境構築については、[flutter for web 環境を作る](https://cch-robo.github.io/DevFest-Kyoto-2020/install_flutter_sdk.html) ページを参照ください。*  
 
 ![dhttpd host web app](./images/dhttpd_host_web_app.png)
 
@@ -768,8 +768,8 @@ dependencies:
 <br/>
 
 - `pubspec.yaml`修正内容：  
-修正前：[`pubspec.yaml`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step1_2/pubspec.yaml) [(ダウンロード)](./project/lib/src/step1_2/pubspec.yaml)  
-修正後：[`pubspec.yaml`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_1/pubspec.yaml) [(ダウンロード)](./project/lib/src/step2_1/pubspec.yaml)  
+修正前：[`pubspec.yaml`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/pubspec.yaml) [(ダウンロード)](./project/lib/src/step1_2/pubspec.yaml)  
+修正後：[`pubspec.yaml`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_1/pubspec.yaml) [(ダウンロード)](./project/lib/src/step2_1/pubspec.yaml)  
 
 <br/>
 
@@ -971,8 +971,8 @@ class MyHomePage extends StatelessWidget {
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step1_2/app.dart) [(ダウンロード)](./project/lib/src/step1_2/app.dart)  
-修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_1/app.dart) [(ダウンロード)](./project/lib/src/step2_1/app.dart)  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/app.dart) [(ダウンロード)](./project/lib/src/step1_2/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_1/app.dart) [(ダウンロード)](./project/lib/src/step2_1/app.dart)  
 
 <br/>
 <br/>
@@ -1030,8 +1030,8 @@ class CountView extends StatelessWidget {
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_1/app.dart) [(ダウンロード)](./project/lib/src/step2_1/app.dart)  
-修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_2/app.dart) [(ダウンロード)](./project/lib/src/step2_2/app.dart)  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_1/app.dart) [(ダウンロード)](./project/lib/src/step2_1/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_2/app.dart) [(ダウンロード)](./project/lib/src/step2_2/app.dart)  
 
 <br/>
 <br/>
@@ -1238,13 +1238,13 @@ class MyHomeProvider {
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_2/app.dart) [(ダウンロード)](./project/lib/src/step2_2/app.dart)  
-修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_3/app.dart) [(ダウンロード)](./project/lib/src/step2_3/app.dart)  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_2/app.dart) [(ダウンロード)](./project/lib/src/step2_2/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_3/app.dart) [(ダウンロード)](./project/lib/src/step2_3/app.dart)  
 
 <br/>
 
 - `lib/src/library/model_mixin.dart` ライブラリ：  
-ライブラリ：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/library/model_mixin.dart) [(ダウンロード)](./project/lib/src/library/model_mixin.dart)  
+ライブラリ：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/library/model_mixin.dart) [(ダウンロード)](./project/lib/src/library/model_mixin.dart)  
 
 - `lib/src/library/model_mixin.dart` ライブラリ全内容：  
 
@@ -1515,8 +1515,8 @@ class MyHomeProvider {
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_3/app.dart) [(ダウンロード)](./project/lib/src/step2_3/app.dart)  
-修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_4/app.dart) [(ダウンロード)](./project/lib/src/step2_4/app.dart)  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_3/app.dart) [(ダウンロード)](./project/lib/src/step2_3/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_4/app.dart) [(ダウンロード)](./project/lib/src/step2_4/app.dart)  
 
 <br/>
 <br/>
@@ -1937,8 +1937,8 @@ Column(children: <Widget>[
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_4/app.dart) [(ダウンロード)](./project/lib/src/step2_4/app.dart)  
-修正後コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_5/app.dart) [(ダウンロード)](./project/lib/src/step2_5/app.dart)  
+修正前コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_4/app.dart) [(ダウンロード)](./project/lib/src/step2_4/app.dart)  
+修正後コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_5/app.dart) [(ダウンロード)](./project/lib/src/step2_5/app.dart)  
 
 <br/>
 <br/>
@@ -2096,8 +2096,8 @@ class MyHomeProvider {
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_5/app.dart) [(ダウンロード)](./project/lib/src/step2_5/app.dart)  
-修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_6/app.dart) [(ダウンロード)](./project/lib/src/step2_6/app.dart)  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_5/app.dart) [(ダウンロード)](./project/lib/src/step2_5/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_6/app.dart) [(ダウンロード)](./project/lib/src/step2_6/app.dart)  
 
 <br/>
 <br/>
@@ -2306,8 +2306,8 @@ class _TenCounterAnimationViewState extends State<TenCounterAnimationView>
 <br/>
 
 - `lib/src/app.dart`修正内容：  
-修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_6/app.dart) [(ダウンロード)](./project/lib/src/step2_6/app.dart)  
-修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2_7/app.dart) [(ダウンロード)](./project/lib/src/step2_7/app.dart)  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_6/app.dart) [(ダウンロード)](./project/lib/src/step2_6/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_7/app.dart) [(ダウンロード)](./project/lib/src/step2_7/app.dart)  
 
 <br/>
 <br/>
@@ -2871,27 +2871,27 @@ class TenCounterAnimationView extends StatefulWidget {
 <br/>
 
 - Step 3-1: `lib/src/app.dart`修正内容：  
-修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step2-7/app.dart) [(ダウンロード)](./project/lib/src/step2-7/app.dart)  
-修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step3-1/app.dart) [(ダウンロード)](./project/lib/src/step3-1/app.dart)  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2-7/app.dart) [(ダウンロード)](./project/lib/src/step2-7/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3-1/app.dart) [(ダウンロード)](./project/lib/src/step3-1/app.dart)  
 
 <br/>
 
 - Step 3-2: providerパッケージの `Consumer`ウィジェットと同じような役割の  
   `ViewWidget`と `AnimationViewWidget`を使った場合のサンプル  
 - `lib/src/app.dart`参考例内容：  
-参考例：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step3_2/app.dart) [(ダウンロード)](./project/lib/src/step3_2/app.dart)  
+参考例：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3_2/app.dart) [(ダウンロード)](./project/lib/src/step3_2/app.dart)  
 
 <br/>
 
 - Step 3-3: `TenCounterAnimationView`をライブラリ基盤を継承して、  
   アニメ用の View Model(`AnimationViewModel`)対応に改修したサンプル  
 - `lib/src/app.dart`参考例内容：  
-参考例：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step3_3/app.dart) [(ダウンロード)](./project/lib/src/step3_3/app.dart)  
+参考例：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3_3/app.dart) [(ダウンロード)](./project/lib/src/step3_3/app.dart)  
 
 <br/>
 
 - `lib/src/library/model_view_viewmodel_container.dart` ライブラリ：  
-ライブラリ：[`lib/src/model_view_viewmodel_container.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/library/model_view_viewmodel_container.dart) [(ダウンロード)](./project/lib/src/library/model_view_viewmodel_container.dart)  
+ライブラリ：[`lib/src/model_view_viewmodel_container.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/library/model_view_viewmodel_container.dart) [(ダウンロード)](./project/lib/src/library/model_view_viewmodel_container.dart)  
 *ライブラリは、`BSD 3-Clause License`です。(自由に御利用ください)*  
 
 <br/>
@@ -2899,12 +2899,12 @@ class TenCounterAnimationView extends StatefulWidget {
 - Step 3-3 を DartPad で動作するようにした修正後全内容  
 *修正点は、独自MVVMライブラリをインポートせずソースに含めるようにしたのみです。*  
 *以下の **DartPad対応全コード** を [DartPad](https://dartpad.dev) に貼り付ければ動作を確認できます。*  
-DartPad対応全コード：[`lib/src/step3_3/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step3_3/main.dart) [(ダウンロード)](./project/lib/src/step3_3/main.dart)  
+DartPad対応全コード：[`lib/src/step3_3/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3_3/main.dart) [(ダウンロード)](./project/lib/src/step3_3/main.dart)  
 
 - DartPadで動作する flutter for web アプリは、gist にコードを保管すれば 公開することもできます。  
 *[(gist)DevFest Kyoto 2020 - Flutter 初心者向け講座 - Step 3-3 サンプル](https://gist.github.com/cch-robo/93f34ba70cd7eed727b0fea5525a7539)*  
 *[(DartPad)DevFest Kyoto 2020 - Flutter 初心者向け講座 - Step 3-3 サンプル](https://dartpad.dev/embed-flutter.html?id=93f34ba70cd7eed727b0fea5525a7539&split=80&theme=dark)*  
-詳しくは、[DartPad について](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/about_the_dartpad.html) を参照ください。  
+詳しくは、[DartPad について](https://cch-robo.github.io/DevFest-Kyoto-2020/about_the_dartpad.html) を参照ください。  
 
 <br/>
 <br/>
@@ -4319,17 +4319,17 @@ class GamePlayModel {
 
 - Step game: ミニゲームの全内容  
 - `lib/src/app.dart`ミニゲームの全内容：  
-ソースコード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step_game/app.dart) [(ダウンロード)](./project/lib/src/step_game/app.dart)  
+ソースコード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step_game/app.dart) [(ダウンロード)](./project/lib/src/step_game/app.dart)  
 
 - Step game を DartPad で動作するようにした修正後全内容  
 *修正点は、独自MVVMライブラリをインポートせずソースに含めるようにしたのみです。*  
 *以下の **DartPad対応全コード** を [DartPad](https://dartpad.dev) に貼り付ければ動作を確認できます。*  
-DartPad対応全コード：[`lib/src/step_game/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020_prototype/blob/master/lib/src/step_game/main.dart) [(ダウンロード)](./project/lib/src/step_game/main.dart)  
+DartPad対応全コード：[`lib/src/step_game/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step_game/main.dart) [(ダウンロード)](./project/lib/src/step_game/main.dart)  
 
 - DartPadで動作する flutter for web アプリは、gist にコードを保管すれば 公開することもできます。  
 *[(gist)DevFest Kyoto 2020 - Flutter 初心者向け講座 - Step game サンプル](https://gist.github.com/cch-robo/77ee97e93bc43e3a91c1e78a4015ea87)*  
 *[(DartPad)DevFest Kyoto 2020 - Flutter 初心者向け講座 - Step game サンプル](https://dartpad.dev/embed-flutter.html?id=77ee97e93bc43e3a91c1e78a4015ea87&split=80&theme=dark)*  
-詳しくは、[DartPad について](https://cch-robo.github.io/DevFest-Kyoto-2020_prototype/about_the_dartpad.html) を参照ください。  
+詳しくは、[DartPad について](https://cch-robo.github.io/DevFest-Kyoto-2020/about_the_dartpad.html) を参照ください。  
 
 <br/>
 <br/>
