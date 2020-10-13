@@ -10,6 +10,16 @@
 
 <br/>
 
+初心者の方に、予めお詫びしたいことがあります。  
+それは、講座テキストでは、綴れる情報分量からアドバイス的なことしか伝えられないということです。  
+この講座で理解を進められるのは、flutterや 他プログラミング言語の多少の経験者に限られるかもしれません。
+
+ですが、今は判らなくても「初めてのことは、見ているだけでも学びである」という事実が次の一歩を進めます。  
+この講座で「flutterやプログラム開発では、あんなふうに考えて、こんなことをするのだ」という基礎と、  
+アプリ開発のイメージモデルを掴んでいただければと思います。  
+
+<br/>
+
 - 講座構成
   - [flutter for web 環境を作る](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E7%92%B0%E5%A2%83%E3%82%92%E4%BD%9C%E3%82%8B)
   - [flutter for web ってなに？](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E3%81%A3%E3%81%A6%E3%81%AA%E3%81%AB)
@@ -2901,12 +2911,1414 @@ DartPad対応全コード：[`lib/src/step3_3/main.dart`](https://github.com/cch
 
 ----------
 ### ミニゲームを作ろう
+MVVMパターンや、Timerに Future async/await など、今まで学んだ基礎を応用して、ミニゲームを作ってみましょう。  
+作成するミニゲームは、例示されたボタンの明滅順を記憶して、チャレンジで明滅順にボタンをタップする、記憶力ゲームです。  
+
+![ミニゲーム・デモ](./images/minigame-demo.gif)
+
+<br/>
+
+ゲームの仕様（ゲームイメージ）は、このようになっています。
+1. タップボタンは、２列×３行の色別で表示され、タップされると明滅を表示します。
+1. レベルとして記憶するボタンの明滅数を表示し、記憶してもらうボタンの明滅を例示します。
+1. チャレンジを表示してタップしてもらい、順番を間違えなければ、クリアを表示して、  
+  次のチャレンジ（レベル＋１）に進みます。  
+1. タップする順番を間違えれば、ミスが表示され、正しい明滅順をリプレイして、ゲームオーバを表示します。  
+1. タップしないままでもタイムオーバを表示して、正しい明滅順をリプレイして、ゲームオーバを表示します。  
+1. 今までの最高レベルであれば、ゲームオーバー表示の前にハイスコアを表示して健闘を讃えます。
+1. ゲーム開始待機中は、ゲームの説明とランダムにボタンの明滅を繰り返すデモプレイを表示します。
+1. ゲーム開始待機中にゲームの説明をタップすれば、ゲームを開始させます。(二重起動を抑止すること)
+1. ゲーム開始待機中とチャレンジ中以外は、画面をタップできないようにする入力バリアも必要です。
+
+<br/>
+
+ゲームの要求仕様により、それぞれに対応するロジックや表示アイテムおよびアニメーションが必要なので、  
+実際のコード量は、最終的なサンプルコード(Step 3-3)の４倍近くになりました。  
+１つ１つ説明をしていたのでは、とても時間がたりません。  
+
+そこで、次ようなステップでキーポイントを説明します。  
+- **学んできた基礎の一覧（おさらい）**
+- **仕様要求から起こした、プログラムが必要なアイテムの具体化**
+- **アイテムのソースコードでの具体的なプログラムコードの抜粋紹介**
+- **ゲームプレイやデモ表示のコードやロジックのキーポイント**
+- **ミニゲームの全内容紹介 (ソースコード紹介)**
+ 
+<br/>
+
+#### 学んできた基礎の一覧（おさらい）
+- Model - View - View Modelパターンの基礎。
+  - 外部都合の影響がなく、全体関心事のみを取り扱う Model の作成
+  - 全体関心事のみ参照し、表示関心事のみを取り扱う View Model の作成
+  - 表示関心事のみ参照し、表示のみを取り扱う View の作成
+  - ボタン入力とアクション実行の連携  
+  *(View入力と、View Modelコマンド⇒アクションとの連携)*
+  - 任意タイミングかつピンポイントの表示更新  
+  *(View Modelからのプロパティ参照の提供と更新通知による、Viewのピンポイント表示更新)*
+  - 任意タイミングかつ連携した表示更新  
+  *(全体関心事の Model管理、およびプロパティ参照やコマンドの公開と更新通知による、View Modelの連携表示更新)*
+
+<br/>
+
+- Stackウィジェットを使った、レイヤー表現の基礎
+- RowウィジェットとColumnウィジェットを使ったレイアウト表現の基礎
+- Containerウィジェットを使った配置位置やバックグラウンド表現の基礎  
+  *(配置位置の表現は、CenterウィジェットやAlignウィジェットにもあります)*
+- アニメーション表現を行うための基礎
+- 指定時間ごとに「別の処理実行」を起動させる基礎 (Timer)
+- 現在の処理実行を止めない「別の処理実行」の起動方法の基礎 (Future)
+- 呼出元の処理実行を「別の処理実行」完了まで待機させる方法の基礎 (Future async/await)
+
+<br/>
+
+#### 仕様要求から起こした、プログラムが必要なアイテムの具体化
+
+##### ビュー・アイテムの具体化
+表示に関する要件として、  
+レベル表示〜ゲームオーバー表示など、必要時にのみ表示されて不要時は表示されない状況表示のビューと、  
+２列×３行⇒６個かつ色別のタップ入力ボタンのビューが必要になることが判ります。
+
+- これらを具体化すると、以下のビューが必要でしょう。
+  - **レベル表示（レベル数付き）**
+  - **チャレンジ表示**
+  - **チャレンジ成功のクリア表示**
+  - **チャレンジ失敗のミス表示**
+  - **チャレンジ失敗のタイムアップ表示**
+  - **チャレンジ失敗のゲームオーバー表示**
+  - **チャレンジ終了のハイスコア表示（ハイスコアレベル数付き）**
+  - **ゲーム開始待機中のゲーム説明表示（タップによるゲーム開始コマンド付き）**
+  - **タップボタン入力を遮るタップ入力バリア表示（画面レイヤの最上位を覆って入力を遮る）**
+  - **タップ入力ボタン表示（固有色とタップ時やデモプレイ時での明滅表示機能付き）**
+
+<br/>
+
+##### ビューモデル・アイテムの具体化
+- レベル表示〜入力バリア表示の「純粋な表示関心事」には、  
+以下のみを満たすビューモデルがあれば良いことになります。  
+  - **表示ON/OFFのプロパティ値参照の提供（７種類）**  
+  - **表示ON/OFFのプロパティ値参照と レベル数のプロパティ値参照の提供（２種類）**  
+
+<br/>
+
+- ２列×３行のタップ入力ボタン表示の「純粋な表示関心事」には、  
+以下のみを満たすビューモデルがあれば良いことになります。  
+  - **２列×３行のタップ入力ボタンのビューモデルを提供するコンテナ**  
+  - **明滅ON/OFFのプロパティ値参照と コンテナ・インデックスのプロパティ値参照と**  
+  **タップ入力通知コマンドの提供（６個）**  
+
+<br/>
+
+- ビューモデルとビューについての補足事項
+  - **ビューモデルは、７種類や２種類と系統でまとめられるため、**  
+  **ベース基盤を作れば、継承で個別のビューモデルが簡易に作れることになります。**  
+  - **ビューは、ビューモデルの表示関心事の表示担当(つまり同系統)ですので、**  
+  **ビューもベース基板を作れば、継承で個別のビューが簡易に作れることになります。**  
+  **ついでなのでゲーム中のビューの表示ONは、ジャンプアップするアニメーションにします。**
+
+*独自MVVMライブラリの都合で、これらビューモデルとビューを連携させるには、*  
+*ビューのコンストラクタ引数に ビューモデルのオブジェクトを渡してあげる必要があります。*  
+*ビューから状態を操作されないよう、ビューモデルは、状態値の参照メソッドのみを公開します。*
+
+<br/>
+
+##### モデル・アイテムの具体化
+仕様要求からアプリ全体で共有する、またはページ全体で共有する要件として、  
+アプリ全体で共有する、ハイスコアやゲーム起動済フラグ（二重起動抑止フラグ）と、  
+２列×３行のタップ入力ボタンを配置可能にするゲーム板の縦横サイズを計算するロジック、  
+ゲームプレイやデモ表示における、各要求の状態やロジックやフロー遷移制御が必要になることが判ります。  
+
+- これらを具体化すると、以下のモデルが必要でしょう。  
+  - **アプリ全体で共有されるハイスコアや、ゲーム起動済フラグを提供するモデル**
+  - **タップボタン２列×３行が配置可能なゲーム板縦横サイズの計算ロジックを提供するモデル**
+  - **ゲームプレイやデモ表示などの各仕様要求事項の状態やロジックやフロー遷移制御を提供するモデル**
+
+<br/>
+
+##### 「ビューモデルから状態/プロパティを引き剥がす」モデル・アイテムの具体化
+ゲームプレイ中は、ボタンタップで明滅表示させたり、チャレンジ失敗で「ミス」を表示する必要があります。  
+つまりゲームプレイのロジックを持つモデルは、タップボタンやミスなどの状態を操作できないといけません。  
+
+モデルは、ビューモデルを操作できませんし、影響を分離するため操作するべきでもありませんから、  
+ビューモデルから表示ON/OFF状態 ⇒ ON/OFF状態のフラグや レベル数を引き剥がすモデルが必要です。
+
+- **レベル表示〜入力バリア**と **タップボタン**のビューモデルから表示状態を引き剥がすモデル
+  - **表示ON/OFFフラグのモデル（７種類）**  
+  - **表示ON/OFFフラグ＋レベル数のモデル（２種類）**  
+  - **明滅ON/OFFフラグのモデル（６個）**  
+
+*独自MVVMライブラリの都合で、これらフラグモデルとビューモデルを連携させるには、*  
+*ビューモデルのコンストラクタ引数に フラグモデルのオブジェクトを渡してあげる必要があります。*  
+*ビューモデルには、状態を操作されないよう、フラグモデルは、状態値の参照メソッドのみを公開します。*  
+*ゲームプレイのロジックを持つモデルには、状態を操作できるよう、フラグモデルは、状態値を公開します。*  
+*ゲームプレイのロジックを持つモデルは、これらフラグモデルを操作できるようオブジェクトを所有します。*  
+
+<br/>
+
+##### 「ビューモデルからコマンドを引き剥がす」モデル・アイテムの具体化
+ゲームプレイ中は、タップされた順番が間違っていないか判定できないといけません。  
+つまりゲームプレイのロジックを持つモデルは、タップボタンのビューモデルに、  
+コマンドとして「どのボタン(コンテナ・インデックス)がタップされたのかを通知」してもらう  
+タップボタン入力の通知関数を提供する必要があります。  
+
+- タップボタン入力の通知関数提供元モデル  
+  **ゲームプレイやデモ表示などの各仕様要求事項の状態やロジックやフロー遷移制御を提供するモデル**
+
+*独自MVVMライブラリの都合で、このタップボタン入力通知関数と ビューモデルを連携させるには、*  
+*ビューモデルのコンストラクタ引数に タプボタン入力関数のオブジェクトを渡してあげる必要があります。*  
+
+<br/>
+
+##### モデルコンテナ・アイテムの具体化
+独自MVVMライブラリの都合で、  
+アプリ全体で利用するモデルと ページ全体で利用するモデルとビューモデルのオブジェクトは、  
+`AppModelContainerミキシイン`または `PageModelContainerミキシイン`を継承したモデルコンテナに所有させ、  
+アプリおよびページのウィジェット(`AppWidget抽象クラス`または`PageWidget抽象クラス`を継承)に提供できるよう、  
+これらウィジェットの `createModelContainer`関数でモデルコンテナ・オブジェクトを生成し、所有させることが必要です。
+
+- **アプリ全体のモデルコンテナ**に所有させるモデル  
+  - **アプリ全体で共有されるハイスコアや、ゲーム起動済フラグを提供するモデル**  
+  *モデルコンテナに モデルのオブジェクトを所有させるため、フィールドと生成が必要です。*  
+
+<br/>
+
+- **ページ全体のモデルコンテナ**に所有させるモデル  
+  - **ゲームプレイやデモ表示などの各仕様要求事項の状態やロジックやフロー遷移制御を提供するモデル**  
+  *モデルコンテナに ビューモデルとモデルのオブジェクトを所有させるため、フィールドと生成が必要です。*  
+
+<br/>
+
+- 特にモデルコンテナに所有させる必要のないモデル  
+  - **タップボタン２列×３行が配置可能なゲーム板縦横サイズの計算ロジックを提供するモデル**  
+  *ロジックのみのモデルなので、モデルコンテナでの状態維持管理(オブジェクト所有)が必要ない。*  
+
+<br/>
+
+##### アプリとページのウィジェット・アイテムの具体化
+独自MVVMライブラリの都合で、  
+アプリ全体で利用する 公開モデルのオブジェクトは、アプリのモデルコンテナに登録し、  
+アプリのモデルコンテナのオブジェクトは、アプリのウィジェットに所有させる必要があります。  
+
+- **アプリのウィジェット**  
+`AppWidget抽象クラス`を継承して、  
+`createModelContainer`関数でモデルコンテナ・オブジェクトを生成して返却し、  
+`build`関数第２引数の モデルコンテナを介して、アプリ全体で共有するモデルを提供します。
+
+<br/>
+
+独自MVVMライブラリの都合で、  
+ページ全体で利用する モデルやビューモデルのオブジェクトは、ページのモデルコンテナに登録し、  
+ページのモデルコンテナのオブジェクトは、ページのウィジェットに所有させる必要があります。  
+
+- **ページのウィジェット**  
+`PageWidget抽象クラス`を継承して、  
+`createModelContainer`関数でモデルコンテナ・オブジェクトを生成して返却し、  
+`build`関数第２引数の 公開ビューモデル一覧を介して、公開ビューモデルを提供します。  
+
+<br/>
+
+#### アイテムのソースコードでの具体的なプログラムコードの抜粋紹介
+
+##### モデルのコード
+
+- アプリ全体で共有されるモデルの具体的条件  
+  - ハイスコアやゲーム起動済フラグの状態を提供します。
+  
+*オブジェクトは、アプリ全体のモデルコンテナで生成されて所有されます。*
+
+```dart
+/// ゲーム状態のモデル
+class GameStateModel {
+  GameStateModel();
+
+  /// ゲーム起動済フラグ（二重起動抑止用）
+  bool isStarting = false;
+
+  /// ハイスコア
+  int highScore = 0;
+}
+```
+
+<br/>
+
+- ページ全体で共有されるモデルの具体的条件  
+  - タップボタン２列×３行が配置可能なゲーム板の縦横サイズの計算ロジックを提供します。
+
+*オブジェクトは、ページのウィジェット内で直接生成されて利用されます。*
+
+```dart
+/// ゲーム板のモデル
+class GameStageModel {
+  GameStageModel(
+      BuildContext context,
+  ) : stageSize = _computeGameStageSize(context),
+      fontSize = _computeFontSize(_computeGameStageSize(context)) {
+    print('PageSize(${stageSize.width}, ${stageSize.height}), '
+        'GameFieldSize(${stageSize.width}, ${stageSize.height}), '
+        'fontSize=$fontSize');
+  }
+
+  /// ゲーム板の縦×横サイズ
+  final Size stageSize;
+
+  /// ゲーム板の文字サイズ
+  final double fontSize;
+
+  /// 現在のページ高さで、横２列と縦３行が配置できる幅を持つ、ゲーム板サイズを返す。
+  static Size _computeGameStageSize(BuildContext context) {
+    final MediaQueryData data = MediaQuery.of(context);
+    final Size pageSize = data.size;
+    final double height = pageSize.height;
+    double width = (pageSize.width > height) ? height : pageSize.width;
+    width = (width / 2 > height / 3) ? height / 3 * 2 : width;
+    return Size(width, height);
+  }
+
+  /// 現在のゲーム板サイズからフォントサイズを計算する。
+  static double _computeFontSize(Size stageSize) {
+    final double fontSize = stageSize.width / 10;
+    return fontSize;
+  }
+}
+```
+
+<br/>
+
+- ページ全体で共有されるモデルの具体的条件  
+  - ゲームプレイやデモ表示などの各仕様要求事項の状態や ロジックや フロー遷移制御を提供します。
+
+*オブジェクトは、ページ全体のモデルコンテナで生成されて所有されます。*  
+*状態モデル(フラグモデル)の生成や受け渡しは、当該モデル内で行われます。*  
+
+```dart
+/// ゲームプレイのモデル
+class GamePlayModel {
+  GamePlayModel() {
+    _random = Random.secure();
+    _tapButtons = [
+      OperationShowModel(false),
+      OperationShowModel(false),
+      OperationShowModel(false),
+      OperationShowModel(false),
+      OperationShowModel(false),
+      OperationShowModel(false),
+    ];
+    _tapQuestions = <int>[];
+    _tapAnswers = <int>[];
+    _tapScore = 0;
+    _tapChallengeTimer = null;
+    _tapNotify = tapNotifyHandler;
+  }
+
+  /// （公開プロパティ）ゲーム状態モデル
+  set gameState (GameStateModel state) => _gameState = state;
+
+  /// （公開コマンド）デモ停止
+  VoidFunction get stopDemos => _stopDemos;
+
+  /// （公開コマンド）タップ通知コマンド
+  TapButtonNotify get tapNotify => _tapNotify;
+
+  /// （公開プロパティ）タップボタン・コレクション
+  List<OperationShowModel> get tapButtons => _tapButtons;
+
+  /// （公開プロパティ）デモ表示フラグ
+  ShowModel get isOnDemos => _isOnDemos.showModel;
+
+  /// （公開プロパティ）タップ入力ブロックフラグ
+  ShowModel get isTapBlock => _isTapBlock.showModel;
+
+  // (コード省略) レベル、チャレンジ、クリア、ミス、タイムアップ、リプレイ、ゲームオーバー表示フラグ
+
+  /// （公開プロパティ）ハイスコア表示フラグ
+  ShowModel get highScore => _highScore.showModel;
+
+  /// （公開コマンド）ゲーム起動
+  void start() {
+    if (!_gameState.isStarting) {
+      _gameState.isStarting = true;
+      // ページ表示と異なる Isolate で、デモ表示開始
+      Future(() {
+        _startDemos();
+      });
+    }
+  }
+
+  //＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+  // 以降は、モデル内部の非公開なプロパティとロジックです。
+  //＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+  // ゲームプレイや デモ表示の ロジックのコードは、別枠で説明します。
+}
+```
+
+<br/>
+
+##### 「ビューモデルから状態/プロパティを引き剥がす」モデルのコード
+- レベル表示〜入力バリアと タップボタンの状態モデルの具体的条件
+  - ON/OFFフラグと オプションのレベル数の状態を持ち、  
+  ゲームプレイのロジックを持つモデルに 状態値の操作を公開する。
+  - ビューモデルには、前記の状態値の参照メソッドのみを公開する。
+  - 連携するビューモデルのコンストラクタ引数に、前記を渡してもらう。
+  - ゲームプレイのロジックを持つモデルに、オブジェクトを所有してもらう。
+
+以上を満たすよう、  
+状態を操作(read/write)でき、下記を提供するモデルと、  
+状態の参照(read)のみをビューモデルに提供するモデルのクラスを作ります。  
+*オブジェクトにおける、連携するビューモデルのコンストラクタ引数への受け渡しや、*  
+*ゲームプレイのロジックを持つモデルへの受け渡しは、モデルコンテナでおこないます。*
+
+```dart
+/// 表示ON/OFFフラグ＆値操作を提供するモデル (read/write)
+class OperationShowModel {
+  OperationShowModel(this._isShow, [this._value = 0]) {
+    _showModel = ShowModel(this);
+  }
+
+  bool _isShow;
+  int _value;
+  ShowModel _showModel;
+
+  bool get isShow => _isShow;
+  int  get value => _value;
+  ShowModel get showModel => _showModel;
+
+  /// 状態を更新する
+  void set(bool isShow, [int value]) {
+    _isShow = isShow;
+    if (value != null) {
+      _value = value;
+    }
+    _showModel.updateViewModels();
+  }
+}
+
+/// 表示ON/OFFフラグ＆値参照を提供するモデル (read only)
+class ShowModel extends Model {
+  final OperationShowModel _model;
+  ShowModel(this._model);
+  bool get isShow => _model.isShow;
+  int get value => _model.value;
+}
+```
+
+<br/>
+
+##### ビューモデルのコード
+- アニメーションのない、デモ表示と入力バリアのビューモデルの具体的条件  
+  - 連携するモデル・オブジェクトをコンストラクタ引数で受け取り、  
+  連携するモデル・オブジェクトの 表示ON/OFFフラグを参照するベース基盤を作成する。  
+  - デモ表示のみコンストラクタ引数で、追加の デモ停止通知関数を受け取る。
+  - ベース基盤を継承して、個別のビューモデルを作る。  
+
+*`ViewModelクラス`は、*  
+*コンストラクタ引数オプションの`value`に、任意型のプロパティを指定することができます。*  
+
+```dart
+/// 表示ON/OFFフラグを提供するビューモデル基盤
+class _FlagViewModel extends ViewModel<bool> {
+  final ShowModel _model;
+  _FlagViewModel(this._model) : super(value: _model.isShow) {
+    _model.bindUpdate(onUpdate);
+  }
+
+  @override
+  void onUpdate(Model model) {
+    if (model?.hashCode == _model.hashCode ?? false) {
+      value = _model.isShow;
+      updateView();
+    }
+  }
+}
+
+/// デモ表示(表示ON/OFF付き)のビューモデル
+class DemosViewModel extends _FlagViewModel {
+  final VoidFunction stopDemos;
+  DemosViewModel(ShowModel model, this.stopDemos) : super(model);
+  bool get isOnDemos => value;
+}
+
+/// タップ入力バリア(表示ON/OFF付き)のビューモデル
+class TapBlockViewModel extends _FlagViewModel {
+  TapBlockViewModel(ShowModel model) : super(model);
+  bool get isTapBlock => value;
+}
+```
+
+<br/>
+
+- アニメーションのある タップボタン表示と チャレンジ表示〜ゲーム説明表示のビューモデルの具体的条件  
+  - 連携するモデル・オブジェクトをコンストラクタ引数で受け取り、  
+  連携するモデル・オブジェクトの 表示ON/OFFフラグを参照するベース基盤を作成する。  
+  - タップボタン表示のみコンストラクタ引数で、  
+  追加の コンテナ・インデックス番号と タップボタン入力通知関数を受け取る。
+  - ベース基盤を継承して、個別のビューモデルを作る。  
+
+*`AnimationViewModelクラス`は、*  
+*コンストラクタ引数オプションの`isAnimate`に、bool型のプロパティを指定することができます。*  
+
+```dart
+/// アニメ表示ON/OFFフラグを提供するビューモデル基盤
+class _FlagAnimationViewModel extends AnimationViewModel {
+  final ShowModel _model;
+  _FlagAnimationViewModel(this._model) : super(isAnimate: _model.isShow) {
+    _model.bindUpdate(onUpdate);
+  }
+
+  @override
+  Future<void> onUpdate(Model model) async {
+    if (model?.hashCode == _model.hashCode ?? false) {
+      isAnimate = _model.isShow;
+      await asyncUpdateView();
+    }
+  }
+}
+
+/// タップボタン表示(アニメ表示ON/OFF付き)のビューモデル
+class TapButtonAnimationViewModel extends _FlagAnimationViewModel {
+  final int index;
+  final TapButtonNotify notify;
+  TapButtonAnimationViewModel(ShowModel model, this.index, this.notify) : super(model);
+}
+
+/// チャレンジ表示(アニメ表示ON/OFF付き)のビューモデル
+class ChallengeAnimationViewModel extends _FlagAnimationViewModel {
+  ChallengeAnimationViewModel(ShowModel model) : super(model);
+}
+
+// (コード省略) チャレンジクリア、ミス、タイムアップ、リプレイ、ゲームオーバー表示
+```
+
+<br/>
+
+- アニメーション＋レベル数のある、レベル表示〜ハイスコア表示のビューモデルの具体的条件  
+  - 連携するモデル・オブジェクトと オプションのレベル数をコンストラクタ引数で受け取り、  
+  連携するモデル・オブジェクトの 表示ON/OFFフラグとレベル数を参照するベース基盤を作成する。  
+  - ベース基盤を継承して、個別のビューモデルを作る。  
+
+*`AnimationViewModelクラス`は、*  
+*コンストラクタ引数オプションの`isAnimate`に、bool型のプロパティを指定することができます。*  
+*コンストラクタ引数オプションの`value`に、任意型のプロパティを指定することができます。*  
+
+```dart
+/// int プロパティ付きアニメON/OFFフラグを提供するビューモデル基盤
+class _IntWithAnimationViewModel extends AnimationViewModel<int> {
+  final ShowModel _model;
+  _IntWithAnimationViewModel(this._model)
+      : super(isAnimate: _model.isShow, value: _model.value) {
+    _model.bindUpdate(onUpdate);
+  }
+
+  @override
+  Future<void> onUpdate(Model model) async {
+    if (model?.hashCode == _model.hashCode ?? false) {
+      if (_model.value != null) {
+        value = _model.value;
+      }
+      isAnimate = _model.isShow;
+      await asyncUpdateView();
+    }
+  }
+}
+
+/// レベル表示(intプロパティ＋アニメ表示ON/OFF付き)のビューモデル
+class LevelAnimationViewModel extends _IntWithAnimationViewModel {
+  LevelAnimationViewModel(ShowModel model) : super(model);
+}
+
+/// ハイスコア表示(intプロパティ＋アニメ表示ON/OFF付き)のビューモデル
+class HighScoreAnimationViewModel extends _IntWithAnimationViewModel {
+  HighScoreAnimationViewModel(ShowModel model) : super(model);
+}
+```
+
+<br/>
+
+##### ビューのコード
+- アニメーションのない、デモ表示と入力バリアのビューの具体的条件  
+  - 連携するビューモデル・オブジェクトをコンストラクタ引数で受け取り、  
+  連携するビューモデル・オブジェクトのプロパティから表示ON/OFFフラグを参照して、  
+  表示(全画面表示)と 非表示(表示サイズゼロ)を切り替えるビューを作る。
+  - デモ表示のみ `TextButton`でテキストをラップして、  
+  `onPressed`プロパティにビューモデルのデモ停止通知関数の指定を追加する。  
+  *(タップでデモ表示を停止させます。)*
+
+*`AbstractViewWidget抽象クラス`は、*  
+*コンストラクタ引数オプションの`model`に、任意型のプロパティを持つビューモデルを指定できます。*  
+
+```dart
+/// タップ入力をブロックするためのビューウィジェット
+class TapBlockViewWidget extends AbstractViewWidget<TapBlockViewModel> {
+  const TapBlockViewWidget({
+    Key key,
+    @required TapBlockViewModel isTapBlock,
+  }) : super(key:key, model: isTapBlock);
+
+  @override
+  Widget build(BuildContext context, ViewModel<bool> model) {
+    return model.value
+        ? Container(color: Colors.transparent)
+        : const SizedBox.shrink();
+  }
+}
+
+/// デモ表示中にゲーム説明をオーバラップ表示するビューウィジェット
+class DemosViewWidget extends AbstractViewWidget<DemosViewModel> {
+  final double fontSize;
+  const DemosViewWidget({
+    Key key,
+    @required DemosViewModel demos,
+    @required this.fontSize,
+  }) : super(key:key, model: demos);
+
+  @override
+  Widget build(BuildContext context, DemosViewModel model) {
+    return model.value
+        ? Align(
+            alignment: Alignment.center,
+            child: TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+              ),
+              onPressed: model.stopDemos,
+              child: BorderText(
+                'Memorize the order of \n'
+                'the glowing buttons\n'
+                'and tap them in order.\n\n'
+                'Tap to start the game.',
+
+                fontSize: fontSize,
+                color: Colors.white,
+                borderColor: Colors.black,
+                borderWidth: fontSize/5,
+              ),
+            ),
+          ) // This trailing comma makes auto-formatting nicer for build methods.
+        : const SizedBox.shrink();
+  }
+}
+```
+
+![thinking](./images/1f914.png)
+`SizedBox.shrink()`って何なの？
+
+<br/>
+
+- アニメーションのある、レベル表示〜ハイスコア表示のビューの具体的条件  
+  - 連携するビューモデル・オブジェクトをコンストラクタ引数で受け取り、  
+  連携するビューモデル・オブジェクトのプロパティから表示ON/OFFフラグを参照して、  
+  表示(全画面表示)ではジャンプアップのアニメーションを伴わせて表示し、  
+  非表示(表示サイズゼロ)とを切り替えるベース基盤を作成する。
+  - ベース基盤を継承して、個別のビューを作る。  
+
+*`AbstractAnimationViewWidget抽象クラス`は、*  
+*コンストラクタ引数オプションの`model`に、任意型と `isAnimate`のプロパティを持つビューモデルを指定できます。*  
+**ジャンプアップするアニメーションのベース基盤のロジックは、Step 3-1 のコード、内容は Step 3-3 とほぼ同じです。**
+
+```dart
+/// せり上がるラベル・アニメーション表示と非表示の UI表示を適用するビューウィジェット基盤
+/// (ビューモデルが、アニメーション表示ON/OFFだけでなく intプロパティを持つ場合、ラベルの末尾に数値を追加します。)
+class RiseUpAnimationWidget<T extends AnimationViewModel> extends AbstractAnimationViewWidget<T> {
+  final String label;
+  final Color fontColor;
+  final double fontSize;
+
+  const RiseUpAnimationWidget({
+    Key key,
+    @required T model,
+    @required this.label,
+    @required this.fontColor,
+    this.fontSize,
+  }) : super(key: key, model: model);
+
+  @override
+  AnimationController onCreateController(TickerProvider vsync) {
+    return AnimationController(
+        duration: const Duration(milliseconds: 500),
+        vsync: vsync)..forward();
+  }
+
+  @override
+  List<Animation> onCreateAnimations(AnimationController controller) {
+    final Animation<double> animation = Tween<double>(begin: 1.0, end: 0.0)
+        .animate(
+          CurvedAnimation(
+            parent: controller,
+            curve: Curves.easeOutQuart),
+    );
+    return <Animation>[animation];
+  }
+
+  @override
+  Widget onCreateChild(BuildContext context) {
+    return null;
+  }
+
+  @override
+  Widget onAnimationBuild(BuildContext context, Widget child,
+      AnimationController controller, List<Animation> animations, {T model}) {
+    // value が null でない場合は、label に続いて値を表示します。
+    //
+    // Alignment は、左端/上端が-1.0 で 右端/下端が 1.0 の位置を表す座標系なので、
+    // Alignmentの x は、0.0 ⇒ 中央固定で、y を 1.0 〜 0.0 まで変化させて、
+    // 画面下端から中央に移動させます。
+    final Animation<double> animation = convertAnimation(animations[0]);
+    return Align(
+      alignment: Alignment(0.0, animation.value),
+      widthFactor : null,
+      heightFactor : null,
+      child: BorderText('$label${model.value == null ? "" : " ${model.value}"}',
+        fontSize: fontSize,
+        color: fontColor,
+        borderColor: Colors.black,
+        borderWidth: fontSize / 5,
+      ),
+    );
+  }
+
+  @override
+  Widget noAnimationBuild(BuildContext context, Widget child, {T model}) {
+    return const SizedBox.shrink();
+  }
+}
+
+/// レベル表示をオーバラップしながらアニメーション表示するビューウィジェット
+class LevelAnimationWidget extends RiseUpAnimationWidget<LevelAnimationViewModel> {
+  const LevelAnimationWidget({
+    Key key,
+    @required LevelAnimationViewModel model,
+    @required double fontSize,
+  }) : super(
+        key: key, model: model,
+        label: 'LEVEL', fontColor: Colors.green, fontSize: fontSize);
+}
+
+/// チャレンジ表示をオーバラップしながらアニメーション表示するビューウィジェット
+class ChallengeAnimationWidget extends RiseUpAnimationWidget<ChallengeAnimationViewModel> {
+  const ChallengeAnimationWidget({
+    Key key,
+    @required ChallengeAnimationViewModel model,
+    @required double fontSize,
+  }) : super(
+        key: key, model: model,
+        label: 'CHALLENGE', fontColor: Colors.orange, fontSize: fontSize);
+}
+
+/// (コード省略) チャレンジクリア、ミス、タイムアップ、リプレイ、ゲームオーバー、ハイスコア表示
+```
+
+<br/>
+
+- アニメーションのある、丸いタップボタン表示のビューの具体的条件  
+  - 連携するビューモデル・オブジェクトをコンストラクタ引数で受け取り、  
+  連携するビューモデル・オブジェクトのプロパティから表示ON/OFFフラグを参照して、  
+  表示(全画面表示)では明滅アニメーションを伴わせて表示し、  
+  非表示(表示サイズゼロ)とを切り替えるビューを作る。  
+
+*`AbstractAnimationViewWidget抽象クラス`は、*  
+*コンストラクタ引数オプションの`model`に、任意型と `isAnimate`のプロパティを持つビューモデルを指定できます。*  
+
+```dart
+/// 丸いタップボタンの UI表示を明滅アニメーション表示するビューウィジェット
+class TapButtonAnimationWidget extends AbstractAnimationViewWidget<TapButtonAnimationViewModel> {
+  final Color color;
+  const TapButtonAnimationWidget({
+      @required TapButtonAnimationViewModel model,
+      @required this.color}) : super(model: model);
+
+  @override
+  AnimationController onCreateController(TickerProvider vsync) {
+    return AnimationController(
+        duration: const Duration(milliseconds: 300),
+        vsync: vsync,
+    )..forward();
+  }
+
+  @override
+  List<Animation>  onCreateAnimations(AnimationController controller) {
+    final Animation<Color> animeIn = ColorTween(begin: color, end: Colors.white)
+        .animate(CurvedAnimation(
+            parent: controller,
+            curve: const Interval(0.0, 0.5, curve: Curves.easeInCirc)
+          ),
+        );
+
+    final Animation<Color> animeOut = ColorTween(begin: Colors.white, end: color)
+        .animate(CurvedAnimation(
+            parent: controller,
+            curve: const Interval(0.5, 1.0, curve: Curves.easeOutCirc)
+        ),
+    );
+
+    return <Animation>[animeIn, animeOut];
+  }
+
+  @override
+  Widget onCreateChild(BuildContext context) {
+    return null;
+  }
+
+  @override
+  Widget onAnimationBuild(BuildContext context, Widget child,
+      AnimationController controller, List<Animation> animations, {model}) {
+    final Animation<Color> animeIn  = convertAnimation(animations[0]);
+    final Animation<Color> animeOut = convertAnimation(animations[1]);
+
+    // アニメーションのあるボタンは、アニメーションのオブジェクトで色を変化させる。
+    return createTapButton(() => controller.value < 0.5 ? animeIn.value : animeOut.value);
+  }
+
+  @override
+  Widget noAnimationBuild(BuildContext context, Widget child, {model}) {
+    // アニメーションのないボタンの色は、固定にする。
+    return createTapButton(() => color);
+  }
+
+  /// 丸いタップボタンを作成する。
+  Widget createTapButton(Color Function() logic) {
+    // パラメータ logic 関数オブジェクトで、ボタンの色を操作します。
+    return OutlinedButton(
+      onPressed: () {
+        model.isAnimate = true;
+        model.updateView();
+        model.notify(model.index);
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(logic()),
+        overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+            const CircleBorder(side: BorderSide(color: Colors.black54, width: 2.0))
+        ),
+      ),
+      child: const SizedBox(width: 100.0, height: 100.0),
+    );
+  }
+}
+```
+
+<br/>
+
+##### モデルコンテナのコード
+- アプリ全体のモデルコンテナの具体的条件  
+  - フィールドに、ゲーム状態のモデル(`GameStateModel`)を持ち、  
+  `initModel`メソッドで、ゲーム状態のモデルを生成する。  
+  *`initApp`メソッドは、特に利用しません。*  
+
+*`AppModelContainerミキシイン`は、*  
+*モデルを初期化するための `initModel`メソッドと、*  
+*アプリ全体に関わる初期設定のための `initApp`メソッドを提供します。*  
+
+```dart
+/// アプリ全体のモデル（モデル/ビジネスロジックとデータ）を提供するモデルコンテナ
+class GameAppModelContainer with AppModelContainer {
+  GameAppModelContainer() : super();
+
+  /// ゲーム状態のモデル
+  GameStateModel gameState;
+
+  @override
+  void initModel() {
+    gameState = GameStateModel();
+  }
+
+  @override
+  void initApp(BuildContext context) {
+  }
+}
+```
+
+<br/>
+
+- ページ全体のモデルコンテナの具体的条件  
+  - フィールドに、ゲームロジックのモデル(`GamePlayModel`)や 全てのビューモデルを持ち、  
+  `initModel`メソッドでモデルと全てのビューモデルを生成し、公開する全てのビューモデルを返します。  
+  `initPage`メソッドで、ハイスコアなどを利用するため、アプリ全体のゲーム状態モデルを取得します。  
+
+*`PageModelContainerミキシイン`は、*  
+*モデルを初期化するための `initModel`メソッドと、*  
+*ページ全体に関わる初期設定のための `initPage`メソッドを提供します。*  
+*`provideAppModelContainer(context)`メソッドにより、アプリ全体のモデルコンテナが取得できます。*  
+
+```dart
+/// ページ全体のモデル（ビューモデルとモデル）を提供するモデルコンテナ
+class GameModelContainer with PageModelContainer {
+
+  /// ゲームロジックのモデル
+  GamePlayModel gamePlay;
+
+  /// デモ表示のビューモデル
+  DemosViewModel isOnDemos;
+
+  /// タップ入力バリアのビューモデル
+  TapBlockViewModel isTapBlock;
+
+  /// タップボタン・コンテナのビューモデル
+  TapButtonsAnimationViewModel tapButtonsContainer;
+
+  /// LEVEL 表示のビューモデル
+  LevelAnimationViewModel level;
+
+  // (コード省略) CHALLENGE、CLEAR、MISS、TIMEUP、REPLAY、GAME OVER、HIGH SCORE 表示のビューモデル
+
+  @override
+  ViewModels initModel() {
+    gamePlay = GamePlayModel();
+
+    isOnDemos  = DemosViewModel(gamePlay.isOnDemos, gamePlay.stopDemos);
+    isTapBlock = TapBlockViewModel(gamePlay.isTapBlock);
+
+    level = LevelAnimationViewModel(gamePlay.level);
+    challenge = ChallengeAnimationViewModel(gamePlay.challenge);
+    clear = ClearAnimationViewModel(gamePlay.clear);
+    miss = MissAnimationViewModel(gamePlay.miss);
+    timeUp = TimeUpAnimationViewModel(gamePlay.timeUp);
+    replay = ReplayAnimationViewModel(gamePlay.replay);
+    gameOver = GameOverAnimationViewModel(gamePlay.gameOver);
+    highScore = HighScoreAnimationViewModel(gamePlay.highScore);
+    tapButtonsContainer = TapButtonsAnimationViewModel(
+        <TapButtonAnimationViewModel>[
+          TapButtonAnimationViewModel(gamePlay.tapButtons[0].showModel, 0, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[1].showModel, 1, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[2].showModel, 2, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[3].showModel, 3, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[4].showModel, 4, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[5].showModel, 5, gamePlay.tapNotify),
+        ]
+    );
+
+    return ViewModels([
+      isOnDemos,
+      isTapBlock,
+      tapButtonsContainer,
+      level,
+      challenge,
+      clear,
+      miss,
+      timeUp,
+      replay,
+      gameOver,
+      highScore,
+    ], this);
+  }
+
+  @override
+  void initPage(BuildContext context) {
+    // GameAppModelContainer から、GameState オブジェクトを提供してもらう。
+    gamePlay.gameState = provideAppModelContainer<GameAppModelContainer>(context).gameState;
+    gamePlay.start();
+  }
+}
+```
+
+<br/>
+
+##### アプリとページのウィジェットのコード
+独自MVVMライブラリの都合で、  
+アプリ全体で利用する 公開モデルのオブジェクトは、アプリのモデルコンテナに登録し、  
+アプリのモデルコンテナのオブジェクトは、アプリのウィジェットに所有させる必要があります。  
+
+- アプリのウィジェットは、`AppWidget抽象クラス`を継承して、  
+`createModelContainer`関数でモデルコンテナ・オブジェクトを生成して返却し、  
+`build`関数第２引数の モデルコンテナを介して、アプリのモデルを利用することになります。  
+*もちろん本来のアプリとして、テーマ設定などのアプリ全体設定もプログラムする必要があります。*  
+*このミニゲームアプリでは、アプリのウィジェット内でモデル(モデルコンテナ)を利用していません。*
+
+```dart
+/// ゲームのアプリウィジェット
+class MemoJudgeApp extends AppWidget<GameAppModelContainer> {
+  @override
+  GameAppModelContainer createModelContainer() {
+    return GameAppModelContainer();
+  }
+
+  @override
+  Widget build(BuildContext context, GameAppModelContainer modelContainer) {
+    return MaterialApp(
+      title: 'Memory Judge',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const GameFieldPage(),
+    );
+  }
+}
+```
+
+<br/>
+
+独自MVVMライブラリの都合で、  
+ページ全体で利用する モデルやビューモデルのオブジェクトは、ページのモデルコンテナに登録し、  
+ページのモデルコンテナのオブジェクトは、ページのウィジェットに所有させる必要があります。  
+
+- ページのウィジェットは、`PageWidget抽象クラス`を継承して、  
+`createModelContainer`関数でモデルコンテナ・オブジェクトを生成して返却し、  
+`build`関数第２引数の 公開ビューモデル一覧を介して、公開ビューモデルを利用することになります。  
+*もちろん本来のページとして、ページ表示内容の設定などのページ全体設定もプログラムする必要があります。*  
+*このページウィジェットでは、`build`関数先頭で、ゲーム板モデルを使いゲーム板縦横サイズを計算させています。*
+
+```dart
+/// ゲームのページウィジェット
+class GameFieldPage extends PageWidget<GameModelContainer> {
+  const GameFieldPage({
+        Key key,
+      }) : super(key: key);
+
+  @override
+  GameModelContainer createModelContainer() {
+    return GameModelContainer();
+  }
+
+  @override
+  Widget build(BuildContext context, ViewModels viewModels) {
+    final GameStageModel stage = GameStageModel(context);
+    return Material(
+      child: Stack(
+        fit:StackFit.loose,
+        overflow: Overflow.clip,
+        children: [
+          Center(child: Container(
+              width: stage.stageSize.width,
+              height: stage.stageSize.height,
+              color: Colors.black26,
+              child: Center(child: GridView.count(
+                  primary: false,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(20),
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                  crossAxisCount: 2,
+                  children: <Widget>[
+                    TapButtonAnimationWidget(
+                        model: viewModels.find<TapButtonsAnimationViewModel>().tapButtons[0],
+                        color: Colors.blue),
+                    TapButtonAnimationWidget(
+                        model: viewModels.find<TapButtonsAnimationViewModel>().tapButtons[1],
+                        color: Colors.red),
+                    TapButtonAnimationWidget(
+                        model: viewModels.find<TapButtonsAnimationViewModel>().tapButtons[2],
+                        color: Colors.green),
+                    TapButtonAnimationWidget(
+                        model: viewModels.find<TapButtonsAnimationViewModel>().tapButtons[3],
+                        color: Colors.purple),
+                    TapButtonAnimationWidget(
+                        model: viewModels.find<TapButtonsAnimationViewModel>().tapButtons[4],
+                        color: Colors.yellow),
+                    TapButtonAnimationWidget(
+                        model: viewModels.find<TapButtonsAnimationViewModel>().tapButtons[5],
+                        color: Colors.orange),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          LevelAnimationWidget(model: viewModels.find<LevelAnimationViewModel>(), fontSize: stage.fontSize),
+          ChallengeAnimationWidget(model: viewModels.find<ChallengeAnimationViewModel>(), fontSize: stage.fontSize),
+          ClearAnimationWidget(model: viewModels.find<ClearAnimationViewModel>(), fontSize: stage.fontSize),
+          MissAnimationWidget(model: viewModels.find<MissAnimationViewModel>(), fontSize: stage.fontSize),
+          TimeUpAnimationWidget(model: viewModels.find<TimeUpAnimationViewModel>(), fontSize: stage.fontSize),
+          ReplayAnimationWidget(model: viewModels.find<ReplayAnimationViewModel>(), fontSize: stage.fontSize),
+          GameOverAnimationWidget(model: viewModels.find<GameOverAnimationViewModel>(), fontSize: stage.fontSize),
+          HighScoreAnimationWidget(model: viewModels.find<HighScoreAnimationViewModel>(), fontSize: stage.fontSize),
+          TapBlockViewWidget(isTapBlock: viewModels.find<TapBlockViewModel>()),
+          DemosViewWidget(demos: viewModels.find<DemosViewModel>(), fontSize: stage.fontSize * 0.9)
+        ],
+      ),
+    );
+  }
+}
+```
+
+<br/>
+
+- 備考：ゲーム画面は、Stackウィジェットにより 表示ビューのレイヤーを 10層重ねています。
+  - **ゲーム説明（デモ）**
+  - **タップ入力バリア**
+  - **ハイスコア**
+  - **ゲームオーバー**
+  - **タイムアップ**
+  - **ミス**
+  - **クリア**
+  - **チャレンジ**
+  - **レベル**
+  - **タップボタン**
+
+![game stage layer](./images/stage_layer.png)
+
+<br/>
+
+- 備考：縁取り付きのテキストを表示するウィジェット  
+*テキストの四方に影を落とすことで縁取りをつけるカスタムウィジェットです。*
+
+```dart
+/// 縁取り付きのテキストを表示するビューウィジェット
+class BorderText extends StatelessWidget {
+  // This custom text widget is based on the Stack Overflow post below.
+  // How to decorate text stroke in Flutter?
+  // https://stackoverflow.com/questions/52146269/how-to-decorate-text-stroke-in-flutter
+
+  const BorderText(this.text, {
+    Key key,
+    @required this.color,
+    @required this.borderColor,
+    @required this.borderWidth,
+    this.fontSize,
+    this.fontStyle,
+    this.fontWeight,
+  }) : _scale = (borderWidth * 2 + fontSize) / fontSize, super(key: key);
+
+  final String text;
+  final Color color;
+  final Color borderColor;
+  final double borderWidth;
+  final double fontSize;
+  final double _scale;
+  final FontStyle fontStyle;
+  final FontWeight fontWeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+          style: TextStyle(
+              fontSize: fontSize ?? 14.0,
+              color: color,
+              fontStyle: fontStyle,
+              fontWeight: fontWeight,
+              shadows: [
+                Shadow(
+                    offset: Offset(-_scale, -_scale),
+                    color: borderColor
+                ),
+                Shadow(
+                    offset: Offset(_scale, -_scale),
+                    color: borderColor
+                ),
+                Shadow(
+                    offset: Offset(-_scale, _scale),
+                    color: borderColor
+                ),
+                Shadow(
+                    offset: Offset(_scale, _scale),
+                    color: borderColor
+                ),
+              ],
+          ));
+  }
+}
+```
+
+<br/>
+
+#### ゲームプレイやデモ表示のコードやロジックのキーポイント
 
 ![UNDER CONSTRUCTING](./images/under_constructing.png)
+
+```dart
+/// ゲームプレイのモデル
+class GamePlayModel {
+  GamePlayModel() {
+    _random = Random.secure();
+    _tapButtons = [
+      OperationShowModel(false),
+      OperationShowModel(false),
+      OperationShowModel(false),
+      OperationShowModel(false),
+      OperationShowModel(false),
+      OperationShowModel(false),
+    ];
+    _tapQuestions = <int>[];
+    _tapAnswers = <int>[];
+    _tapScore = 0;
+    _tapChallengeTimer = null;
+    _tapNotify = tapNotifyHandler;
+  }
+
+  /// （公開プロパティ）ゲーム状態モデル
+  set gameState (GameStateModel state) => _gameState = state;
+
+  /// （公開コマンド）デモ停止
+  VoidFunction get stopDemos => _stopDemos;
+
+  /// （公開コマンド）タップ通知コマンド
+  TapButtonNotify get tapNotify => _tapNotify;
+
+  /// （公開プロパティ）タップボタン・コレクション
+  List<OperationShowModel> get tapButtons => _tapButtons;
+
+  /// （公開プロパティ）デモ表示フラグ
+  ShowModel get isOnDemos => _isOnDemos.showModel;
+
+  /// （公開プロパティ）タップ入力ブロックフラグ
+  ShowModel get isTapBlock => _isTapBlock.showModel;
+
+  // (コード省略) レベル、チャレンジ、クリア、ミス、タイムアップ、リプレイ、ゲームオーバー表示フラグ
+
+  /// （公開プロパティ）ハイスコア表示フラグ
+  ShowModel get highScore => _highScore.showModel;
+
+  /// （公開コマンド）ゲーム起動
+  void start() {
+    if (!_gameState.isStarting) {
+      _gameState.isStarting = true;
+      // ページ表示と異なる Isolate で、デモ表示開始
+      Future(() {
+        _startDemos();
+      });
+    }
+  }
+
+  //＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+  // 以降は、モデル内部の非公開なプロパティとロジックです。
+  //＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+  /// ゲーム状態のモデル
+  GameStateModel _gameState;
+
+  // ゲームプレイの状態要素
+  Random _random;
+  TapButtonNotify _tapNotify;
+  List<OperationShowModel> _tapButtons;
+  List<int> _tapQuestions;
+  List<int> _tapAnswers;
+  int _tapScore;
+  Timer _tapChallengeTimer;
+
+  /// デモ表示フラグ
+  final OperationShowModel _isOnDemos = OperationShowModel(false);
+
+  /// タップ入力バリア(ON/OFF)フラグ
+  final OperationShowModel _isTapBlock = OperationShowModel(false);
+
+  /// LEVEL 表示フラグ
+  final OperationShowModel _level = OperationShowModel(false, 0);
+
+  /// CHALLENGE 表示フラグ
+  final OperationShowModel _challenge = OperationShowModel(false);
+
+  /// CLEAR 表示フラグ
+  final OperationShowModel _clear = OperationShowModel(false);
+
+  /// MISS 表示フラグ
+  final OperationShowModel _miss = OperationShowModel(false);
+
+  /// TIMEUP 表示フラグ
+  final OperationShowModel _timeUp = OperationShowModel(false);
+
+  /// REPLAY 表示フラグ
+  final OperationShowModel _replay = OperationShowModel(false);
+
+  /// GAME OVER 表示フラグ
+  final OperationShowModel _gameOver = OperationShowModel(false);
+
+  /// HIGH SCORE 表示フラグ
+  final OperationShowModel _highScore = OperationShowModel(false, 0);
+
+
+  /// デモ表示を行う。
+  Future<void> _startDemos() async {
+    print('DEMOS');
+    _isOnDemos.set(true);
+    _isTapBlock.set(true);
+
+    // デモ中フラグが変更されるまで、１秒毎にランダムタップを繰り返す。
+    while(_isOnDemos.isShow) {
+      final int index = _random.nextInt(_tapButtons.length);
+      _tapButtons[index].set(true);
+      await _asyncWait(1000);
+      _tapButtons[index].set(false);
+    }
+
+    // ゲーム開始
+    _startTapChallenge();
+  }
+
+  // デモ表示を中止させる。
+  void _stopDemos() {
+    _isOnDemos.set(false);
+  }
+
+  /// タップ順記憶ゲーム開始
+  void _startTapChallenge() {
+    _isTapBlock.set(true);
+    _tapScore = 0;
+    _nextTapChallenge();
+  }
+
+  Future<void> _nextTapChallenge() async {
+    _tapScore++;
+    _tapAnswers.clear();
+    _tapQuestions.clear();
+    for (int i = 0; i < _tapScore; i++) {
+      final int index = _random.nextInt(tapButtons.length);
+      _tapQuestions.add(index);
+    }
+
+    // 出題
+    print('LEVEL  $_tapScore');
+    _level.set(true, _tapScore);
+    await _asyncWait(2000);
+    await _tapTrace(_tapQuestions);
+    _level.set(false);
+
+    // チャレンジ開始（入力待ちに切替）
+    print('CHALLENGE');
+    _challenge.set(true);
+    await _asyncWait(1000);
+    _isTapBlock.set(false);
+    _challenge.set(false);
+    _setupChallengeTimer(true);
+  }
+
+  /// チャレンジタイマー設定
+  void _setupChallengeTimer(bool isCreate) {
+    if (isCreate) {
+      _tapChallengeTimer = Timer(
+          Duration(seconds: _tapScore * 2),
+          _tapsTimeUp);
+    } else {
+      _tapChallengeTimer.cancel();
+    }
+  }
+
+  /// TapButtonタップ通知ハンドラ
+  void tapNotifyHandler(int tapIndex) {
+    print('TapButton[$tapIndex] is tapped!');
+    _tapAnswers.add(tapIndex);
+    _checkTapAnswer(tapIndex);
+  }
+
+  // チャレンジ正解チェック
+  Future<void> _checkTapAnswer(int tapIndex) async {
+    /// 正解チェック
+    final int count = _tapAnswers.length;
+    if (_tapQuestions[count - 1] == tapIndex) {
+      print('OK');
+
+    } else {
+      await _tapsMistake();
+      return;
+    }
+
+    /// チャレンジ完了判定
+    if (_tapQuestions.length == count) {
+      _setupChallengeTimer(false);
+      _isTapBlock.set(true);
+
+      print('CLEAR');
+      _clear.set(true);
+      await _asyncWait(2000);
+      _clear.set(false);
+
+      // 次チャレンジ
+      _nextTapChallenge();
+    }
+  }
+
+  /// タップミス
+  Future<void> _tapsMistake() async {
+    _setupChallengeTimer(false);
+    _isTapBlock.set(true);
+
+    print('MISS');
+    _miss.set(true);
+    await _asyncWait(2000);
+    _miss.set(false);
+
+    await _failed();
+  }
+
+  /// タイムアップ
+  Future<void> _tapsTimeUp() async {
+    _isTapBlock.set(true);
+
+    print('TIME UP');
+    _timeUp.set(true);
+    await _asyncWait(2000);
+    _timeUp.set(false);
+
+    await _failed();
+  }
+
+  /// チャレンジ失敗処置
+  Future<void> _failed() async {
+    // 正解リプレイ
+    print('REPLAY');
+    _replay.set(true);
+    await _tapTrace(_tapQuestions);
+    _replay.set(false);
+
+    // ゲームオーバー
+    print('GAME OVER');
+    _gameOver.set(true);
+    await _asyncWait(5000);
+    _gameOver.set(false);
+
+    // ハイスコア判定
+    final int score = _tapScore - 1;
+    if (score > _gameState.highScore) {
+      print('HIGH SCORE ($score)');
+      _gameState.highScore = score;
+      _highScore.set(true, score);
+      await _asyncWait(10000);
+      _highScore.set(false);
+    }
+
+    // デモ表示をタップとは別の Isolate で実行させます。
+    Future(() => _startDemos());
+  }
+
+  /// TapButtonタップ順トレース
+  Future<void> _tapTrace(List<int> tapOrders) {
+    final Completer completer = Completer();
+    final int lastIndex = tapOrders.length;
+    int historyIndex = 0;
+    Timer.periodic(
+      const Duration(seconds: 1),
+          (Timer timer) {
+        if (historyIndex != lastIndex) {
+          // タップ表現を再現する。
+          final int index = tapOrders[historyIndex++];
+          _tapButtons[index].set(true);
+          print('trace tapping TapButton[$index]');
+        } else {
+          // タイマーの時間ごとの繰り返し(periodic)を終了する。
+          timer.cancel();
+          completer.complete();
+        }
+      },
+    );
+    return completer.future;
+  }
+
+  /// 処理を指定時間待機させる。（遅延非同期処理を利用）
+  Future<void> _asyncWait(int milliseconds) {
+    final Future<void> future = Future.delayed(
+      Duration(milliseconds: milliseconds),
+          () {},
+    );
+    return future;
+  }
+}
+```
+
+<br/>
+
+#### ミニゲームの全内容紹介 (ソースコード紹介)
 
 - Step game: ミニゲームの全内容  
 - `lib/src/app.dart`ミニゲームの全内容：  
 ソースコード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step_game/app.dart) [(ダウンロード)](./project/lib/src/step_game/app.dart)  
+
+- Step game を DartPad で動作するようにした修正後全内容  
+*修正点は、独自MVVMライブラリをインポートせずソースに含めるようにしたのみです。*  
+*以下の **DartPad対応全コード** を [DartPad](https://dartpad.dev) に貼り付ければ動作を確認できます。*  
+DartPad対応全コード：[`lib/src/step_game/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step_game/main.dart) [(ダウンロード)](./project/lib/src/step_game/main.dart)  
+
+- DartPadで動作する flutter for web アプリは、gist にコードを保管すれば 公開することもできます。  
+*[(gist)DevFest Kyoto 2020 - Flutter 初心者向け講座 - Step game サンプル](https://gist.github.com/cch-robo/77ee97e93bc43e3a91c1e78a4015ea87)*  
+*[(DartPad)DevFest Kyoto 2020 - Flutter 初心者向け講座 - Step game サンプル](https://dartpad.dev/embed-flutter.html?id=77ee97e93bc43e3a91c1e78a4015ea87&split=80&theme=dark)*  
+詳しくは、[DartPad について](https://cch-robo.github.io/DevFest-Kyoto-2020/about_the_dartpad.html) を参照ください。  
 
 <br/>
 <br/>
