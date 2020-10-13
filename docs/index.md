@@ -3614,7 +3614,7 @@ class ChallengeAnimationWidget extends RiseUpAnimationWidget<ChallengeAnimationV
   - 連携するビューモデル・オブジェクトとボタン色をコンストラクタ引数で受け取り、  
   連携するビューモデル・オブジェクトのプロパティから表示ON/OFFフラグを参照して、  
   表示(全画面表示)では明滅アニメーションを伴わせて表示し、  
-  非表示(全画面表示)ではアニメーションを行わすボタン色で表示するビューを作る。  
+  非表示(全画面表示)ではアニメーションを行わずボタン色で表示するビューを作る。  
 
 *`AbstractAnimationViewWidget抽象クラス`は、*  
 *コンストラクタ引数オプションの`model`に、任意型と `isAnimate`のプロパティを持つビューモデルを指定できます。*  
