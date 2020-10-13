@@ -3700,6 +3700,11 @@ class TapButtonAnimationWidget extends AbstractAnimationViewWidget<TapButtonAnim
 <br/>
 
 ##### モデルコンテナのコード
+独自MVVMライブラリの都合で、  
+アプリ全体で利用するモデルのオブジェクトは、  
+`AppModelContainerミキシイン`を継承した モデルコンテナのフィールドに所有させ、  
+`initModel`メソッドでモデルを生成し、`initApp`メソッドでアプリ全体の初期設定を行うことが必要です。  
+
 - アプリ全体のモデルコンテナの具体的条件  
   - フィールドに、ゲーム状態のモデル(`GameStateModel`)を持ち、  
   `initModel`メソッドで、ゲーム状態のモデルを生成する。  
@@ -3729,6 +3734,12 @@ class GameAppModelContainer with AppModelContainer {
 ```
 
 <br/>
+
+独自MVVMライブラリの都合で、  
+ページ全体で利用するモデルとビューモデルのオブジェクトは、  
+`PageModelContainerミキシイン`を継承した モデルコンテナのフィールドに所有させ、  
+`initModel`メソッドで、モデルと全てのビューモデルを生成して、公開する全てのビューモデルを返却し、  
+`initPage`メソッドで、ページ全体の初期設定を行うことが必要です。  
 
 - ページ全体のモデルコンテナの具体的条件  
   - フィールドに、ゲームロジックのモデル(`GamePlayModel`)や 全てのビューモデルを持ち、  
