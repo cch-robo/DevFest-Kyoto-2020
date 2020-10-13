@@ -24,10 +24,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # デファクトスタンダードな状態管理ライブラリ (step2 で利用します)
+  # 詳細URL https://pub.dev/packages/provider
+  provider: ^4.3.2+2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+  cupertino_icons: ^0.1.3
 
 dev_dependencies:
   flutter_test:
