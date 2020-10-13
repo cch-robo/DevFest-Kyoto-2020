@@ -190,7 +190,7 @@ class GamePlayModel {
   /// （公開コマンド）タップ通知コマンド
   TapButtonNotify get tapNotify => _tapNotify;
 
-  /// （公開コマンド）タップ通知コマンド
+  /// （公開プロパティ）タップボタン・コレクション
   List<OperationShowModel> get tapButtons => _tapButtons;
 
   /// （公開プロパティ）デモ表示フラグ
@@ -898,17 +898,6 @@ class LevelAnimationWidget extends RiseUpAnimationWidget<LevelAnimationViewModel
         label: 'LEVEL', fontColor: Colors.green, fontSize: fontSize);
 }
 
-/// チャレンジクリア表示をオーバラップしながらアニメーション表示するビューウィジェット
-class ClearAnimationWidget extends RiseUpAnimationWidget<ClearAnimationViewModel> {
-  const ClearAnimationWidget({
-    Key key,
-    @required ClearAnimationViewModel model,
-    @required double fontSize,
-  }) : super(
-      key: key, model: model,
-      label: 'CLEAR', fontColor: Colors.white, fontSize: fontSize);
-}
-
 /// チャレンジ表示をオーバラップしながらアニメーション表示するビューウィジェット
 class ChallengeAnimationWidget extends RiseUpAnimationWidget<ChallengeAnimationViewModel> {
   const ChallengeAnimationWidget({
@@ -918,6 +907,17 @@ class ChallengeAnimationWidget extends RiseUpAnimationWidget<ChallengeAnimationV
   }) : super(
         key: key, model: model,
         label: 'CHALLENGE', fontColor: Colors.orange, fontSize: fontSize);
+}
+
+/// チャレンジクリア表示をオーバラップしながらアニメーション表示するビューウィジェット
+class ClearAnimationWidget extends RiseUpAnimationWidget<ClearAnimationViewModel> {
+  const ClearAnimationWidget({
+    Key key,
+    @required ClearAnimationViewModel model,
+    @required double fontSize,
+  }) : super(
+      key: key, model: model,
+      label: 'CLEAR', fontColor: Colors.white, fontSize: fontSize);
 }
 
 /// ミス表示をオーバラップしながらアニメーション表示するビューウィジェット
