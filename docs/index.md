@@ -707,7 +707,8 @@ flutterには、コードを変更してもアプリ全体を再ビルドする�
 1. ページ自体の関心事は、カウント数表示ではないのに、カウント値と カウント増加関数をページに定義しています。
 
 この問題は、昔から`flutterでの状態管理`の課題として議論されていました。  
-現在の flutter公式サイトでは、[Simple app state management](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple) ページを設けて、[provider](https://pub.dev/packages/provider) パッケージを使った解決方法が紹介されています。
+現在の flutter公式サイトでは、[Simple app state management](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple) ページを設けて、  
+[provider](https://pub.dev/packages/provider) パッケージを使った解決方法が紹介されています。
 
 - [provider](https://pub.dev/packages/provider) パッケージを使うと、  
 カウントを関心事とする以下のようなモデルを作ることができます。
@@ -719,13 +720,14 @@ flutterには、コードを変更してもアプリ全体を再ビルドする�
 (依存関係が単方向であり、モデルは、ボタンやカウント表示部 ⇒ ビュー層の存在を知らない)  
 1. モデルは、ボタンやカウント表示部から利用されるので、それらの生存期間を包含した生存期間にできる。  
 
-- [provider](https://pub.dev/packages/provider) パッケージは、
-ビューに状況変化を通知できるよう [ChangeNotifier クラス](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html) を継承したモデルのオブジェクトを 
-[ChangeNotifierProvider クラス](https://pub.dev/documentation/provider/latest/provider/ChangeNotifierProvider-class.html) に登録することで、
-[BuildContext#read()](https://pub.dev/documentation/provider/latest/provider/ReadContext.html) で モデルのオブジェクトを参照でき、
+- [provider](https://pub.dev/packages/provider) パッケージは、  
+ビューに状況変化を通知できるよう [ChangeNotifier クラス](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html) を継承したモデルのオブジェクトを  
+[ChangeNotifierProvider クラス](https://pub.dev/documentation/provider/latest/provider/ChangeNotifierProvider-class.html) に登録することで、 
+[BuildContext#read()](https://pub.dev/documentation/provider/latest/provider/ReadContext.html) で モデルのオブジェクトを参照でき、  
 [Consumer クラス](https://pub.dev/documentation/provider/latest/provider/Consumer-class.html) や 
 [BuildContext#watch()](https://pub.dev/documentation/provider/latest/provider/WatchContext.html) で モデルのオブジェクトの参照と 通知によるビューの再描画ができるようにしてくれます。  
-サンプルでは、情報の器となる `MyHomeProviderクラス`が 複数のプロバイダーを扱えるよう [MultiProvider クラス](https://pub.dev/documentation/provider/latest/provider/MultiProvider-class.html) でラップしています。
+サンプルでは、情報の器となる `MyHomeProviderクラス`が 複数のプロバイダーを扱えるよう  
+[MultiProvider クラス](https://pub.dev/documentation/provider/latest/provider/MultiProvider-class.html) でラップしています。
 
 - providerパッケージの中身は複雑ですので、  
 ここでは「表示の関心事をモデルに分離して、ビューを再描画させることができる」という理解で構いません。  
