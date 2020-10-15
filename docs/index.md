@@ -904,6 +904,10 @@ class MyHomePage extends StatelessWidget {
 
 <br/>
 
+![thinking](./images/1f914.png) `provider`パッケージがあれば、`StatefulWidget`は要らなくなるの？
+
+<br/>
+
 - アプリバーに表示されるテキストを `MyHomePage`の `title`プロパティの直接参照に修正。  
 *この修正は、`MyHomePage`の継承元が `StatelessWidget`に変更されたために行います。*  
 
@@ -969,6 +973,10 @@ class MyHomePage extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
 ```
+
+<br/>
+
+![thinking](./images/1f914.png) `const`ってのが追加されてるのはなんで？
 
 <br/>
 
@@ -3311,7 +3319,7 @@ class ShowModel extends Model {
   - デモ表示のみコンストラクタ引数で、追加の デモ停止通知関数を受け取る。
   - ベース基盤を継承して、個別のビューモデルを作る。  
 
-*`ViewModelクラス`は、*  
+*独自MVVMライブラリの `ViewModelクラス`を継承すると、*  
 *コンストラクタ引数オプションの`value`に、任意型のプロパティを指定することができます。*  
 
 ```dart
@@ -3354,7 +3362,7 @@ class TapBlockViewModel extends _FlagViewModel {
   追加の コンテナ・インデックス番号と タップボタン入力通知関数を受け取る。
   - ベース基盤を継承して、個別のビューモデルを作る。  
 
-*`AnimationViewModelクラス`は、*  
+*独自MVVMライブラリの `AnimationViewModelクラス`を継承すると、*  
 *コンストラクタ引数オプションの`isAnimate`に、bool型のプロパティを指定することができます。*  
 
 ```dart
@@ -3396,7 +3404,7 @@ class ChallengeAnimationViewModel extends _FlagAnimationViewModel {
   連携するモデル・オブジェクトの 表示ON/OFFフラグとレベル数を参照するベース基盤を作成する。  
   - ベース基盤を継承して、個別のビューモデルを作る。  
 
-*`AnimationViewModelクラス`は、*  
+*独自MVVMライブラリの `AnimationViewModelクラス`を継承すると、*  
 *コンストラクタ引数オプションの`isAnimate`に、bool型のプロパティを指定することができます。*  
 *コンストラクタ引数オプションの`value`に、任意型のプロパティを指定することができます。*  
 
@@ -3443,7 +3451,7 @@ class HighScoreAnimationViewModel extends _IntWithAnimationViewModel {
   `onPressed`プロパティにビューモデルのデモ停止通知関数の指定を追加する。  
   *(タップでデモ表示を停止させます。)*
 
-*`AbstractViewWidget抽象クラス`は、*  
+*独自MVVMライブラリの `AbstractViewWidget抽象クラス`を継承すると、*  
 *コンストラクタ引数オプションの`model`に、任意型のプロパティを持つビューモデルを指定できます。*  
 
 ```dart
@@ -3514,7 +3522,7 @@ class DemosViewWidget extends AbstractViewWidget<DemosViewModel> {
   非表示(表示サイズゼロ)とを切り替えるベース基盤を作成する。
   - ベース基盤を継承して、個別のビューを作る。  
 
-*`AbstractAnimationViewWidget抽象クラス`は、*  
+*独自MVVMライブラリの `AbstractAnimationViewWidget抽象クラス`を継承すると、*  
 *コンストラクタ引数オプションの`model`に、任意型と `isAnimate`のプロパティを持つビューモデルを指定できます。*  
 **ジャンプアップするアニメーションのベース基盤のロジックは、Step 3-1 のコード、内容は Step 3-3 とほぼ同じです。**
 
@@ -3609,6 +3617,9 @@ class ChallengeAnimationWidget extends RiseUpAnimationWidget<ChallengeAnimationV
 
 /// (コード省略) チャレンジクリア、ミス、タイムアップ、リプレイ、ゲームオーバー、ハイスコア表示
 ```
+<br/>
+
+![thinking](./images/1f914.png) `AbstractAnimationViewWidget`が、何をしているのか解らないんだけど？
 
 <br/>
 
@@ -3618,7 +3629,7 @@ class ChallengeAnimationWidget extends RiseUpAnimationWidget<ChallengeAnimationV
   表示(全画面表示)では明滅アニメーションを伴わせて表示し、  
   非表示(全画面表示)ではアニメーションを行わずボタン色で表示するビューを作る。  
 
-*`AbstractAnimationViewWidget抽象クラス`は、*  
+*独自MVVMライブラリの `AbstractAnimationViewWidget抽象クラス`を継承すると、*  
 *コンストラクタ引数オプションの`model`に、任意型と `isAnimate`のプロパティを持つビューモデルを指定できます。*  
 
 ```dart
