@@ -240,13 +240,29 @@ class GamePlayModel {
   /// ゲーム状態のモデル
   GameStateModel _gameState;
 
+  // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
   // ゲームプレイの状態要素
+  // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+  /// 乱数生成器
   Random _random;
+
+  /// タップ通知コマンド
   TapButtonNotify _tapNotify;
+
+  /// タップボタン・コレクション
   List<OperationShowModel> _tapButtons;
+
+  /// タップ順問題リスト
   List<int> _tapQuestions;
+
+  /// タップ順解答リスト
   List<int> _tapAnswers;
+
+  /// タップスコア（レベル）
   int _tapScore;
+
+  /// タップチャレンジ・タイムアップタイマー
   Timer _tapChallengeTimer;
 
   /// デモ表示フラグ
@@ -310,7 +326,9 @@ class GamePlayModel {
     _nextTapChallenge();
   }
 
+  /// レベルアップ・チャレンジ開始
   Future<void> _nextTapChallenge() async {
+    // レベルアップしたタップ順設問作成
     _tapScore++;
     _tapAnswers.clear();
     _tapQuestions.clear();
@@ -380,7 +398,7 @@ class GamePlayModel {
     }
   }
 
-  /// タップミス
+  /// タップミス処置
   Future<void> _tapsMistake() async {
     _setupChallengeTimer(false);
     _isTapBlock.set(true);
@@ -393,7 +411,7 @@ class GamePlayModel {
     await _failed();
   }
 
-  /// タイムアップ
+  /// タイムアップ処置
   Future<void> _tapsTimeUp() async {
     _isTapBlock.set(true);
 

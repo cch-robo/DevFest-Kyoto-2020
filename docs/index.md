@@ -4023,13 +4023,102 @@ class BorderText extends StatelessWidget {
 
 #### ゲームプレイやデモ表示のコードやロジックのキーポイント
 
-![UNDER CONSTRUCTING](./images/under_constructing.png)
+##### ゲームプレイモデル内の「状態モデルの原則」
+
+ゲームプレイモデル内では、以下のような「状態モデルの原則」を心がけています。
+- 状態モデルの原則：「自分の状態の変更は、自分で判断し、自分が手を下す。」
+  - 自分の状態は、自分が変更し、外部に操作させない。
+  - 自分の状態は、外部には参照のみ許す。
+  - 外部の状態は、変更通知(変更情報)のみを受け取る。
+  - 自分の状態の変更は、自分が判断し、自分が手を下す。  
+  *外部状態の変更情報を受け取っても、自分の状態を変更するか否かは、自分が判断して、自分が手を下す。*
+
+<br/>
+
+また「外部公開が不要」と「外部公開が必要」という視点から、  
+以下のような「状態モデルの取り扱い分け」を考えています。
+
+- 状態モデルの取扱区別
+  - 作業元(内部)では、状態操作(read/write)と、状態変更判断ができるようにする。
+  - 公開先(外部)には、プロパティ参照(read only)と、コマンド(変更通知関数)のみの提供に制限する。
+
+*ゲームプレイモデル内では、*  
+*外部公開が必要な「ゲーム表示アイテムの状態」と「ユーザ操作の通知」を **公開プロパティ**と **公開コマンド** と呼んで、*  
+*外部公開が不要な **目的挙動実現のために利用される、非公開な 状態や 関数**と区別しています。*  
+
+<br/>
+
+外部公開が必要な「ゲーム表示アイテムの状態」については、  
+内部用の `OperationShowModel`と 外部用の `ShowModel`に分けて扱うことで、  
+ゲームプレイモデルの内部と外部で「操作可能/参照専用」の制限を与えています。  
+
+- OperationShowModel  
+表示ON/OFFフラグ＆値操作を提供するモデル (read/write)  
+状態(bool isShow, int value)と、自分の状態を参照させることのできる ShowModel を持ち、  
+set(isShoe, value)メソッドで、自分の状態更新を行い、ShowModelに状態更新通知を送ります。  
+
+- ShowModel  
+表示ON/OFFフラグ＆値参照を提供するモデル (read only)  
+コンストラクタ引数で、従属先となる OperationShowModel が提供され、  
+独自MVVMライブラリの Modelを継承により、ビューモデルにバインドできます。  
+バインド先に 従属先の状態(bool isShow, int value)の参照を提供し、  
+従属先からの更新通知で、バインド先のビューモデルに更新通知を送ります。  
+
+*内部での状態操作用の`OperationShowModel`は、外部用の参照専用`ShowModel`も提供できます。*  
+*これにより「内部作業では状態操作可能だが、バインド先のビューモデルでは参照専用」の制限を与え、*  
+*内部作業での set(isShow,value)状態変更と共に、ビューモデルの更新も行なうようにしています。*
+
+```dart
+/// 表示ON/OFFフラグ＆値操作を提供するモデル (read/write)
+class OperationShowModel {
+  OperationShowModel(this._isShow, [this._value = 0]) {
+    _showModel = ShowModel(this);
+  }
+
+  bool _isShow;
+  int _value;
+  ShowModel _showModel;
+
+  bool get isShow => _isShow;
+  int  get value => _value;
+  ShowModel get showModel => _showModel;
+
+  /// 状態を更新する
+  void set(bool isShow, [int value]) {
+    _isShow = isShow;
+    if (value != null) {
+      _value = value;
+    }
+    _showModel.updateViewModels();
+  }
+}
+
+/// 表示ON/OFFフラグ＆値参照を提供するモデル (read only)
+class ShowModel extends Model {
+  final OperationShowModel _model;
+  ShowModel(this._model);
+  bool get isShow => _model.isShow;
+  int get value => _model.value;
+}
+```
+
+<br/>
+
+##### ゲームプレイモデル内の「状態モデル」と「ビューモデル」の関係
+
+ゲームプレイのモデル(`GamePlayModel`)は、非公開の **状態操作可能なモデル(`OperationShowModel`)** を所有し、  
+**公開プロパティ** として、状態操作可能なモデルから **状態参照専用のモデル(`ShowModel`)** を提供させています。  
+
+独自MVVMライブラリの都合で、  
+ゲームプレイのモデル(`GamePlayModel`)は、ページ全体のモデルコンテナ(`GameModelContainer`)で生成してもらい、  
+ビューモデル生成のコンストラクタ引数に、ゲームプレイのモデルの **公開プロパティ** を指定してもらっています。  
+これにより、操作可能な状態モデルと ビューモデルのバインド (バインド側は、状態参照限定) を行っています。
 
 ```dart
 /// ゲームプレイのモデル
 class GamePlayModel {
   GamePlayModel() {
-    _random = Random.secure();
+    // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
     _tapButtons = [
       OperationShowModel(false),
       OperationShowModel(false),
@@ -4038,21 +4127,10 @@ class GamePlayModel {
       OperationShowModel(false),
       OperationShowModel(false),
     ];
-    _tapQuestions = <int>[];
-    _tapAnswers = <int>[];
-    _tapScore = 0;
-    _tapChallengeTimer = null;
-    _tapNotify = tapNotifyHandler;
+    // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
   }
 
-  /// （公開プロパティ）ゲーム状態モデル
-  set gameState (GameStateModel state) => _gameState = state;
-
-  /// （公開コマンド）デモ停止
-  VoidFunction get stopDemos => _stopDemos;
-
-  /// （公開コマンド）タップ通知コマンド
-  TapButtonNotify get tapNotify => _tapNotify;
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
 
   /// （公開プロパティ）タップボタン・コレクション
   List<OperationShowModel> get tapButtons => _tapButtons;
@@ -4063,10 +4141,191 @@ class GamePlayModel {
   /// （公開プロパティ）タップ入力ブロックフラグ
   ShowModel get isTapBlock => _isTapBlock.showModel;
 
-  // (コード省略) レベル、チャレンジ、クリア、ミス、タイムアップ、リプレイ、ゲームオーバー表示フラグ
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+  // レベル表示フラグ、チャレンジ表示フラグ、クリア表示フラグ、
+  // ミス表示フラグ、タイムアップ表示フラグ、リプレイ表示フラグ
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+  /// （公開プロパティ）ゲームオーバー表示フラグ
+  ShowModel get gameOver => _gameOver.showModel;
 
   /// （公開プロパティ）ハイスコア表示フラグ
   ShowModel get highScore => _highScore.showModel;
+
+  //＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+  // 以降は、モデル内部の非公開なプロパティとロジックです。
+  //＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+  /// タップボタン・コレクション
+  List<OperationShowModel> _tapButtons;
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+  /// デモ表示フラグ
+  final OperationShowModel _isOnDemos = OperationShowModel(false);
+
+  /// タップ入力バリア(ON/OFF)フラグ
+  final OperationShowModel _isTapBlock = OperationShowModel(false);
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+  // LEVEL、CHALLENGE、CLEAR、MISS、TIMEUP、REPLAY 表示フラグ
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+  /// GAME OVER 表示フラグ
+  final OperationShowModel _gameOver = OperationShowModel(false);
+
+  /// HIGH SCORE 表示フラグ
+  final OperationShowModel _highScore = OperationShowModel(false, 0);
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+}
+
+/// ページ全体のモデル（ビューモデルとモデル）を提供するモデルコンテナ
+class GameModelContainer with PageModelContainer {
+
+  /// ゲームロジックのモデル
+  GamePlayModel gamePlay;
+
+  /// デモ表示のビューモデル
+  DemosViewModel isOnDemos;
+
+  /// タップ入力バリアのビューモデル
+  TapBlockViewModel isTapBlock;
+
+  /// タップボタン・コンテナのビューモデル
+  TapButtonsAnimationViewModel tapButtonsContainer;
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+  // LEVEL、CHALLENGE、CLEAR、MISS、TIMEUP、REPLAY 表示のビューモデル
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+  /// GAME OVER 表示のビューモデル
+  GameOverAnimationViewModel gameOver;
+
+  /// HIGH SCORE 表示のビューモデル
+  HighScoreAnimationViewModel highScore;
+
+  @override
+  ViewModels initModel() {
+    gamePlay = GamePlayModel();
+
+    isOnDemos  = DemosViewModel(gamePlay.isOnDemos, gamePlay.stopDemos);
+    isTapBlock = TapBlockViewModel(gamePlay.isTapBlock);
+    // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+    gameOver = GameOverAnimationViewModel(gamePlay.gameOver);
+    highScore = HighScoreAnimationViewModel(gamePlay.highScore);
+    tapButtonsContainer = TapButtonsAnimationViewModel(
+        <TapButtonAnimationViewModel>[
+          TapButtonAnimationViewModel(gamePlay.tapButtons[0].showModel, 0, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[1].showModel, 1, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[2].showModel, 2, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[3].showModel, 3, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[4].showModel, 4, gamePlay.tapNotify),
+          TapButtonAnimationViewModel(gamePlay.tapButtons[5].showModel, 5, gamePlay.tapNotify),
+        ]
+    );
+
+    return ViewModels([
+      isOnDemos,
+      isTapBlock,
+      tapButtonsContainer,
+      // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+      // LEVEL、CHALLENGE、CLEAR、MISS、TIMEUP、REPLAY 表示のビューモデル
+      // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+      gameOver,
+      highScore,
+    ], this);
+  }
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+}
+```
+
+<br/>
+
+##### ゲームプレイモデル内の「外部公開が不要な 状態や 関数」
+
+ゲームプレイのモデル(`GamePlayModel`)では、  
+外部公開が不要な **目的挙動実現のために利用される、非公開な 状態や 関数** については、  
+公開用アクセスのための制御が必要ないので、一般的な変数や関数として扱っています。  
+
+```dart
+/// ゲームプレイのモデル
+class GamePlayModel {
+  GamePlayModel() {
+    _random = Random.secure();
+    // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+    _tapQuestions = <int>[];
+    _tapAnswers = <int>[];
+    _tapScore = 0;
+    _tapChallengeTimer = null;
+    _tapNotify = tapNotifyHandler;
+  }
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+  // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+  // ゲームプレイの状態要素
+  // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+  /// 乱数生成器
+  Random _random;
+
+  /// タップ通知コマンド
+  TapButtonNotify _tapNotify;
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+  /// タップ順問題リスト
+  List<int> _tapQuestions;
+
+  /// タップ順解答リスト
+  List<int> _tapAnswers;
+
+  /// タップスコア（レベル）
+  int _tapScore;
+
+  /// タップチャレンジ・タイムアップタイマー
+  Timer _tapChallengeTimer;
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+}
+```
+
+<br/>
+
+##### ゲーム起動〜デモ表示のフロー
+ゲームの要求仕様より、ゲーム起動(ゲームアプリ起動)〜デモ表示までのフローは、以下のようになります。  
+*flutterアプリは、ウィジェットツリーで構成され、アプリはページのウィジェットを生成(初期化を伴う)することを思い出してください。*
+
+![ゲームアプリ起動](./images/game_app_start.png)
+
+- ページウィジェットの初期化処理
+  - ページのモデルコンテナの初期化処理から、ゲーム起動`start()`が実行されます。  
+  - ゲーム起動では、デモ表示を`Future`を使って「別の処理実行」で実行させます。
+  - *補足：アプリのモデルコンテナから、ゲーム状態のモデル(`GameState`)の取得と、*  
+  *ゲームプレイのモデル(`GamePlayModel`)への設定も、ここで行なわれています。*
+
+```dart
+/// ページ全体のモデル（ビューモデルとモデル）を提供するモデルコンテナ
+class GameModelContainer with PageModelContainer {
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+  @override
+  void initPage(BuildContext context) {
+    // GameAppModelContainer から、GameState オブジェクトを提供してもらう。
+    gamePlay.gameState = provideAppModelContainer<GameAppModelContainer>(context).gameState;
+    gamePlay.start();
+  }
+}
+
+/// ゲームプレイのモデル
+class GamePlayModel {
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
 
   /// （公開コマンド）ゲーム起動
   void start() {
@@ -4079,53 +4338,38 @@ class GamePlayModel {
     }
   }
 
-  //＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-  // 以降は、モデル内部の非公開なプロパティとロジックです。
-  //＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
 
-  /// ゲーム状態のモデル
-  GameStateModel _gameState;
+  /// デモ表示を行う。
+  Future<void> _startDemos() async {
+    // 〜 省略 〜
+  }
 
-  // ゲームプレイの状態要素
-  Random _random;
-  TapButtonNotify _tapNotify;
-  List<OperationShowModel> _tapButtons;
-  List<int> _tapQuestions;
-  List<int> _tapAnswers;
-  int _tapScore;
-  Timer _tapChallengeTimer;
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+}
+```
 
-  /// デモ表示フラグ
-  final OperationShowModel _isOnDemos = OperationShowModel(false);
+![thinking](./images/1f914.png)
+なんで、`Future`でデモ表示を実行させるの？
 
-  /// タップ入力バリア(ON/OFF)フラグ
-  final OperationShowModel _isTapBlock = OperationShowModel(false);
+<br/>
 
-  /// LEVEL 表示フラグ
-  final OperationShowModel _level = OperationShowModel(false, 0);
+##### デモ表示〜ゲーム開始のフロー
+ゲームの要求仕様より、デモ表示〜ゲーム開始までのフローは、以下のようになります。  
 
-  /// CHALLENGE 表示フラグ
-  final OperationShowModel _challenge = OperationShowModel(false);
+![デモ表示〜ゲーム開始](./images/demo_start.png)
 
-  /// CLEAR 表示フラグ
-  final OperationShowModel _clear = OperationShowModel(false);
+- デモ表示中フラグが、ONのままなら明滅を繰り返します。
+  - ランダムなタップボタンの明滅と `Future.delayed()`を使った１秒間待機を繰り返します。
+  - デモ画面タップで、`_stopDemos()`が呼び出され、デモ表示フラグが OFFになります。
 
-  /// MISS 表示フラグ
-  final OperationShowModel _miss = OperationShowModel(false);
+<br/>
 
-  /// TIMEUP 表示フラグ
-  final OperationShowModel _timeUp = OperationShowModel(false);
+- デモ表示中フラグが、OFFならゲーム開始に遷移します。
+  - タップ入力ブロックの OFFや レベルのクリアなどゲームの初期化処理を行います。
+  - レベルアップ・チャレンジに遷移します。
 
-  /// REPLAY 表示フラグ
-  final OperationShowModel _replay = OperationShowModel(false);
-
-  /// GAME OVER 表示フラグ
-  final OperationShowModel _gameOver = OperationShowModel(false);
-
-  /// HIGH SCORE 表示フラグ
-  final OperationShowModel _highScore = OperationShowModel(false, 0);
-
-
+```dart
   /// デモ表示を行う。
   Future<void> _startDemos() async {
     print('DEMOS');
@@ -4156,7 +4400,75 @@ class GamePlayModel {
     _nextTapChallenge();
   }
 
+  /// レベルアップ・チャレンジ開始
   Future<void> _nextTapChallenge() async {
+    // 〜 省略 〜
+  }
+
+  // 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜 省略 〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+  /// 処理を指定時間待機させる。（遅延非同期処理を利用）
+  Future<void> _asyncWait(int milliseconds) {
+    final Future<void> future = Future.delayed(
+      Duration(milliseconds: milliseconds),
+          () {},
+    );
+    return future;
+  }
+```
+
+![thinking](./images/1f914.png)
+`_asyncWait()`で、呼出元を止めちゃって大丈夫なの？
+
+<br/>
+
+##### レベルアップ・チャレンジのフロー
+ゲームの要求仕様より、レベルアップ・チャレンジのフローは、以下のようになります。  
+
+![レベルアップチャレンジ](./images/level_up_challenge.png)
+
+- レベルアップ・チャレンジで、チャレンジ開始を行います。
+  - レベル＋１、解答リスト・クリアなどの初期設定を行います。
+  - レベル数に応じた、ランダムなタップ順の問題を作成します。
+  - レベル数に応じた、チャレンジタイマーを設定して、タイムアップカウントを開始します。  
+  - レベルを表示して、作成したタップ順で、タップ明滅を再現し、問題を例示します。  
+  *(タップ順の明滅再現処置 ⇒ `_tapTrace(タップ順リスト)`メソッドについては後述)*
+  - チャレンジ開始を表示します。
+
+<br/>
+
+- チャレンジ中のタップは、`tapNotifyHandler(int tapIndex)`に通知されます。
+  - `tapIndex`で、どのボタンがタップされたのかが判断できます。
+  - タップボタン(インデックス番号)を解答リストに追加して、解答チェックに回します。
+
+<br/>
+
+- 解答チェック処置
+  - タップ間違いの場合、タップミス処置に遷移させます。
+  - タップ正解かつ、最後の問題でない場合は、何もしません。(次タップを待つ)
+  - タップ正解かつ、最後の問題の場合は、チャレンジタイマーをキャンセルさせ、  
+  クリアを表示して、次のレベルアップ・チャレンジに遷移させます。   
+
+<br/>
+
+- チャレンジタイマーの期限を迎えると、タイムアップ処置に遷移します。
+
+<br/>
+
+- タップミス処置
+  - チャレンジタイマーをキャンセルさせ、タップ入力ブロックを ONにします。
+  - ミスを表示させて、チャレンジ失敗処置に遷移させます。
+
+<br/>
+
+- タイムアップ処置
+  - チャレンジタイマーをキャンセルさせ、タップ入力ブロックを ONにします。
+  - タイムアップを表示させて、チャレンジ失敗処置に遷移させます。
+
+```dart
+  /// レベルアップ・チャレンジ開始
+  Future<void> _nextTapChallenge() async {
+    // レベルアップしたタップ順設問作成
     _tapScore++;
     _tapAnswers.clear();
     _tapQuestions.clear();
@@ -4226,7 +4538,7 @@ class GamePlayModel {
     }
   }
 
-  /// タップミス
+  /// タップミス処置
   Future<void> _tapsMistake() async {
     _setupChallengeTimer(false);
     _isTapBlock.set(true);
@@ -4239,7 +4551,7 @@ class GamePlayModel {
     await _failed();
   }
 
-  /// タイムアップ
+  /// タイムアップ処置
   Future<void> _tapsTimeUp() async {
     _isTapBlock.set(true);
 
@@ -4251,6 +4563,26 @@ class GamePlayModel {
     await _failed();
   }
 
+  /// チャレンジ失敗処置
+  Future<void> _failed() async {
+    // 〜 省略 〜
+  }
+```
+
+<br/>
+
+##### チャレンジ失敗のフロー
+ゲームの要求仕様より、チャレンジ失敗のフローは、以下のようになります。  
+
+![チャレンジ失敗](./images/challenge_failed.png)
+
+- チャレンジ失敗処置
+  - リプレイを表示して、問題として例示したタップ順で、タップ明滅を再現します。
+  - ゲームオーバを表示します。
+  - ゲーム状態モデルのハイスコアより、プレーヤーのレベル数が大きければ置き換え、ハイスコアを表示します。
+  - デモ表示を`Future`を使って「別の処理実行」で実行させます。
+
+```dart
   /// チャレンジ失敗処置
   Future<void> _failed() async {
     // 正解リプレイ
@@ -4278,7 +4610,29 @@ class GamePlayModel {
     // デモ表示をタップとは別の Isolate で実行させます。
     Future(() => _startDemos());
   }
+```
 
+<br/>
+
+##### タップ順番再現のフロー
+タップ順番を １秒毎に再現させるために `Timer` を使うことを考えると、  
+タップ順番再現のフローは、以下のようになります。  
+
+![タップ順番再現](./images/tap_order_trace.png)
+
+- タップ順番再現処置
+  - １秒毎に **タイマー処理実行** を繰り返すタイマーを生成します。
+  - タップ順番再現終了フラグが立つまで、処理を待機させます。  
+  タップ順番再現終了フラグが立てば、呼出元に帰ります。
+
+<br/>
+
+- タイマー処理実行 (１秒毎に実行される)
+  - タップ順番再現終了チェック (タップ順番最終を超過したかチェック) 
+  - タップ順番未超過：指定タップボタンを明滅させます。
+  - タップ順番超過済：タイマーを破棄し、終了フラグを立てます。
+
+```dart
   /// TapButtonタップ順トレース
   Future<void> _tapTrace(List<int> tapOrders) {
     final Completer completer = Completer();
@@ -4301,18 +4655,17 @@ class GamePlayModel {
     );
     return completer.future;
   }
-
-  /// 処理を指定時間待機させる。（遅延非同期処理を利用）
-  Future<void> _asyncWait(int milliseconds) {
-    final Future<void> future = Future.delayed(
-      Duration(milliseconds: milliseconds),
-          () {},
-    );
-    return future;
-  }
-}
 ```
 
+<br/>
+<br/>
+
+![コングラチュレーション](./images/congratulation.png)  
+
+**お疲れさまです。**  
+**ミニゲームのコードやロジック説明は、一通り終了しました！**  
+
+<br/>
 <br/>
 
 #### ミニゲームの全内容紹介 (ソースコード紹介)
