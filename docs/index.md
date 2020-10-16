@@ -1773,9 +1773,31 @@ Future<int> countMillion() async {
 <br/>
 
 Timerや Futureを使って、カウントを 1〜20まで、1秒毎にカウントアップする修正手順概要は、以下の通りです。
+1. `dart:async`パッケージのインポートを追加。
 1. `CountModel`に自動カウントアップのプロパティとコマンド(および内部ロジック)を追加。
 1. `CountViewModel`の `updateCount`内の利用先コマンドを自動カウントアップ呼出元に修正。
 1. ボタンを Timer.periodicと Future.delayedで自動カウントアップさせる２つのボタンに追加修正。
+
+<br/>
+
+- `dart:async`パッケージのインポートを追加  
+*`Timer`や`Future`を使えるようにする。*
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:memojudge/src/library/model_mixin.dart';
+```
+
+![below](./images/below.png)
+
+```dart
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:memojudge/src/library/model_mixin.dart';
+```
 
 <br/>
 
@@ -2001,7 +2023,7 @@ class AutoCountViewModel with ChangeNotifier, ViewModel {
 
 <br/>
 
-- `CountModel`に、自動カウントアップを 別の処理の実行で起動させる関数を新規追加
+- `CountModel`に、自動カウントアップを 別の処理の実行で起動させる関数を新規追加  
 *`Future`を使って、`autoIncrementToTwenty`関数を 別の「処理の実行」で実行させる。*
 
 ```dart
