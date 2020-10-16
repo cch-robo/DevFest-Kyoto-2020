@@ -1409,6 +1409,8 @@ class TenCounterView extends StatelessWidget {
 }
 ```
 
+![thinking](./images/1f914.png) `SizedBox.shrink()`って何なの？
+
 <br/>
 
 - `MyHomeProvider`に `TenCounterViewModel`の生成と `ChangeNotifierProvider`への登録を追加  
@@ -3531,9 +3533,6 @@ class DemosViewWidget extends AbstractViewWidget<DemosViewModel> {
   }
 }
 ```
-
-![thinking](./images/1f914.png)
-`SizedBox.shrink()`って何なの？
 
 <br/>
 
