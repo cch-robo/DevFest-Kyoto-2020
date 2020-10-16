@@ -2903,8 +2903,8 @@ class TenCounterAnimationView extends StatefulWidget {
 <br/>
 
 - Step 3-1: `lib/src/app.dart`修正内容：  
-修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2-7/app.dart) [(ダウンロード)](./project/lib/src/step2-7/app.dart)  
-修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3-1/app.dart) [(ダウンロード)](./project/lib/src/step3-1/app.dart)  
+修正前全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step2_7/app.dart) [(ダウンロード)](./project/lib/src/step2_7/app.dart)  
+修正後全コード：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step3_1/app.dart) [(ダウンロード)](./project/lib/src/step3_1/app.dart)  
 
 <br/>
 
