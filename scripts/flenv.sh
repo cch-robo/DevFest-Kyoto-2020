@@ -101,11 +101,11 @@ FlutterInstall() {
 	#   https://plugins.jetbrains.com/
 	if [ -f /vmlinuz ]; then
 		# IntelliJ Community IDE for Linux
-		wget https://download-cf.jetbrains.com/idea/ideaIC-2020.2.2.tar.gz
+		wget https://download-cf.jetbrains.com/idea/ideaIC-2020.2.3.tar.gz
 
-		tar -xzf ideaIC-2020.2.2.tar.gz
+		tar -xzf ideaIC-2020.2.3.tar.gz
 		mv idea-IC-202.7319.50 idea-CE
-		rm ideaIC-2020.2.2.tar.gz
+		rm ideaIC-2020.2.3.tar.gz
 
 		# Dart plugin
 		wget https://plugins.jetbrains.com/files/6351/97449/Dart-203.3645.34.zip
@@ -133,12 +133,12 @@ FlutterInstall() {
 	fi
 	if [ -f /System/Applications/App\ Store.app/Contents/MacOS/App\ Store  ]; then
 		# IntelliJ Community IDE for MAC（注意：元URL からリダイレクトされる）
-		# wget https://download-cf.jetbrains.com/idea/ideaIC-2020.2.2.dmg
-		curl -L -O https://download-cf.jetbrains.com/idea/ideaIC-2020.2.2.dmg
-		hdiutil mount ideaIC-2020.2.2.dmg
+		# wget https://download-cf.jetbrains.com/idea/ideaIC-2020.2.3.dmg
+		curl -L -O https://download-cf.jetbrains.com/idea/ideaIC-2020.2.3.dmg
+		hdiutil mount ideaIC-2020.2.3.dmg
 		cp -r "/Volumes/IntelliJ IDEA CE/IntelliJ IDEA CE.app" $FLUTTER_EXPERIENCE_ROOT/idea-CE
 		hdiutil detach "/Volumes/IntelliJ IDEA CE/"
-		rm ideaIC-2020.2.2.dmg
+		rm ideaIC-2020.2.3.dmg
 
 		# Dart plugin
 		# wget https://plugins.jetbrains.com/files/6351/97449/Dart-203.3645.34.zip
