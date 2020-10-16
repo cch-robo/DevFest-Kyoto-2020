@@ -104,7 +104,7 @@ FlutterInstall() {
 		wget https://download-cf.jetbrains.com/idea/ideaIC-2020.2.3.tar.gz
 
 		tar -xzf ideaIC-2020.2.3.tar.gz
-		mv idea-IC-202.7319.50 idea-CE
+		mv idea-IC-202.7660.26 idea-CE
 		rm ideaIC-2020.2.3.tar.gz
 
 		# Dart plugin

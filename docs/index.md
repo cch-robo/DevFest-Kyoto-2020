@@ -88,7 +88,7 @@ Webアプリ版は、Flutter for web として現在ベータ版に昇格して�
 
 #### Flutter for webは、現在ベータバージョン 
 
-- **Flutter for web は、ベータバージョン dev channel に移行**  
+- **Flutter for web は、ベータバージョン beta channel に移行**  
 現段階では、Chrome ブラウザのみ公式対応 (Edge Firefox Safari 対応計画中)  
 
 ![flutter on the web](./images/flutter_on_the_web.png)
