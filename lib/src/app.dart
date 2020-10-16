@@ -1,8 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-/// step1-2
+// provider パッケージを使った、VM パターン実装
+// CountView に CountViewModel をバインドして、
+// CountViewModel で、UI状態の変更と UI表示の更新を行う。
+
+/// step2-1
 void startApp() {
   runApp(MyApp());
+}
+
+/// ページ全体にモデル（ビジネスロジックとデータモデル）を提供する Provider
+class MyHomeProvider {
+  Widget create() {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CountViewModel()),
+      ],
+      child: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+/// カウントの UI表示に関する、値とロジックを提供する ViewModel
+class CountViewModel with ChangeNotifier {
+  int _count = 0;
+  int get count => _count;
+
+  void incrementCounter() {
+    _count++;
+    notifyListeners();
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -14,34 +42,20 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomeProvider().create(),
     );
   }
 }
 
-@immutable
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         child: Column(
@@ -50,15 +64,20 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            // カウントの UI表示を行う View
+            Consumer<CountViewModel>(
+              builder: (context, model, child) {
+                return Text(
+                  '${model.count}',
+                  style: Theme.of(context).textTheme.headline4,
+                );
+              },
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () => context.read<CountViewModel>().incrementCounter(),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
