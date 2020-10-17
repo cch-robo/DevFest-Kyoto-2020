@@ -1484,7 +1484,6 @@ class MyHomeProvider {
 ```dart
       body: Stack(
         fit:StackFit.loose,
-        overflow: Overflow.clip,
         children: [
           Center(
             child: Column(
@@ -3922,7 +3921,6 @@ class GameFieldPage extends PageWidget<GameModelContainer> {
     return Material(
       child: Stack(
         fit:StackFit.loose,
-        overflow: Overflow.clip,
         children: [
           Center(child: Container(
               width: stage.stageSize.width,

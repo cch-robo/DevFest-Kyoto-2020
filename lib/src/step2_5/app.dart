@@ -173,7 +173,6 @@ class MyHomePage extends StatelessWidget {
       ),
       body: Stack(
         fit:StackFit.loose,
-        overflow: Overflow.clip,
         children: [
           Center(
             child: Column(

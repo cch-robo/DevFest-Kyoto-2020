@@ -202,7 +202,6 @@ class MyHomePage extends PageWidget<MyHomeModelContainer> {
       ),
       body: Stack(
         fit:StackFit.loose,
-        overflow: Overflow.clip,
         children: [
           Center(
             child: Column(
