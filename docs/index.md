@@ -737,7 +737,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 テンプレートアプリ(カウントアプリ)に [provider](https://pub.dev/packages/provider) パッケージを導入して、  
 カウント関心事を `MyHome`ページから モデルに分離する手順概要は、以下の通りです。
-1. プロジェクトのパッケージ設定ファイル `pubspec.yaml` に providerパッケージを追加。  
+1. プロジェクトの設定ファイル `pubspec.yaml` に providerパッケージを追加。  
 1. 追加した provider パッケージをプロジェクトにインポート。  
 1. アプリのソースファイル `lib/src/app.dart`を providerパッケージ対応に修正。 
 1. モデルを提供する`MyHomeProvider`と カウンタ値とカウンタ関数を提供する`CountViewModel`を新規追加。  
@@ -747,7 +747,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 <br/>
 
-- `dependencies:`セクションに、`　provider:  ^4.3.2+2` を追加。  
+- プロジェクトの設定ファイル `pubspec.yaml`の`dependencies:`セクションに、`　provider:  ^4.3.2+2` を追加。  
 *インデントが崩れないよう`provider:`の先頭には半角スペースを 2つ入れます。*  
 
 ```pubspec
@@ -1508,6 +1508,10 @@ class MyHomeProvider {
         ],
       ),
 ```
+
+![thinking](./images/1f914.png) `Container`とか `Stack`ってのが出てきたけど？
+
+<br/>
 
 ![container layout](./images/container_layout.png)
 
