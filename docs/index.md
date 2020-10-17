@@ -1970,7 +1970,7 @@ Column(children: <Widget>[
 
 <br/>
 
-![thinking](./images/1f914.png) `Expanded`って何なの？
+![thinking](./images/1f914.png) `Expanded`ってのもあるんだけど？
 
 <br/>
 
