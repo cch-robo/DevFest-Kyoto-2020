@@ -2311,7 +2311,7 @@ class _TenCounterAnimationViewState extends State<TenCounterAnimationView>
 アニメ進捗率の 0.0と 1.0に 初期値と 終了値が対応するようにして、変化するプロパティ値が、アニメ進捗率に対応するようにします。
 
 - [CurvedAnimationクラス](https://api.flutter.dev/flutter/animation/CurvedAnimation-class.html) は、アニメ進捗率の変化を非線形進行に変換します。  
-[Curvesクラス](https://api.flutter.dev/flutter/animation/Curves-class.html) で「始まりは急激で終わりは緩やかに変化」のような、いくつかの基本的な非線形変化パターンが提供されています。
+*サンプルでは、「始まりは急激で終わりは緩やかに変化」にするため、[Curvesクラス](https://api.flutter.dev/flutter/animation/Curves-class.html) が提供する基本的な非線形変化パターンから `Curves.easeOutQuart`を利用しています。*
 
 <br/>
 
