@@ -24,12 +24,12 @@
   - [flutter for web 環境を作る](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E7%92%B0%E5%A2%83%E3%82%92%E4%BD%9C%E3%82%8B)
   - [flutter for web ってなに？](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E3%81%A3%E3%81%A6%E3%81%AA%E3%81%AB)
   - [Step 1-1: flutterプロジェクトを新規作成する](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-1-1-flutter%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E6%96%B0%E8%A6%8F%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B)
-  - [Step 1-2: テンプレートアプリの分割](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-1-2-%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%88%86%E5%89%B2)
-  - [テンプレートアプリの構造 (flutterアプリの構成の基本)](https://cch-robo.github.io/DevFest-Kyoto-2020/#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E6%A7%8B%E9%80%A0-flutter%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E6%A7%8B%E6%88%90%E3%81%AE%E5%9F%BA%E6%9C%AC)
   - [flutter for web アプリのビルドとアプリ実行 (webアプリの動作確認)](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%81%A8%E3%82%A2%E3%83%97%E3%83%AA%E5%AE%9F%E8%A1%8C-web%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D)
   - [flutter for web アプリをスマートフォンで動作確認 (オプション)](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-for-web-%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E3%82%B9%E3%83%9E%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%B3%E3%81%A7%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D-%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3)
   - [flutter アプリのホットリロードとホットリスタート](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E3%83%9B%E3%83%83%E3%83%88%E3%83%AA%E3%83%AD%E3%83%BC%E3%83%89%E3%81%A8%E3%83%9B%E3%83%83%E3%83%88%E3%83%AA%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%88)
   - [ゲームプレイに必要な、ボタン入力とアクション実行の基本](https://cch-robo.github.io/DevFest-Kyoto-2020/#%E3%82%B2%E3%83%BC%E3%83%A0%E3%83%97%E3%83%AC%E3%82%A4%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E3%83%9C%E3%82%BF%E3%83%B3%E5%85%A5%E5%8A%9B%E3%81%A8%E3%82%A2%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E5%AE%9F%E8%A1%8C%E3%81%AE%E5%9F%BA%E6%9C%AC)
+  - [Step 1-2: テンプレートアプリの分割](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-1-2-%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%88%86%E5%89%B2)
+  - [テンプレートアプリの構造 (flutterアプリの構成の基本)](https://cch-robo.github.io/DevFest-Kyoto-2020/#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E6%A7%8B%E9%80%A0-flutter%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E6%A7%8B%E6%88%90%E3%81%AE%E5%9F%BA%E6%9C%AC)
   - [Step 2-1: providerパッケージを使った UI表示更新の基本](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-1-provider%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F-ui%E8%A1%A8%E7%A4%BA%E6%9B%B4%E6%96%B0%E3%81%AE%E5%9F%BA%E6%9C%AC)
   - [Step 2-2: providerパッケージを使った UI表示更新の基本２](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-2-provider%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F-ui%E8%A1%A8%E7%A4%BA%E6%9B%B4%E6%96%B0%E3%81%AE%E5%9F%BA%E6%9C%AC%EF%BC%92)
   - [Step 2-3: MVVMアーキテクチャを導入する (ビジネスロジックの分離)](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-3-mvvm%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3%E3%82%92%E5%B0%8E%E5%85%A5%E3%81%99%E3%82%8B-%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9%E3%83%AD%E3%82%B8%E3%83%83%E3%82%AF%E3%81%AE%E5%88%86%E9%9B%A2)
@@ -278,148 +278,6 @@ class _MyHomePageState extends State<MyHomePage> {
 # github リポジトリをクローン
 $ git clone https://github.com/cch-robo/DevFest-Kyoto-2020.git
 ```
-
-<br/>
-<br/>
-
-----------
-### Step 1-2: テンプレートアプリの分割
-`lib/main.dart`ファイルは、アプリを起動する`main関数`と `アプリ実態クラス`が一体になっているので分割します。  
-
-1. 講座ステップごとにソースコードが差し替えられるよう、`アプリ実態クラス`を `lib/src/app.dart`に分離。  
-*アプリ実態クラス ⇒ `MyApp`、`MyHome`、`_MyHomePageState` (コードに集中できるよう冗長なコメントは削除)*  
-2. `lib/main.dart`は、アプリを起動する `main関数`のみを残すように簡素化。  
-
-<br/>
-
-修正：[`lib/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/main.dart) [(ダウンロード)](./project/lib/src/step1_2/main.dart)
-
-```dart
-import 'package:memojudge/src/app.dart';
-
-void main() {
-  startApp();
-}
-```
-
-<br/>
-
-新規作成：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/app.dart) [(ダウンロード)](./project/lib/src/step1_2/app.dart)
-
-```dart
-import 'package:flutter/material.dart';
-
-/// step1-2
-void startApp() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-}
-```
-
-<br/>
-<br/>
-
-----------
-### テンプレートアプリの構造 (flutterアプリの構成の基本)
-1. flutter アプリの骨組みは、**ウィジェットツリー**で作られています。  
-**ウィジェットツリー**とは、1つの根(**ルートウィジェット**)から枝分かれしていく樹状図です。  
-枝分かれする各接点や末端(葉)には、**ウィジェット**と呼ばれる Flutterフレームワーク基盤パーツが配置されます。
-
-1. flutterのウィジェットツリーは、大まかに、**アプリ**、**ページ**、**ビュー** の役割階層に分かれていると考えましょう。  
-アプリ：アプリ名や アプリ全体のテーマ指定などの 設定を担います。  
-ページ：タイトルバーや ページボディなどの ページ表示を担います。  
-ビュー：ボタンや テキスト表示や レイアウトなどの UI表示を担います。  
-*ウィジェットツリーの構造は、アプリ ⊃ ページ ⊃ ビューの関係になっていることと、*  
-*上流に行くほど生存期間が長くなり、上流は下流の生存期間を包含していることも忘れないでください。*  
-
-1. 各ウィジェットは、 **特定機能** や **情報の器** を提供する役割に分かれていると考えましょう。  
-特定機能：**ページ表示**や **押しボタン**や **テキストの表示**および **レイアウト**…など。  
-情報の器：子ウィジェット(特定機能)に伝える、任意情報(状態や関数)の保持と仲介役を担います。  
-
-<br/>
-
-- **テンプレートアプリのウィジェットツリー構成概要**
-
-```
-           [MyApp] ← アプリの器 (仲介情報なし)
-              |
-        [MaterialApp] ← アプリ設定の機能を提供
-              |
-         [MyHomePage] ← ページの器 (カウント状態やページタイトル情報を仲介)
-              |
-         [ Scaffold ] ← ページ表示の機能を提供
-        /     |      \
-[AppBar]   [Center]   [FloatingActionButton] ← ボタン機能を提供 (ビュー)
-              |
-           [Column] ← レイアウト機能を提供 (ビュー)
-          /        \
- [Text(1)]         [Text(2)] ← テキスト表示機能を提供 (ビュー)
-```
-
-<br/>
-
-- 基本的なウィジェットの一覧については、公式資料ページの [Basic widgets](https://flutter.dev/docs/development/ui/widgets/basics) を参照ください。  
-機能別ウィジェット一覧については、[Widget catalog](https://flutter.dev/docs/development/ui/widgets) を参照ください。  
-ウィジェット全般の一覧については、[Flutter widget index](https://flutter.dev/docs/reference/widgets) を参照ください。
 
 <br/>
 <br/>
@@ -696,6 +554,148 @@ flutterには、コードを変更してもアプリ全体を再ビルドする�
 <br/>
 
 ![thinking](./images/1f914.png) `_incrementCounter`と `()=>_incrementCounter()` はどう違うの？
+
+<br/>
+<br/>
+
+----------
+### Step 1-2: テンプレートアプリの分割
+`lib/main.dart`ファイルは、アプリを起動する`main関数`と `アプリ実態クラス`が一体になっているので分割します。  
+
+1. 講座ステップごとにソースコードが差し替えられるよう、`アプリ実態クラス`を `lib/src/app.dart`に分離。  
+*アプリ実態クラス ⇒ `MyApp`、`MyHome`、`_MyHomePageState` (コードに集中できるよう冗長なコメントは削除)*  
+2. `lib/main.dart`は、アプリを起動する `main関数`のみを残すように簡素化。  
+
+<br/>
+
+修正：[`lib/main.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/main.dart) [(ダウンロード)](./project/lib/src/step1_2/main.dart)
+
+```dart
+import 'package:memojudge/src/app.dart';
+
+void main() {
+  startApp();
+}
+```
+
+<br/>
+
+新規作成：[`lib/src/app.dart`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step1_2/app.dart) [(ダウンロード)](./project/lib/src/step1_2/app.dart)
+
+```dart
+import 'package:flutter/material.dart';
+
+/// step1-2
+void startApp() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+```
+
+<br/>
+<br/>
+
+----------
+### テンプレートアプリの構造 (flutterアプリの構成の基本)
+1. flutter アプリの骨組みは、**ウィジェットツリー**で作られています。  
+**ウィジェットツリー**とは、1つの根(**ルートウィジェット**)から枝分かれしていく樹状図です。  
+枝分かれする各接点や末端(葉)には、**ウィジェット**と呼ばれる Flutterフレームワーク基盤パーツが配置されます。
+
+1. flutterのウィジェットツリーは、大まかに、**アプリ**、**ページ**、**ビュー** の役割階層に分かれていると考えましょう。  
+アプリ：アプリ名や アプリ全体のテーマ指定などの 設定を担います。  
+ページ：タイトルバーや ページボディなどの ページ表示を担います。  
+ビュー：ボタンや テキスト表示や レイアウトなどの UI表示を担います。  
+*ウィジェットツリーの構造は、アプリ ⊃ ページ ⊃ ビューの関係になっていることと、*  
+*上流に行くほど生存期間が長くなり、上流は下流の生存期間を包含していることも忘れないでください。*  
+
+1. 各ウィジェットは、 **特定機能** や **情報の器** を提供する役割に分かれていると考えましょう。  
+特定機能：**ページ表示**や **押しボタン**や **テキストの表示**および **レイアウト**…など。  
+情報の器：子ウィジェット(特定機能)に伝える、任意情報(状態や関数)の保持と仲介役を担います。  
+
+<br/>
+
+- **テンプレートアプリのウィジェットツリー構成概要**
+
+```
+           [MyApp] ← アプリの器 (仲介情報なし)
+              |
+        [MaterialApp] ← アプリ設定の機能を提供
+              |
+         [MyHomePage] ← ページの器 (カウント状態やページタイトル情報を仲介)
+              |
+         [ Scaffold ] ← ページ表示の機能を提供
+        /     |      \
+[AppBar]   [Center]   [FloatingActionButton] ← ボタン機能を提供 (ビュー)
+              |
+           [Column] ← レイアウト機能を提供 (ビュー)
+          /        \
+ [Text(1)]         [Text(2)] ← テキスト表示機能を提供 (ビュー)
+```
+
+<br/>
+
+- 基本的なウィジェットの一覧については、公式資料ページの [Basic widgets](https://flutter.dev/docs/development/ui/widgets/basics) を参照ください。  
+機能別ウィジェット一覧については、[Widget catalog](https://flutter.dev/docs/development/ui/widgets) を参照ください。  
+ウィジェット全般の一覧については、[Flutter widget index](https://flutter.dev/docs/reference/widgets) を参照ください。
 
 <br/>
 <br/>
