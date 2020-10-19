@@ -147,10 +147,10 @@ MacOS または Linux 環境かつ、git コマンドが使えることが前提
 cd スクリプト配置先ディレクトリ
 
 # flenv.sh スクリプトに実行権限を付与
-chmod +x flenv
+chmod +x flenv.sh
 
 # flutter 体験環境構築を自動実行
-./flenv -install
+./flenv.sh -install
 
 # ネットワーク速度に依存しますが、およそ20分ほどで、
 # flenv.sh 配置先に `flutter_experience` ディレクトリが新規作成され、
