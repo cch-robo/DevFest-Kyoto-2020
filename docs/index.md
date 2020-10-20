@@ -1644,8 +1644,8 @@ Future<void> incrementCount(int count) {
 [await](https://dart.dev/guides/language/language-tour#asynchrony-support) というキーワードがあります。  
 Futureを返す関数の呼び出しに await を指定すると、  
 Futureを返す関数が完了するまで待機させて、確定した値を得ることができます。  
-*注意：Futureを返す関数は、async 指定された関数にする必要があります。*  
 *注意：await キーワードは、async 指定された関数内でしか使えません。*  
+*注意：async 指定された関数は、Futureを返す必要があります。*  
 公式資料：[Asynchronous programming: futures, async, await](https://dart.dev/codelabs/async-await)  
 
 - Futureによる非同期関数の実行(別の処理の実行)が、await 有り/なしで、どう変わるのか確認しましょう。
