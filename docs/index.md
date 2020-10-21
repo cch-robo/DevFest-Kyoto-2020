@@ -555,6 +555,10 @@ flutterには、コードを変更してもアプリ全体を再ビルドする�
 
 ![thinking](./images/1f914.png) `_incrementCounter`と `()=>_incrementCounter()` はどう違うの？
 
+![nerd](./images/1f913x36.png) `_incrementCounter`は、カウント増加関数オブジェクトをそのまま渡していますが、  
+　　　`()=>_incrementCounter()`は、カウント増加関数を実行する関数オブジェクトを渡しています。  
+　　　このように Dart言語では、関数に対して色々な表現ができることを覚えておいてくださいね。
+
 <br/>
 <br/>
 
@@ -831,6 +835,11 @@ class CountViewModel with ChangeNotifier {
 
 ![thinking](./images/1f914.png) なんで `MyHomeProvider`は、`MyHomePage`を子ウィジェットにしているの？
 
+![nerd](./images/1f913x36.png) モデルは、ボタンやカウント表示部から利用されますよね。  
+　　　ということはボタンやカウント表示部から見て「モデルは先に生成されていて、後に破棄される」でないと困ります。  
+　　　ウィジェットツリーで、親ウィジェットは子ウィジェットを包含（生存期間もまた包含）する   
+　　　…と説明したことを思い出してくださいね。  
+
 <br/>
 
 - `MyApp`の`home:`プロパティ先を `MyHomeProvider`に変更。  
@@ -907,6 +916,12 @@ class MyHomePage extends StatelessWidget {
 
 ![thinking](./images/1f914.png) `provider`パッケージがあれば、`StatefulWidget`は要らなくなるの？
 
+![nerd](./images/1f913x36.png) たしかに `provider`パッケージを使えば、状態をビューから引き剥がせます。  
+　　　ビュー ⇒ ウィジェットから状態を引き剥がせるのなら、`StatefulWidget`が要らなくなるのは一理あります。  
+　　　ですがウィジェットに状態を提供する `StatefulWidget`の役目は、多岐にわたるので全く要らなくなる訳ではありません。  
+　　　後述のアニメーションの説明でも、  
+　　　ウィジェットの`State`に `TickerProvider`を提供させるため `StatefulWidget`を使っていますよ。
+
 <br/>
 
 - アプリバーに表示されるテキストを `MyHomePage`の `title`プロパティの直接参照に修正。  
@@ -978,6 +993,13 @@ class MyHomePage extends StatelessWidget {
 <br/>
 
 ![thinking](./images/1f914.png) `const`ってのが追加されてるのはなんで？
+
+![nerd](./images/1f913x36.png) `const`は、指定されたオブジェクトが不変 `imutable` であることを宣言します。  
+　　　不変なウィジェットは、再描画しても表示が変わりませんから、flutter はこの指定により不要な再描画を抑えてくれます。  
+　　　プロジェクト・ルートに配置した **コードの静的解析オプション `analysis_options.yaml`** の設定により  
+　　　`const`を使えるところで使っていないと警告を出すようにしていますので、  
+　　　一度 `const Icon(Icons.add)`から `const`を外してみて IntelliJのエディタの表示変化を確認してくださいね。  
+　　　*`analysis_options.yaml`についてもっと知りたい場合は、[Customizing static analysis](https://dart.dev/guides/language/analysis-options) を参照してみてください。*
 
 <br/>
 
@@ -1412,6 +1434,10 @@ class TenCounterView extends StatelessWidget {
 
 ![thinking](./images/1f914.png) `SizedBox.shrink()`って何なの？
 
+![nerd](./images/1f913x36.png) `SizedBox`は、矩形の表示領域を持つウィジェットで、  
+　　　`SizedBox.shrink()`は、表示領域のサイズが 縦横共に 0ピクセルのウィジェット作成を表します。  
+　　　*10カウントごとの UI表示が、10カウントでなければ表示されないよう、ここでは表示サイズゼロのウィジェットを使っています。*
+
 <br/>
 
 - `MyHomeProvider`に `TenCounterViewModel`の生成と `ChangeNotifierProvider`への登録を追加  
@@ -1510,6 +1536,8 @@ class MyHomeProvider {
 ```
 
 ![thinking](./images/1f914.png) `Container`とか `Stack`ってのが出てきたけど？
+
+![nerd](./images/1f913x36.png) `Container`と `Stack`は、レイアウト機能を持つウィジェットです。
 
 <br/>
 
@@ -1633,6 +1661,8 @@ Future<void> incrementCount(int count) {
 
 <br/>
 
+![nerd](./images/1f913x36.png) **Future**や **async** と **await** について説明しますね。  
+
 - **Future**や **async** と **await** について。  
 [Futureクラス](https://api.dart.dev/stable/2.10.0/dart-async/Future-class.html) のオブジェクトは、値が将来決定することを表します。  
 つまり Futureを返す関数を実行して、エラーなく処理が返ってきても、その値はまだ確定していません。  
@@ -1707,6 +1737,8 @@ await があるとそのまま呼び出されているだけじゃないの？
 
 <br/>
 
+![nerd](./images/1f913x36.png) 疑り深いなぁ。（笑い）
+
 - [Completerクラス](https://api.dart.dev/stable/2.10.0/dart-async/Completer-class.html) を使うと、
 未確定や確定のFutureを返せるオブジェクトが作れます。  
 これを利用して、await が本当に Future の値が確定するまで待機するのか確かめてみましょう。
@@ -1775,6 +1807,8 @@ Future<int> countMillion() async {
   return completer.future;
 }
 ```
+
+![nerd](./images/1f913x36.png) ちゃんと確定するまで、呼出元を待機させてますよね。
 
 <br/>
 
@@ -1944,6 +1978,8 @@ class CountModel with Model {
 
 <br/>
 
+![nerd](./images/1f913x36.png) `row`は、レイアウト機能を持ったウィジェットです。
+
 ![Row layout](./images/row_layout.png)
 
 `Row`は、行並びを作るため、子ウィジェットを横に並べて表示するレイアウト機能を持ったウィジェットです。
@@ -1956,6 +1992,8 @@ Row(children: <Widget>[
 ```
 
 <br/>
+
+![nerd](./images/1f913x36.png) ちなみに `column`というウィジェットもあります。
 
 ![Column layout](./images/column_layout.png)
 
@@ -1971,6 +2009,10 @@ Column(children: <Widget>[
 <br/>
 
 ![thinking](./images/1f914.png) `Expanded`ってのもあるんだけど？
+
+![nerd](./images/1f913x36.png) `Expanded`は、子ウィジェットの周りの空隙を指定比率で埋めてくれるレイアウト機能を持ったウィジェットです。  
+　　　*左右２つのボタンは、比率指定のない `Expanded`に包まれていますので、ともに同じ比率になるようにレイアウトされます。*  
+　　　*だから画面端からボタンまでの間の比率を１とすると、ボタンの間は(左右２つ分だから) ２の比率の配置になるんです。*
 
 <br/>
 
@@ -2044,6 +2086,8 @@ class AutoCountViewModel with ChangeNotifier, ViewModel {
 <br/>
 
 ![thinking](./images/1f914.png) **Isolate**って何なの？
+
+![nerd](./images/1f913x36.png) **Isolate** について説明しますね。
 
 - [Isolate](https://api.flutter.dev/flutter/dart-isolate/Isolate-class.html) は、Dart言語での「処理の実行」の最小単位で、状態を共有しません。  
 Futureは、Isolateの上に「呼出元の処理の実行」との状態の共有(awaitで確定した結果を取得)ができるようにしたものです。  
@@ -2306,6 +2350,8 @@ class _TenCounterAnimationViewState extends State<TenCounterAnimationView>
 
 ![thinking](./images/1f914.png)
 `Tween`や`CurvedAnimation`って何なの？
+
+![nerd](./images/1f913x36.png) `Tween`と `CurvedAnimation`について説明しますね。
 
 - [Tweenクラス](https://master-api.flutter.dev/flutter/animation/Tween-class.html) は、アニメ進捗率と プロパティの 初期値/終了値 とのマッパーです。  
 アニメ進捗率の 0.0と 1.0に 初期値と 終了値が対応するようにして、変化するプロパティ値が、アニメ進捗率に対応するようにします。
@@ -3646,6 +3692,22 @@ class ChallengeAnimationWidget extends RiseUpAnimationWidget<ChallengeAnimationV
 
 ![thinking](./images/1f914.png) `AbstractAnimationViewWidget`が、何をしているのか解らないんだけど？
 
+![nerd](./images/1f913x36.png) ジャンプアップするアニメーションのベース基盤のロジックは、Step 3-1 と同じって言ってますよね。  
+
+- Step 3-1 は、Step 2-7 のコードを独自 MVVM ライブラリ対応にしたものですから、  
+`RiseUpAnimationWidget`の内部は、Step 2-7の `TenCounterAnimationView`の実装と同じことしていることになります。  
+  - Step 2-7の `TenCounterAnimationView`では、  
+  `StatefulWidget`を継承させて、`State`に `TickerProviderStateMixin`を継承させたり、  
+  `AnimationController`を生成して、  変化させるプロパティ値を提供する `Animation`の作成を行い、  
+  `isAnimate`フラグで、アニメーションさせる表示と アニメーションさせない表示を切り替えています。  
+  - ですから `RiseUpAnimationWidget`にある、`onCreateController()`と `onCreateAnimations()`や  
+  `onAnimationBuild()`と `noAnimationBuild()`は、それらを最小限の記述で行っていることになります。  
+  - つまり `AbstractAnimationViewWidget`基盤抽象クラスは、  
+  Step 2-7 で行ったアニメーション対応の追加実装を自分の内部に隠して、  
+  最小限のコード記述でアニメーションを利用できるようにしてくれる…ということになります。  
+
+![nerd](./images/1f913x36.png) …説明が長くなってごめんね。
+
 <br/>
 
 - アニメーションのある、丸いタップボタン表示のビューの具体的条件  
@@ -4389,6 +4451,13 @@ class GamePlayModel {
 ![thinking](./images/1f914.png)
 なんで、`Future`でデモ表示を実行させるの？
 
+![nerd](./images/1f913x36.png) ゲーム板を表示する「処理実行」に影響を与えないようにするためです。  
+　　　デモ表示は、ゲーム起動(`gamePlay.start()`)から呼び出され、  
+　　　ゲーム起動は、ページ表示時の処理 `initPage()`で呼び出されています。  
+　　　つまり **ページ表示の「処理実行」からの呼び出しでは、**  
+　　　**デモ表示で処理が止まったりすると、ページ表示に問題が起きてしまいます！**  
+　　　このためデモ表示は、`Future`を使って、デモ表示専用(ゲーム専用)の「別の処理実行」にしているのです。
+
 <br/>
 
 ##### デモ表示〜ゲーム開始のフロー
@@ -4456,6 +4525,10 @@ class GamePlayModel {
 
 ![thinking](./images/1f914.png)
 `_asyncWait()`で、呼出元を止めちゃって大丈夫なの？
+
+![nerd](./images/1f913x36.png) ゲームは、デモ表示の「処理実行」で動いていますから大丈夫です。  
+　　　ページ処理に影響を与えないよう、デモ表示は `Future`により「別の処理実行」で起動しましたし、  
+　　　`_asyncWait()`での待機も指定時間後(Future確定後)には、呼出元に帰る実装になっているからです。
 
 <br/>
 
@@ -4726,3 +4799,4 @@ DartPad対応全コード：[`lib/src/step_game/main.dart`](https://github.com/c
 
 ----------
 thinking emoji image 1f914.png by [Twemoji](https://twemoji.twitter.com/content/twemoji-twitter/en.html) [(Licensed under CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) 
+nerd emoji image 1f913.png by [Twemoji](https://twemoji.twitter.com/content/twemoji-twitter/en.html) [(Licensed under CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) 
