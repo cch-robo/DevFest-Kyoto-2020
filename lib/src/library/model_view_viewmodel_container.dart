@@ -423,8 +423,44 @@ class ViewModels {
     return _pageModelContainer as M;
   }
 
+  /// 指定 ViewModel一覧を追加した、新しい ViewModel一覧を作成
+  ViewModels addAll(List<ViewModel> viewModels) {
+    final List<ViewModel> newViewModels = <ViewModel>[];
+    newViewModels.addAll(_viewModels ?? <ViewModel>[]);
+    newViewModels.addAll(viewModels ?? <ViewModel>[]);
+    return ViewModels(newViewModels, _pageModelContainer);
+  }
+
+  /// 指定 ViewModel型 の ViewModel要素インデックス取得
+  int _indexOf<T extends ViewModel>() {
+    int index = (_viewModels?.length ?? 0) - 1;
+    for(; index > -1; index--) {
+      if (_viewModels[index].runtimeType == T) {
+        break;
+      } else {
+        continue;
+      }
+    }
+    return index;
+  }
+
+  /// 指定 ViewModel型 の ViewModel要素置換
+  T replace<T extends ViewModel>(T object) {
+    final int index = _indexOf<T>();
+    if (index == -1) {
+      return null;
+    }
+    _viewModels.removeAt(index);
+    _viewModels.insert(index, object);
+    _viewModelMap[T] = object;
+    return find<T>();
+  }
+
   /// 指定 index の ViewModel要素取得
   T get<T extends ViewModel>(int index) {
+    if (_viewModels == null || _viewModels.isEmpty) {
+      return null;
+    }
     return _viewModels[index] as T;
   }
 
@@ -435,9 +471,11 @@ class ViewModels {
 
   static Map<Type,ViewModel> _parseMap(List<ViewModel> models) {
     final Map<Type,ViewModel> viewModelMap = {};
-    for(ViewModel model in models) {
-      final Type type = model.runtimeType;
-      viewModelMap[type] = model;
+    if (models != null && models.isNotEmpty) {
+      for(ViewModel model in models) {
+        final Type type = model.runtimeType;
+        viewModelMap[type] = model;
+      }
     }
     return viewModelMap;
   }
