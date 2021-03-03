@@ -377,6 +377,35 @@ class ViewModel<T> {
     model.unbindUpdate(onUpdate);
   }
 }
+/* // DartPad以外のライブラリが複数ファイルに分割できる場合の実装
+class ViewModel<T extends Model> {
+  UpdateView _updateView;
+  T value;
+  ViewModel(this.value) {
+    value.bindUpdate(onUpdate);
+  }
+
+  /// UI表現を更新する。
+  void updateView() {
+    if (_updateView != null) {
+      _updateView();
+    }
+  }
+
+  /// UI個別表現の状態を更新するハンドラ。
+  void onUpdate(Model model) {}
+
+  /// モデルと更新ハンドラをバインドする。
+  void bindModel(Model model) {
+    model.bindUpdate(onUpdate);
+  }
+
+  /// モデルと更新ハンドラをアンバインドする。
+  void unbindModel(Model model) {
+    model.unbindUpdate(onUpdate);
+  }
+}
+*/
 
 /// アニメーション(ON/OFF)指定付きのUI個別表現の状態を扱う基盤クラス。
 ///
@@ -406,6 +435,25 @@ class AnimationViewModel<T> extends ViewModel<T> {
     return Future<bool>.value(false);
   }
 }
+/* // DartPad以外のライブラリが複数ファイルに分割できる場合の実装
+class AnimationViewModel<T extends Model> extends ViewModel<T> {
+  bool isAnimate;
+  AsyncUpdateView _asyncUpdateView;
+
+  AnimationViewModel({
+    @required this.isAnimate,
+    T value
+  }) : super(value);
+
+  /// UI表現を更新し、アニメーション表示完了まで待機する。
+  Future<bool> asyncUpdateView() {
+    if (_asyncUpdateView != null) {
+      return _asyncUpdateView();
+    }
+    return Future<bool>.value(false);
+  }
+}
+*/
 
 /// ViewModel の一覧を格納する基盤クラス
 class ViewModels {
