@@ -4819,6 +4819,12 @@ $ flutter build web --web-renderer html
 
 - 【お詫び】このWebレンダラーオプションを `DartPad` で指定する方法が不明です。  
   *このためミニゲームは、現在 Flutter 2 環境となった `DartPad` でプレイできなくなっています。*
+  
+  - 確実な情報ではありませんが、Chrome のデベロッパーツールの設定で回避できるかもしれません。  
+  Chrome ツールバー右端のメニューから `︙` > `ツール` > `デベロッパーツール` を開き、  
+  上ツールバー右側の `Toggle device toolber` で端末別用表示に切り替え、  
+  上ツールバー左側で `Responsive` `Mid-tier Mobile` などを選ぶと動作するようです。  
+  ![dartpad and chrome developer tool](./images/chrome_developer-tool.png)
 
 <br/>
 <br/>
