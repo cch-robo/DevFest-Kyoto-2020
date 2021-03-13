@@ -4797,7 +4797,8 @@ DartPad対応全コード：[`lib/src/step_game/main.dart`](https://github.com/c
 <br/>
 <br/>
 
-####　Flutter　2　環境での ミニゲーム動作について　(2021/03/07 追加)
+----------
+#### Flutter　2　環境での ミニゲーム動作について　(2021/03/07 追加)
 
 - Flutter 2 環境でミニゲームがクラッシュする場合、  
 `flutter run` または `flutter build` コマンドに `--web-renderer html` オプションを指定してください。
