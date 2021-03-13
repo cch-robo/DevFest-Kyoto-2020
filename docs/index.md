@@ -4797,6 +4797,30 @@ DartPad対応全コード：[`lib/src/step_game/main.dart`](https://github.com/c
 <br/>
 <br/>
 
+####　Flutter　2　環境での ミニゲーム動作について　(2021/03/07 追加)
+
+- Flutter 2 環境でミニゲームがクラッシュする場合、  
+`flutter run` または `flutter build` コマンドに `--web-renderer html` オプションを指定してください。
+  - 【参考元】[Docs](https://flutter.dev/docs) > [Development](https://flutter.dev/docs/development) > [Tools](https://flutter.dev/docs/development/tools) > [Web renderers](https://flutter.dev/docs/development/tools/web-renderers)  
+
+```bash
+# Chrome を起動してミニゲームをプレイする場合
+$ flutter clean
+$ flutter run -d chrome --web-renderer html
+``` 
+
+```bash
+# ミニゲームをビルドする場合
+$ flutter clean
+$ flutter build web --web-renderer html
+``` 
+
+- 【お詫び】このWebレンダラーオプションを `DartPad` で指定する方法が不明です。  
+  *このためミニゲームは、現在 Flutter 2 環境となった `DartPad` でプレイできなくなっています。*
+
+<br/>
+<br/>
+
 ----------
 thinking emoji image 1f914.png by [Twemoji](https://twemoji.twitter.com/content/twemoji-twitter/en.html) [(Licensed under CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)  
 nerd emoji image 1f913.png by [Twemoji](https://twemoji.twitter.com/content/twemoji-twitter/en.html) [(Licensed under CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) 
