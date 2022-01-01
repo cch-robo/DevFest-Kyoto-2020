@@ -4799,7 +4799,8 @@ DartPad対応全コード：[`lib/src/step_game/main.dart`](https://github.com/c
 <br/>
 
 ----------
-#### Flutter 2 環境での ミニゲーム動作について　(2021/03/07 追加)
+#### ~~Flutter 2 環境での ミニゲーム動作について　(2021/03/07 追加)~~
+*2021/12/30現在では、Flutter フレームワークの対応が進み以下の対応は不要になっています。*
 
 - Flutter 2 環境でミニゲームがクラッシュする場合、  
 `flutter run` または `flutter build` コマンドに `--web-renderer html` オプションを指定してください。
@@ -4825,6 +4826,49 @@ $ flutter build web --web-renderer html
   上ツールバー右側の `Toggle device toolber` で端末別用表示に切り替え、  
   上ツールバー左側で `Responsive` `Mid-tier Mobile` などを選ぶと動作するようです。  
   ![dartpad and chrome developer tool](./images/chrome_developer-tool.png)
+
+<br/>
+<br/>
+
+----------
+#### Null-Safety 部分対応　(2021/12/30 追加)
+
+- DartPad で動作する、Null-Safety対応の全ソースコードを追加  
+DevFest 2020 発表当時は stable でなかった、Null-Safety も現在では標準となりました。  
+Flutter公式のオンライン開発環境 DartPad も、2021/11頃から Null-Safety 必須となりました。  
+このため公開資料で学習や動作確認していただけるよう、サンプルも Null-Safety 対応を行いました。  
+　  
+
+- Step game: ミニゲーム Null-Safety対応版の全内容  
+  - Step game の DartPad 対応版を Null-Safety で動作するようにした修正後全内容  
+    ソースコード：[`lib/src/main.txt`](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step_game_nullsafety/main.txt) [(ダウンロード)](./project/lib/src/step_game_nullsafety/main.txt) *(エラーが出ないよう拡張子を txt にしています)*  
+
+
+- [**DartPad**](https://dartpad.dev) での動作確認  
+  [ソース全体](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/lib/src/step_game_nullsafety/main.txt) をコピーして [DartPad](https://dartpad.dev) に貼り付ければ、直接動作を確認することもできます。  
+  *[(gist)DevFest Kyoto 2020 - Flutter 初心者向け講座 - Step game null−safety サンプル](https://gist.github.com/cch-robo/77ee97e93bc43e3a91c1e78a4015ea87)*  
+  *[(DartPad)DevFest Kyoto 2020 - Flutter 初心者向け講座 - Step game null−safety サンプル](https://dartpad.dev/embed-flutter.html?id=77ee97e93bc43e3a91c1e78a4015ea87&split=80&theme=dark)*
+
+
+- **注意事項**  
+このソースをビルドするには、エラーが出ないよう変更したファイル拡張子を `txt` ⇒ `dart` に戻して、  
+`pubspec.yaml` の Flutter SDK バージョンを Null-Safety 対応版以上に上げる必要があります。  
+具体的には、以下のように `sdk: ">=2.7.0 <3.0.0` ⇒ `">=2.15.1 <3.0.0"` 以上に上げてください。  
+*既存コードは Null-Safety非対応のため、バージョンを上げるとビルドできないこと了承願います。*
+
+```
+# DevFest Kyoto 2020 時点での SDKバージョン
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+```
+
+**↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓**
+
+```
+# Null-Safety 対応の SDKバージョン
+environment:
+  sdk: ">=2.15.1 <3.0.0"
+```
 
 <br/>
 <br/>
