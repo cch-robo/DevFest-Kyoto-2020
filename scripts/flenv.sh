@@ -49,8 +49,8 @@ FlutterInstall() {
 	$FLUTTER_ROOT/bin/flutter doctor
 	echo ""
 
-	echo "flutter channel beta"
-	$FLUTTER_ROOT/bin/flutter channel beta
+	echo "flutter channel stable"
+	$FLUTTER_ROOT/bin/flutter channel stable
 	echo ""
 
 	echo "flutter upgrade"
@@ -77,6 +77,10 @@ FlutterInstall() {
 	$FLUTTER_ROOT/bin/flutter config --no-enable-macos-desktop
 	echo ""
 
+	echo "flutter/bin/flutter config -no-enable-macos-desktop"
+	$FLUTTER_ROOT/bin/flutter config --no-enable-windows-desktop
+	echo ""
+
 	# dhttpd 簡易 Web サーバをクローン
 	git clone https://github.com/kevmoo/dhttpd.git
 	cd dhttpd
@@ -99,7 +103,7 @@ FlutterInstall() {
 	#   
 	#   JetBrains Plugins Repository
 	#   https://plugins.jetbrains.com/
-	if [ -f /vmlinuz ]; then
+	if [ -f /boot/vmlinuz ] || [ -f /vmlinuz ]; then
 		# IntelliJ Community IDE for Linux
 		wget https://download-cf.jetbrains.com/idea/ideaIC-2020.2.3.tar.gz
 
@@ -241,15 +245,16 @@ FlutterResume() {
 	export DART_SDK_PATH=$FLUTTER_ROOT/bin/cache/dart-sdk
 	export PUB_CACHE=$FLUTTER_ROOT/.pub-cache
 
-	$FLUTTER_ROOT/bin/flutter channel beta
+	$FLUTTER_ROOT/bin/flutter channel stable
 	$FLUTTER_ROOT/bin/flutter upgrade
 	$FLUTTER_ROOT/bin/flutter config --enable-web
 	$FLUTTER_ROOT/bin/flutter config --no-enable-android
 	$FLUTTER_ROOT/bin/flutter config --no-enable-ios
 	$FLUTTER_ROOT/bin/flutter config --no-enable-linux-desktop 
 	$FLUTTER_ROOT/bin/flutter config --no-enable-macos-desktop
+	$FLUTTER_ROOT/bin/flutter config --no-enable-windows-desktop
 
-	if [ -f /vmlinuz ]; then
+	if [ -f /boot/vmlinuz ] || [ -f /vmlinuz ]; then
 		export JAVA_HOME=$FLUTTER_EXPERIENCE_ROOT/idea-CE/jbr
 		export IDE_HOME=$FLUTTER_EXPERIENCE_ROOT/idea-CE
 		export PATH=$FLUTTER_ROOT/bin:$DART_SDK_PATH/bin:$JAVA_HOME/bin:$IDE_HOME/bin:`pwd`:$PATH:
