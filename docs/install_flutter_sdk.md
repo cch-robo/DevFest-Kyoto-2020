@@ -71,7 +71,7 @@ $ git clone https://github.com/kevmoo/dhttpd.git
 
 ```bash
 # 4. flutter for web 環境切替コマンド
-~~$ flutter channel beta~~ (2021/12/30現在、flutter for web は stable で利用可能となったので、この指定は不要です。)
+$ flutter channel beta (2021/12/30現在、flutter for web は stable で利用可能となったので、この行の指定は不要です。)
 $ flutter upgrade
 $ flutter config --enable-web
 
