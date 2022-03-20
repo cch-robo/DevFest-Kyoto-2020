@@ -39,7 +39,8 @@
   - [Step 2-7: ゲームを賑やかにする、アニメーションの導入](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-2-7-%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%92%E8%B3%91%E3%82%84%E3%81%8B%E3%81%AB%E3%81%99%E3%82%8B%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E5%B0%8E%E5%85%A5)
   - [Step 3-1〜3-3: 独自MVVMライブラリの紹介 (DartPadでも動作可能にする)](https://cch-robo.github.io/DevFest-Kyoto-2020/#step-3-13-3-%E7%8B%AC%E8%87%AAmvvm%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%AE%E7%B4%B9%E4%BB%8B-dartpad%E3%81%A7%E3%82%82%E5%8B%95%E4%BD%9C%E5%8F%AF%E8%83%BD%E3%81%AB%E3%81%99%E3%82%8B)
   - [ミニゲームを作ろう](https://cch-robo.github.io/DevFest-Kyoto-2020/#%E3%83%9F%E3%83%8B%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%92%E4%BD%9C%E3%82%8D%E3%81%86)
-  - [Flutter 2 環境での ミニゲーム動作について　(2021/03/07 追加)](https://github.com/cch-robo/DevFest-Kyoto-2020/blob/master/docs/index.md#flutter-2-%E7%92%B0%E5%A2%83%E3%81%A7%E3%81%AE-%E3%83%9F%E3%83%8B%E3%82%B2%E3%83%BC%E3%83%A0%E5%8B%95%E4%BD%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A620210307-%E8%BF%BD%E5%8A%A0)
+  - [Flutter 2 環境での ミニゲーム動作について　(2021/03/07 追加)](https://cch-robo.github.io/DevFest-Kyoto-2020/#flutter-2-%E7%92%B0%E5%A2%83%E3%81%A7%E3%81%AE-%E3%83%9F%E3%83%8B%E3%82%B2%E3%83%BC%E3%83%A0%E5%8B%95%E4%BD%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A620210307-%E8%BF%BD%E5%8A%A0)
+  - [Null-Safety 部分対応　(2021/12/30 追加)](https://cch-robo.github.io/DevFest-Kyoto-2020/#null-safety-%E9%83%A8%E5%88%86%E5%AF%BE%E5%BF%9C20211230-%E8%BF%BD%E5%8A%A0)
 
 <br/>
 <br/>
